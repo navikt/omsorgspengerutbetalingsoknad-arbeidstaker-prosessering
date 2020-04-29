@@ -29,7 +29,7 @@ internal class PreprosseseringStream(
 
     private companion object {
 
-        private const val NAME = "ArbeidstakerutbetalingPreprosesseringV1"
+        private const val NAME = "PreprosesseringV1"
         private val logger = LoggerFactory.getLogger("no.nav.$NAME.topology")
 
         private fun topology(preprosseseringV1Service: PreprosseseringV1Service): Topology {

@@ -41,7 +41,7 @@ internal class ArbeidstakerutbetalingJournalforingsStream(
     internal val healthy = ManagedStreamHealthy(stream)
 
     private companion object {
-        private const val NAME = "ArbeidstakerutbetalingJournalforingV1"
+        private const val NAME = "JournalforingV1"
         private val logger = LoggerFactory.getLogger("no.nav.$NAME.topology")
 
         private fun topology(joarkGateway: JoarkGateway): Topology {

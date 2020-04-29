@@ -30,7 +30,7 @@ internal class CleanupStream(
     internal val healthy = ManagedStreamHealthy(stream)
 
     private companion object {
-        private const val NAME = "ArbeidstakerutbetalingCleanupV1"
+        private const val NAME = "CleanupV1"
         private val logger = LoggerFactory.getLogger("no.nav.$NAME.topology")
 
         private fun topology(dokumentService: DokumentService): Topology {

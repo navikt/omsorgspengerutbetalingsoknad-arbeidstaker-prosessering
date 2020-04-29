@@ -40,7 +40,7 @@ class SoknadProsesseringTest {
             .build()
             .stubK9DokumentHealth()
             .stubK9JoarkHealth()
-            .stubJournalforArbeidstaker()
+            .stubJournalfor()
             .stubLagreDokument()
             .stubSlettDokument()
 
@@ -125,13 +125,13 @@ class SoknadProsesseringTest {
             søker = defaultArbeidstakerutbetalingMelding.søker.copy(fødselsnummer = gyldigFodselsnummerA)
         )
 
-        wireMockServer.stubJournalforArbeidstaker(500) // Simulerer feil ved journalføring
+        wireMockServer.stubJournalfor(500) // Simulerer feil ved journalføring
 
         kafkaProducer.leggTilMottak(melding)
         ventPaaAtRetryMekanismeIStreamProsessering()
         readyGir200HealthGir503()
 
-        wireMockServer.stubJournalforArbeidstaker(201) // Simulerer journalføring fungerer igjen
+        wireMockServer.stubJournalfor(201) // Simulerer journalføring fungerer igjen
         restartEngine()
         journalføringsKonsumer
             .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)

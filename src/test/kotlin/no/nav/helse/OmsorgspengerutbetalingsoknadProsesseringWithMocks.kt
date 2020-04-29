@@ -20,8 +20,7 @@ class OmsorgspengerutbetalingsoknadProsesseringWithMocks {
                 .build()
                 .stubK9DokumentHealth()
                 .stubK9JoarkHealth()
-                .stubJournalforFrilansSelvstendingNæringsdrivende()
-                .stubJournalforArbeidstaker()
+                .stubJournalfor()
                 .stubLagreDokument()
                 .stubSlettDokument()
 

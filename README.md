@@ -1,8 +1,8 @@
-# omsorgspengerutbetalingsoknad-prosessering
-![CI / CD](https://github.com/navikt/omsorgspengerutbetalingsoknad-prosessering/workflows/CI%20/%20CD/badge.svg)
+# omsorgspengerutbetalingsoknad-arbeidstaker-prosessering
+![CI / CD](https://github.com/navikt/omsorgspengerutbetalingsoknad-arbeidstaker-prosessering/workflows/CI%20/%20CD/badge.svg)
 
-Tjeneste som prosesserer søknader om omsorgspengerutbetaling.
-Leser søknader fra Kafka topic `privat-omsorgspengerutbetaling-mottatt` som legges der av [omsorgspengerutbetalingsoknad-mottak](https://github.com/navikt/omsorgspengerutbetalingsoknad-mottak)
+Tjeneste som prosesserer søknader om omsorgspengerutbetaling for arbeidstakere.
+Leser søknader fra Kafka topic `privat-omp-utbetalingsoknad-arbeidstaker-mottatt` som legges der av [omsorgspengerutbetalingsoknad-arbeidstaker-mottak](https://github.com/navikt/omsorgspengerutbetalingsoknad-arbeidstaker-mottak)
 
 ## Prosessering
 - Genererer Søknad-PDF

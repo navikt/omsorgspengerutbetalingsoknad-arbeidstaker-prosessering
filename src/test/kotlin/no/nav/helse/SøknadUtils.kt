@@ -126,12 +126,6 @@ internal object SøknadUtils {
                 erEØSLand = JaNei.Ja
             )
         ),
-        spørsmål = listOf(
-            SpørsmålOgSvar(
-                spørsmål = "Et spørsmål",
-                svar = JaNei.Nei
-            )
-        ),
         bekreftelser = Bekreftelser(
             harForståttRettigheterOgPlikter = JaNei.Ja,
             harBekreftetOpplysninger = JaNei.Ja

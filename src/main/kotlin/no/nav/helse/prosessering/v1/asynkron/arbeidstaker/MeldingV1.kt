@@ -16,7 +16,6 @@ data class ArbeidstakerutbetalingMelding(
     val søker: Søker,
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
-    val spørsmål: List<SpørsmålOgSvar>,
     val arbeidsgivere: List<ArbeidsgiverDetaljer>,
     val bekreftelser: Bekreftelser,
     val fosterbarn: List<FosterBarn>? = listOf(),

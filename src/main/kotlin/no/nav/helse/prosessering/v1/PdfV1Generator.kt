@@ -118,7 +118,6 @@ internal class PdfV1Generator {
                         "harArbeidsgivere" to melding.arbeidsgivere.isNotEmpty(),
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
-                        "harSpørsmål" to melding.spørsmål.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "titler" to mapOf(

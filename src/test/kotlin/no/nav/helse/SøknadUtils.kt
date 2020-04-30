@@ -2,9 +2,11 @@ package no.nav.helse
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.aktoer.AktørId
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.JobbHosNåværendeArbeidsgiver
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde.Begrunnelse.*
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.net.URI
+import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
@@ -14,7 +16,7 @@ internal object SøknadUtils {
     private val start = LocalDate.parse("2020-01-01")
     private const val GYLDIG_ORGNR = "917755736"
 
-    internal val defaultArbeidstakerutbetalingMelding = ArbeidstakerutbetalingMelding(
+    internal val defaultSøknad = ArbeidstakerutbetalingMelding(
         søknadId = UUID.randomUUID().toString(),
         språk = "nb",
         mottatt = ZonedDateTime.now(),
@@ -26,57 +28,82 @@ internal object SøknadUtils {
             mellomnavn = null,
             fornavn = "Ola"
         ),
-        jobbHosNåværendeArbeidsgiver = JobbHosNåværendeArbeidsgiver(
-            merEnn4Uker = true,
-            begrunnelse = JobbHosNåværendeArbeidsgiver.Begrunnelse.ANNET_ARBEIDSFORHOLD
-        ),
-        arbeidsgivere = ArbeidsgiverDetaljer(
-            organisasjoner = listOf(
-                OrganisasjonDetaljer(
-                    navn = "Arbeidsgiver 1",
-                    organisasjonsnummer = GYLDIG_ORGNR,
-                    harHattFraværHosArbeidsgiver = true,
-                    arbeidsgiverHarUtbetaltLønn = false,
-                    perioder = listOf(
-                        Utbetalingsperiode(
-                            fraOgMed = start,
-                            tilOgMed = start.plusDays(10)
-                        )
-                    )
+        arbeidsgivere = listOf(
+            ArbeidsgiverDetaljer(
+                navn = "Arbeidsgiver 1",
+                organisasjonsnummer = GYLDIG_ORGNR,
+                harHattFraværHosArbeidsgiver = true,
+                arbeidsgiverHarUtbetaltLønn = false,
+                ansettelseslengde = Ansettelseslengde(
+                    merEnn4Uker = true
                 ),
-                OrganisasjonDetaljer(
-                    navn = "Arbeidsgiver 2",
-                    organisasjonsnummer = GYLDIG_ORGNR,
-                    harHattFraværHosArbeidsgiver = true,
-                    arbeidsgiverHarUtbetaltLønn = false,
-                    perioder = listOf(
-                        Utbetalingsperiode(
-                            fraOgMed = start,
-                            tilOgMed = start.plusDays(10)
-                        )
+                perioder = listOf(
+                    Utbetalingsperiode(
+                        fraOgMed = start,
+                        tilOgMed = start.plusDays(10)
                     )
+                )
+            ),
+            ArbeidsgiverDetaljer(
+                navn = "Arbeidsgiver 2",
+                organisasjonsnummer = GYLDIG_ORGNR,
+                harHattFraværHosArbeidsgiver = true,
+                arbeidsgiverHarUtbetaltLønn = false,
+                ansettelseslengde = Ansettelseslengde(
+                    merEnn4Uker = false,
+                    begrunnelse = ANNET_ARBEIDSFORHOLD
                 ),
-                OrganisasjonDetaljer(
-                    navn = "Arbeidsgiver 3",
-                    organisasjonsnummer = GYLDIG_ORGNR,
-                    harHattFraværHosArbeidsgiver = true,
-                    arbeidsgiverHarUtbetaltLønn = false,
-                    perioder = listOf(
-                        Utbetalingsperiode(
-                            fraOgMed = start,
-                            tilOgMed = start.plusDays(10)
-                        )
+                perioder = listOf(
+                    Utbetalingsperiode(
+                        fraOgMed = start.plusDays(20),
+                        tilOgMed = start.plusDays(20),
+                        lengde = Duration.ofHours(5).plusMinutes(30)
                     )
+                )
+            ),
+            ArbeidsgiverDetaljer(
+                navn = "Arbeidsgiver 3",
+                organisasjonsnummer = GYLDIG_ORGNR,
+                harHattFraværHosArbeidsgiver = true,
+                arbeidsgiverHarUtbetaltLønn = false,
+                ansettelseslengde = Ansettelseslengde(
+                    merEnn4Uker = false,
+                    begrunnelse = MILITÆRTJENESTE
                 ),
-                OrganisasjonDetaljer(
-                    organisasjonsnummer = GYLDIG_ORGNR,
-                    harHattFraværHosArbeidsgiver = true,
-                    arbeidsgiverHarUtbetaltLønn = false,
-                    perioder = listOf(
-                        Utbetalingsperiode(
-                            fraOgMed = start,
-                            tilOgMed = start.plusDays(10)
-                        )
+                perioder = listOf(
+                    Utbetalingsperiode(
+                        fraOgMed = start.plusDays(30),
+                        tilOgMed = start.plusDays(35)
+                    )
+                )
+            ),
+            ArbeidsgiverDetaljer(
+                organisasjonsnummer = GYLDIG_ORGNR,
+                harHattFraværHosArbeidsgiver = true,
+                arbeidsgiverHarUtbetaltLønn = false,
+                ansettelseslengde = Ansettelseslengde(
+                    merEnn4Uker = false,
+                    begrunnelse = ANDRE_YTELSER
+                ),
+                perioder = listOf(
+                    Utbetalingsperiode(
+                        fraOgMed = start.plusMonths(1),
+                        tilOgMed = start.plusMonths(1).plusDays(5)
+                    )
+                )
+            ),
+            ArbeidsgiverDetaljer(
+                navn = "Ikke registrert arbeidsgiver",
+                harHattFraværHosArbeidsgiver = true,
+                arbeidsgiverHarUtbetaltLønn = false,
+                ansettelseslengde = Ansettelseslengde(
+                    merEnn4Uker = false,
+                    begrunnelse = ANDRE_YTELSER
+                ),
+                perioder = listOf(
+                    Utbetalingsperiode(
+                        fraOgMed = start.plusMonths(1),
+                        tilOgMed = start.plusMonths(1).plusDays(5)
                     )
                 )
             )
@@ -127,7 +154,7 @@ internal object SøknadUtils {
 
     internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(
         søkerAktørId = AktørId("123456"),
-        melding = defaultArbeidstakerutbetalingMelding,
+        melding = defaultSøknad,
         dokumentUrls = listOf(
             listOf(URI("http://localhost:8080/vedlegg/1"), URI("http://localhost:8080/vedlegg/2")),
             listOf(URI("http://localhost:8080/vedlegg/3"), URI("http://localhost:8080/vedlegg/4"))

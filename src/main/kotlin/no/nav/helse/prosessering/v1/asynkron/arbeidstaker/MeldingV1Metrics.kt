@@ -33,15 +33,15 @@ private val arbeidsgiverDetaljerCounter = Counter.build()
 
 internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
 
-    antallarbeidsgivereCounter.labels(arbeidsgivere.organisasjoner.size.toString()).inc()
-    arbeidsgivere.organisasjoner.forEach {
+    antallarbeidsgivereCounter.labels(arbeidsgivere.size.toString()).inc()
+    arbeidsgivere.forEach {
         arbeidsgiverDetaljerCounter.labels(
             it.arbeidsgiverHarUtbetaltLønn.tilJaEllerNei(),
             it.harHattFraværHosArbeidsgiver.tilJaEllerNei()
         )
     }
 
-    val utbetalingsperioder = this.arbeidsgivere.organisasjoner.flatMap { it.perioder }
+    val utbetalingsperioder = this.arbeidsgivere.flatMap { it.perioder }
 
     utbetalingsperioderCounter.labels(
 

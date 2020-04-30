@@ -14,7 +14,7 @@ import io.ktor.util.KtorExperimentalAPI
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.delay
 import no.nav.common.KafkaEnvironment
-import no.nav.helse.SøknadUtils.defaultArbeidstakerutbetalingMelding
+import no.nav.helse.SøknadUtils.defaultSøknad
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
 import org.junit.AfterClass
 import org.junit.BeforeClass
@@ -120,9 +120,9 @@ class SoknadProsesseringTest {
 
     @Test
     fun `En feilprosessert melding vil bli prosessert etter at tjenesten restartes`() {
-        val melding = defaultArbeidstakerutbetalingMelding.copy(
+        val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
-            søker = defaultArbeidstakerutbetalingMelding.søker.copy(fødselsnummer = gyldigFodselsnummerA)
+            søker = defaultSøknad.søker.copy(fødselsnummer = gyldigFodselsnummerA)
         )
 
         wireMockServer.stubJournalfor(500) // Simulerer feil ved journalføring
@@ -151,9 +151,9 @@ class SoknadProsesseringTest {
 
     @Test
     fun `Melding som gjeder søker med D-nummer`() {
-        val melding = defaultArbeidstakerutbetalingMelding.copy(
+        val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
-            søker = defaultArbeidstakerutbetalingMelding.søker.copy(fødselsnummer = dNummerA)
+            søker = defaultSøknad.søker.copy(fødselsnummer = dNummerA)
         )
 
         kafkaProducer.leggTilMottak(melding)
@@ -164,9 +164,9 @@ class SoknadProsesseringTest {
 
     @Test
     fun `Forvent riktig format på journalført melding`() {
-        val melding = defaultArbeidstakerutbetalingMelding.copy(
+        val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
-            søker = defaultArbeidstakerutbetalingMelding.søker.copy(fødselsnummer = gyldigFodselsnummerA)
+            søker = defaultSøknad.søker.copy(fødselsnummer = gyldigFodselsnummerA)
         )
 
         kafkaProducer.leggTilMottak(melding)

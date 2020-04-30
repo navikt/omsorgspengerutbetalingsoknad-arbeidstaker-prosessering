@@ -78,8 +78,16 @@
     <!-- UTBETALINGSPERIODER -->
     <h2><span>Perioder</span></h2>
     <ul>
-        {{# each søknad.arbeidsgivere.organisasjoner as |org|}}
-            <p class="sporsmalstekst">{{org.navn}}({{org.organisasjonsnummer}})</p>
+        {{# each søknad.arbeidsgivere as |org|}}
+            {{#if org.navn}}
+                {{#unless org.organisasjonsnummer}}
+                    <h3 class="sporsmalstekst">{{org.navn}} (selvoppført)</h3>
+                {{/unless}}
+                {{#if org.organisasjonsnummer}}
+                    <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
+                {{/if}}
+            {{/if}}
+
             <ul>{{# each org.perioder as |p|}}
                 <li>
                     Periode: {{#dato p.fraOgMed}}{{/dato}} - {{#dato p.tilOgMed}}{{/dato}}
@@ -114,38 +122,68 @@
     </ul>
 
     <h2><span>Arbeidssituasjon</span></h2>
-    <p class="sporsmalstekst">Hvor lenge har du jobbet hos arbeidsgiveren din?</p>
-    {{#eqJaNei søknad.jobbHosNåværendeArbeidsgiver.merEnn4Uker "Ja"}}
-        <p>Søker opplyser å ha jobbet mer enn 4 uker hos arbeidsgiver</p><br/>
-    {{/eqJaNei}}
+    <ul>
+        {{# each søknad.arbeidsgivere as |org|}}
+            {{#if org.navn}}
+                {{#unless org.organisasjonsnummer}}
+                    <h3 class="sporsmalstekst">{{org.navn}} (selvoppført)</h3>
+                {{/unless}}
+                {{#if org.organisasjonsnummer}}
+                    <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
+                {{/if}}
+            {{/if}}
 
-    {{#eqJaNei søknad.jobbHosNåværendeArbeidsgiver.merEnn4Uker "Nei"}}
-        {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
-            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av bytte av arbeidsgiver.</p>
-            <br/>
-        {{/eq}}
+            <ul>
+                <li>
+                    <p class="sporsmalstekst">Hvor lenge har du jobbet hos arbeidsgiveren din?</p>
+                    {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Ja"}}
+                        <p>Søker opplyser å ha jobbet mer enn 4 uker hos arbeidsgiver</p><br/>
+                    {{/eqJaNei}}
+                </li>
 
-        {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "ANDRE_YTELSER"}}
-            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har mottatt annen
-                stønad fra NAV.</p><br/>
+                {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Nei"}}
+                    {{#eq org.ansettelseslengde.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av bytte av
+                            arbeidsgiver.</p>
+                        <br/>
+                    {{/eq}}
 
-        {{/eq}}
-        {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
-            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av lovbestemt ferie/ulønnet
-                permisjon etter å ha mottatt Foreldrepenger.</p><br/>
-        {{/eq}}
-        {{#eq søknad.jobbHosNåværendeArbeidsgiver.begrunnelse "MILITÆRTJENESTE"}}
-            <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har vært i
-                militærtjeneste.</p><br/>
-        {{/eq}}
-    {{/eqJaNei}}
+                    {{#eq org.ansettelseslengde.begrunnelse "ANDRE_YTELSER"}}
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har
+                            mottatt annen
+                            stønad fra NAV.</p><br/>
+
+                    {{/eq}}
+
+                    {{#eq org.ansettelseslengde.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av lovbestemt
+                            ferie/ulønnet
+                            permisjon etter å ha mottatt Foreldrepenger.</p><br/>
+                    {{/eq}}
+
+                    {{#eq org.ansettelseslengde.begrunnelse "MILITÆRTJENESTE"}}
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har
+                            vært i
+                            militærtjeneste.</p><br/>
+                    {{/eq}}
+                {{/eqJaNei}}
+            </ul>
+        {{/each}}
+    </ul>
 
     <h2><span>Arbeidsforhold</span></h2>
     <!-- ARBEIDSGIVERE -->
     {{# if harArbeidsgivere }}
 
-        {{# each søknad.arbeidsgivere.organisasjoner as |org|~}}
-            <p class="sporsmalstekst">{{org.navn}} (orgnr: {{org.organisasjonsnummer}})</p>
+        {{# each søknad.arbeidsgivere as |org|~}}
+            {{#if org.navn}}
+                {{#unless org.organisasjonsnummer}}
+                    <h3 class="sporsmalstekst">{{org.navn}} (selvoppført)</h3>
+                {{/unless}}
+                {{#if org.organisasjonsnummer}}
+                    <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
+                {{/if}}
+            {{/if}}
 
             <ul>
                 <p class="sporsmalstekst">Har du hatt fravær hos gitt arbeidsgiver fordi du har brukt omsorgsdager?</p>
@@ -164,14 +202,14 @@
         </ul>
     {{/if}}
 
-   {{#if harSpørsmål}}
-       <!-- SPØRSMÅL -->
-       <h2><span>Spørsmål</span></h2>
-       {{# each søknad.spørsmål as |s|}}
-           <p class="sporsmalstekst">{{s.spørsmål}}</p>
-           {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
-       {{/each}}
-   {{/if}}
+    {{#if harSpørsmål}}
+        <!-- SPØRSMÅL -->
+        <h2><span>Spørsmål</span></h2>
+        {{# each søknad.spørsmål as |s|}}
+            <p class="sporsmalstekst">{{s.spørsmål}}</p>
+            {{>jaNeiCheckbox parameter=s.svar}} <br/><br/>
+        {{/each}}
+    {{/if}}
 
     <!-- MEDLEMSKAP -->
     <h2><span>Medlemskap</span></h2>

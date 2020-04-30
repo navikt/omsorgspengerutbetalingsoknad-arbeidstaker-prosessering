@@ -1,6 +1,6 @@
 package no.nav.helse.prosessering.v1.asynkron.arbeidstaker
 
-data class JobbHosNåværendeArbeidsgiver(
+data class Ansettelseslengde(
     val merEnn4Uker: Boolean,
     val begrunnelse: Begrunnelse? = null
 ) {

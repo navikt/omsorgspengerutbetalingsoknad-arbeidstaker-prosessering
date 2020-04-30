@@ -3,8 +3,7 @@ package no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
-import no.nav.helse.prosessering.v1.*
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.JobbHosNåværendeArbeidsgiver
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
@@ -18,8 +17,7 @@ data class ArbeidstakerutbetalingMelding(
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val spørsmål: List<SpørsmålOgSvar>,
-    val jobbHosNåværendeArbeidsgiver: JobbHosNåværendeArbeidsgiver,
-    val arbeidsgivere: ArbeidsgiverDetaljer,
+    val arbeidsgivere: List<ArbeidsgiverDetaljer>,
     val bekreftelser: Bekreftelser,
     val fosterbarn: List<FosterBarn>? = listOf(),
     val titler: List<String>,
@@ -37,7 +35,12 @@ data class Bosted(
 typealias Opphold = Bosted
 
 data class ArbeidsgiverDetaljer(
-    val organisasjoner: List<OrganisasjonDetaljer>
+    val navn: String? = null,
+    val organisasjonsnummer: String? = null,
+    val harHattFraværHosArbeidsgiver: Boolean,
+    val arbeidsgiverHarUtbetaltLønn: Boolean,
+    val ansettelseslengde: Ansettelseslengde,
+    val perioder: List<Utbetalingsperiode>
 )
 
 data class OrganisasjonDetaljer(

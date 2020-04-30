@@ -167,40 +167,21 @@
                             militærtjeneste.</p><br/>
                     {{/eq}}
                 {{/eqJaNei}}
+
+                <li>
+                    <p class="sporsmalstekst">Har du hatt fravær hos gitt arbeidsgiver fordi du har brukt
+                        omsorgsdager?</p>
+                    {{>jaNeiCheckbox parameter=org.harHattFraværHosArbeidsgiver}} <br/><br/>
+                </li>
+
+                <li>
+                    <p class="sporsmalstekst">Har arbeidsgiver utbetalt deg lønn for de dagene du har brukt
+                        omsorgsdager?</p>
+                    {{>jaNeiCheckbox parameter=org.arbeidsgiverHarUtbetaltLønn}} <br/><br/>
+                </li>
             </ul>
         {{/each}}
     </ul>
-
-    <h2><span>Arbeidsforhold</span></h2>
-    <!-- ARBEIDSGIVERE -->
-    {{# if harArbeidsgivere }}
-
-        {{# each søknad.arbeidsgivere as |org|~}}
-            {{#if org.navn}}
-                {{#unless org.organisasjonsnummer}}
-                    <h3 class="sporsmalstekst">{{org.navn}} (selvoppført)</h3>
-                {{/unless}}
-                {{#if org.organisasjonsnummer}}
-                    <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
-                {{/if}}
-            {{/if}}
-
-            <ul>
-                <p class="sporsmalstekst">Har du hatt fravær hos gitt arbeidsgiver fordi du har brukt omsorgsdager?</p>
-                {{>jaNeiCheckbox parameter=org.harHattFraværHosArbeidsgiver}} <br/>
-
-                <p class="sporsmalstekst">Har arbeidsgiver utbetalt deg lønn for de dagene du har brukt
-                    omsorgsdager?</p>
-                {{>jaNeiCheckbox parameter=org.arbeidsgiverHarUtbetaltLønn}} <br/><br/>
-            </ul>
-
-        {{/each}}
-
-    {{else}}
-        <ul>
-            <li class="ikke_satt">Det er ikke angitt noen arbeidsgivere i søknaden.</li>
-        </ul>
-    {{/if}}
 
     {{#if harSpørsmål}}
         <!-- SPØRSMÅL -->

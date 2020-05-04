@@ -131,6 +131,8 @@
                 {{#if org.organisasjonsnummer}}
                     <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
                 {{/if}}
+            {{else}}
+                <h3 class="sporsmalstekst">{{org.organisasjonsnummer}}</h3>
             {{/if}}
 
             <ul>
@@ -165,6 +167,18 @@
                         <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har vært i
                             militærtjeneste.</p><br/>
                     {{/eq}}
+
+                    {{#eq org.ansettelseslengde.begrunnelse "INGEN_AV_SITUASJONENE"}}
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, men at ingen av situasjonene passer.
+                            Søker forklarer hvorfor ingen situasjonen passet han/hun. </p>
+                        <div class="fritekst">
+                            <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>
+                                Forklaring:
+                            </p>
+                            <p class="fritekst_textarea">{{fritekst org.ansettelseslengde.ingenAvSituasjoneneForklaring}}</p>
+                        </div><br/>
+                    {{/eq}}
+
                 {{/eqJaNei}}
 
                 <li>

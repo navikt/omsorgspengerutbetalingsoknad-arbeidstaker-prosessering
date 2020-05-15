@@ -42,7 +42,7 @@ internal class PreprosseseringV1Service(
             pdf = soknadOppsummeringPdf,
             aktørId = søkerAktørId,
             correlationId = correlationId,
-            dokumentbeskrivelse = "Søknad om utbetaling av omsorgspenger - Arbeidstagere"
+            dokumentbeskrivelse = "Søknad om utbetaling av omsorgspenger - Arbeidstaker"
         )
         logger.info("Mellomlagring av Oppsummerings-PDF OK")
 
@@ -52,7 +52,7 @@ internal class PreprosseseringV1Service(
             melding = melding,
             aktørId = søkerAktørId,
             correlationId = correlationId,
-            dokumentbeskrivelse = "Søknad om utbetaling av omsorgspenger - arbeidstager som JSON"
+            dokumentbeskrivelse = "Søknad om utbetaling av omsorgspenger - Arbeidstaker som JSON"
         )
         logger.info("Mellomlagrer Oppsummerings-JSON OK.")
 

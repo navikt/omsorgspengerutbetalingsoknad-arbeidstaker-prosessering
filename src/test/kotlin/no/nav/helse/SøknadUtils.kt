@@ -132,6 +132,13 @@ internal object SøknadUtils {
                 landkode = "GB",
                 landnavn = "Great Britain",
                 erEØSLand = JaNei.Ja
+            ),
+            Bosted(
+                fraOgMed = start.minusDays(20),
+                tilOgMed = start.minusDays(10),
+                landkode = "US",
+                landnavn = "USA",
+                erEØSLand = JaNei.Nei
             )
         ),
         opphold = listOf(
@@ -160,7 +167,6 @@ internal object SøknadUtils {
             URI("http://localhost:8080/vedlegg/2"),
             URI("http://localhost:8080/vedlegg/3")
         )
-
     )
 
     internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(

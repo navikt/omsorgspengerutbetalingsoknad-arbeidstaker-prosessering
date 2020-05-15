@@ -119,6 +119,7 @@ internal class PdfV1Generator {
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
+                        "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "titler" to mapOf(
                             "vedlegg" to melding.titler.somMapTitler()

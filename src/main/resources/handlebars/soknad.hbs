@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8"/>
-    <title>Søknad om utbetaling av Omsorgspenger - Arbeidstaker</title>
+    <title>Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler</title>
     {{#block 'style' }}
     {{/block}}
 
@@ -19,7 +19,7 @@
 <body>
 <div id="header">
     <img class="navlogo" src="{{ image "Navlogo.png" }}"/>
-    <h1 class="title">Søknad om utbetaling av Omsorgspenger - Arbeidstaker</h1>
+    <h1 class="title">Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler</h1>
 </div>
 <div class="container">
     <div id="container_top">
@@ -57,14 +57,13 @@
                         </p>
                     {{/if}}
                     {{# each søknad.fosterbarn as |barn|}}
-                        <img class="ikon" src="{{ image "Personikon.png" }}"/>
                         <div class="persontekst__personalia">
-                            <p class="navn">
-                                {{ barn.fornavn }} {{barn.etternavn}}
-                            </p>
-                            <p class="id">
-                                {{ barn.fødselsnummer }}
-                            </p>
+                            <span>
+                                <img class="ikon" style="float: left; margin-top: auto; margin-bottom: auto" src="{{ image "Personikon.png" }}"/>
+                                <p class="id" style="float: right; margin-top: 8px; margin-bottom: auto">
+                                    {{ barn.fødselsnummer }}
+                                </p>
+                            </span>
                         </div>
                         <br/>
                     {{/each}}
@@ -81,7 +80,7 @@
         {{# each søknad.arbeidsgivere as |org|}}
             {{#if org.navn}}
                 {{#unless org.organisasjonsnummer}}
-                    <h3 class="sporsmalstekst">{{org.navn}} (selvoppført)</h3>
+                    <h3 class="sporsmalstekst">{{org.navn}} (registrert av søker)</h3>
                 {{/unless}}
                 {{#if org.organisasjonsnummer}}
                     <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
@@ -126,7 +125,7 @@
         {{# each søknad.arbeidsgivere as |org|}}
             {{#if org.navn}}
                 {{#unless org.organisasjonsnummer}}
-                    <h3 class="sporsmalstekst">{{org.navn}} (selvoppført)</h3>
+                    <h3 class="sporsmalstekst">{{org.navn}} (registrert av søker)</h3>
                 {{/unless}}
                 {{#if org.organisasjonsnummer}}
                     <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
@@ -164,19 +163,23 @@
                     {{/eq}}
 
                     {{#eq org.ansettelseslengde.begrunnelse "MILITÆRTJENESTE"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har vært i
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har
+                            vært i
                             militærtjeneste.</p><br/>
                     {{/eq}}
 
                     {{#eq org.ansettelseslengde.begrunnelse "INGEN_AV_SITUASJONENE"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, men at ingen av situasjonene passer.
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, men at ingen av situasjonene
+                            passer.
                             Søker forklarer hvorfor ingen situasjonen passet han/hun. </p>
                         <div class="fritekst">
                             <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>
                                 Forklaring:
                             </p>
-                            <p class="fritekst_textarea">{{fritekst org.ansettelseslengde.ingenAvSituasjoneneForklaring}}</p>
-                        </div><br/>
+                            <p class="fritekst_textarea">{{fritekst
+                                    org.ansettelseslengde.ingenAvSituasjoneneForklaring}}</p>
+                        </div>
+                        <br/>
                     {{/eq}}
 
                 {{/eqJaNei}}
@@ -213,24 +216,20 @@
     {{/if}}
     <ul>
         {{# each søknad.bosteder as |b|}}
-            {{# if b.erEØSLand}}
-                <li>
-                    {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
-                </li>
-            {{else}}
-                <li>
-                    {{b.landnavn}} (utenfor EØS): {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
-                </li>
-            {{/if}}
+            <li>
+                {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
+            </li>
         {{/each}}
     </ul>
 
-    <h2><span>Dokumenter</span></h2>
-    <ul>
-        {{#each titler.vedlegg as |vedlegg|}}
-            <li><p>{{vedlegg.tittel}}</p></li>
-        {{/each}}
-    </ul>
+    {{#if harVedlegg}}
+        <h2><span>Dokumenter</span></h2>
+        <ul>
+            {{#each titler.vedlegg as |vedlegg|}}
+                <li><p>{{vedlegg.tittel}}</p></li>
+            {{/each}}
+        </ul>
+    {{/if}}
 
     <h2><span>Samtykker</span></h2>
     <p class="sporsmalstekst">Har forstått rettigheter og plikter?</p>

@@ -1,6 +1,7 @@
-package no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling
+package no.nav.helse.prosessering.v1.asynkron.arbeidstaker
 
 import no.nav.helse.aktoer.AktørId
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.net.URI
 import java.time.ZonedDateTime
 
@@ -15,7 +16,8 @@ data class PreprosessertArbeidstakerutbetalingMelding(
     val fosterbarn: List<FosterBarn>? = listOf(),
     val bekreftelser: Bekreftelser,
     val dokumentUrls: List<List<URI>>,
-    val titler: List<String>
+    val titler: List<String>,
+    val hjemmePgaSmittevernhensyn: Boolean
 ) {
     internal constructor(
         melding: ArbeidstakerutbetalingMelding,
@@ -32,7 +34,8 @@ data class PreprosessertArbeidstakerutbetalingMelding(
         fosterbarn = melding.fosterbarn,
         bekreftelser = melding.bekreftelser,
         dokumentUrls = dokumentUrls,
-        titler = melding.titler
+        titler = melding.titler,
+        hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn
     )
 }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde.Begrunnelse.*
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.net.URI
 import java.time.Duration
@@ -166,7 +167,8 @@ internal object SøknadUtils {
             URI("http://localhost:8080/vedlegg/1"),
             URI("http://localhost:8080/vedlegg/2"),
             URI("http://localhost:8080/vedlegg/3")
-        )
+        ),
+        hjemmePgaSmittevernhensyn = true
     )
 
     internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(

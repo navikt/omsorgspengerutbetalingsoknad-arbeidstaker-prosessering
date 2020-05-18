@@ -31,6 +31,12 @@ private val arbeidsgiverDetaljerCounter = Counter.build()
     .labelNames("harUtbetaltlonn", "harHattFraver")
     .register()
 
+private val særligeSmittevernhensynCounter = Counter.build()
+    .name("serligeSmittevernhensynCounter")
+    .help("Teller for info om særlige smittevernhensyn")
+    .labelNames("blirHjemme", "harVedleggLastetOpp")
+    .register()
+
 internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
 
     antallarbeidsgivereCounter.labels(arbeidsgivere.size.toString()).inc()
@@ -55,6 +61,10 @@ internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
         utbetalingsperioder.tilAntallHeleDager().toString(),
         utbetalingsperioder.tilAntallDelDager().toString()
     ).inc()
+
+    særligeSmittevernhensynCounter
+        .labels(hjemmePgaSmittevernhensyn.tilJaEllerNei(), vedleggUrls.isNotEmpty().tilJaEllerNei())
+        .inc()
 }
 
 private fun List<Utbetalingsperiode>.søkerBareOmTimer(): String {

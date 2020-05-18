@@ -74,6 +74,16 @@
     </div>
     <br/>
 
+    {{#if søknad.hjemmePgaSmittevernhensyn}}
+        <h2><span>Særlige Smittevernhensyn</span></h2>
+        <ul>
+            <li>Søker opplyser å være hjemme med barn grunnet smittevernhensyn</li>
+            {{#if ikkeHarSendtInnVedlegg}}
+                <li>Bekreftelse fra lege ikke lastet opp. Må ettersendes.</li>
+            {{/if}}
+        </ul>
+    {{/if}}
+
     <!-- UTBETALINGSPERIODER -->
     <h2><span>Perioder</span></h2>
     <ul>

@@ -59,7 +59,8 @@
                     {{# each søknad.fosterbarn as |barn|}}
                         <div class="persontekst__personalia">
                             <span>
-                                <img class="ikon" style="float: left; margin-top: auto; margin-bottom: auto" src="{{ image "Personikon.png" }}"/>
+                                <img class="ikon" style="float: left; margin-top: auto; margin-bottom: auto"
+                                     src="{{ image "Personikon.png" }}"/>
                                 <p class="id" style="float: right; margin-top: 8px; margin-bottom: auto">
                                     {{ barn.fødselsnummer }}
                                 </p>
@@ -148,40 +149,47 @@
                 <li>
                     <p class="sporsmalstekst">Hvor lenge har du jobbet hos arbeidsgiveren din?</p>
                     {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Ja"}}
-                        <p>Søker opplyser å ha jobbet mer enn 4 uker hos arbeidsgiver</p><br/>
+                        {{#if harVedlegg}}
+                            <p>Søker opplyser å ha jobbet mer enn 4 uker. Søker har lastet opp vedlegg til søknaden.</p>
+                            <br/>
+
+                        {{else}}
+                            <p>Søker opplyser å ha jobbet mer enn 4 uker. Søker har ikke lastet opp vedlegg til søknaden
+                                med forklaring fra arbeidsgiver. Denne må
+                                ettersendes.</p>
+                            <br/>
+                        {{/if}}
                     {{/eqJaNei}}
                 </li>
 
                 {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Nei"}}
                     {{#eq org.ansettelseslengde.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av bytte av
-                            arbeidsgiver.</p>
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det å ha jobbet hos en annen
+                            arbeidsgiver. </p>
                         <br/>
                     {{/eq}}
 
                     {{#eq org.ansettelseslengde.begrunnelse "ANDRE_YTELSER"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har
-                            mottatt annen
-                            stønad fra NAV.</p><br/>
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, å ha mottatt dagpenger,
+                            sykepenger, pleiepenger, omsorgspenger, opplæringspenger, foreldrepenger eller
+                            svangerskapspenger.</p><br/>
 
                     {{/eq}}
 
                     {{#eq org.ansettelseslengde.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av lovbestemt
-                            ferie/ulønnet
-                            permisjon etter å ha mottatt Foreldrepenger.</p><br/>
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, hatt ulønnet permisjon
+                            direkte etter en periode med foreldrepenger, for så å ha gjenopptatt arbeidet etter
+                            permisjonen.</p><br/>
                     {{/eq}}
 
                     {{#eq org.ansettelseslengde.begrunnelse "MILITÆRTJENESTE"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, på grunn av at han/hun har
-                            vært i
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, vært i
                             militærtjeneste.</p><br/>
                     {{/eq}}
 
                     {{#eq org.ansettelseslengde.begrunnelse "INGEN_AV_SITUASJONENE"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker hos arbeidsgiver, men at ingen av situasjonene
-                            passer.
-                            Søker forklarer hvorfor ingen situasjonen passet han/hun. </p>
+                        <p>Søker opplyser å ha jobbet mindre enn 4 uker, men at ingen av situasjonene beskrevet i
+                            søknaden gjelder for han/hun.</p>
                         <div class="fritekst">
                             <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>
                                 Forklaring:

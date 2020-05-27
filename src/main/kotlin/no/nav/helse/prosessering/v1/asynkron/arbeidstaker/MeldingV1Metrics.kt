@@ -37,6 +37,12 @@ private val særligeSmittevernhensynCounter = Counter.build()
     .labelNames("blirHjemme", "harVedleggLastetOpp")
     .register()
 
+private val ansettelseslengdeCounter = Counter.build()
+    .name("ansettelseslengdeCounter")
+    .help("Teller for info om ansettelseslengde")
+    .labelNames("merEnn4Uker", "begrunnelse")
+    .register()
+
 internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
 
     antallarbeidsgivereCounter.labels(arbeidsgivere.size.toString()).inc()
@@ -44,6 +50,11 @@ internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
         arbeidsgiverDetaljerCounter.labels(
             it.arbeidsgiverHarUtbetaltLønn.tilJaEllerNei(),
             it.harHattFraværHosArbeidsgiver.tilJaEllerNei()
+        )
+
+        ansettelseslengdeCounter.labels(
+            it.ansettelseslengde.merEnn4Uker.tilJaEllerNei(),
+            it.ansettelseslengde.begrunnelse?.name ?: "n/a"
         )
     }
 
@@ -65,6 +76,7 @@ internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
     særligeSmittevernhensynCounter
         .labels(hjemmePgaSmittevernhensyn.tilJaEllerNei(), vedleggUrls.isNotEmpty().tilJaEllerNei())
         .inc()
+
 }
 
 private fun List<Utbetalingsperiode>.søkerBareOmTimer(): String {

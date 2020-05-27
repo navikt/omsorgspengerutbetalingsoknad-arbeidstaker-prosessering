@@ -55,7 +55,7 @@ internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
         ansettelseslengdeCounter.labels(
             it.ansettelseslengde.merEnn4Uker.tilJaEllerNei(),
             it.ansettelseslengde.begrunnelse?.name ?: "n/a"
-        )
+        ).inc()
     }
 
     val utbetalingsperioder = this.arbeidsgivere.flatMap { it.perioder }

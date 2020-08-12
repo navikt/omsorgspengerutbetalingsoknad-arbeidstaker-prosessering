@@ -19,6 +19,7 @@ data class ArbeidstakerutbetalingMelding(
     val arbeidsgivere: List<ArbeidsgiverDetaljer>,
     val bekreftelser: Bekreftelser,
     val fosterbarn: List<FosterBarn>? = listOf(),
+    val selvstendigOgEllerFrilans: List<String>,
     val titler: List<String>,
     val vedleggUrls: List<URI>,
     val hjemmePgaSmittevernhensyn: Boolean

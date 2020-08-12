@@ -119,6 +119,7 @@ internal class PdfV1Generator {
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
+                        "erSelvstendigOgEllerFrilans" to melding.selvstendigOgEllerFrilans.erSelvstendigOgEllerFrilans(),
                         "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
                         "ikkeHarSendtInnVedlegg" to melding.vedleggUrls.isEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
@@ -214,3 +215,5 @@ private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     "nn" -> "Nynorsk"
     else -> this
 }
+
+private fun List<String>.erSelvstendigOgEllerFrilans(): Boolean = this.isNotEmpty()

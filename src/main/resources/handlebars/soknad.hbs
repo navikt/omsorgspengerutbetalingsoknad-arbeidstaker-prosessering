@@ -244,6 +244,19 @@
         {{/each}}
     </ul>
 
+    {{#if erSelvstendigOgEllerFrilans}}
+        <h2><span>Annet</span></h2>
+        <h3>Er selvstendig næringsdrivende og/eller frilanser i tillegg til arbeidstaker?</h3>
+        <ul>
+            {{# each søknad.selvstendigOgEllerFrilans as |sorf|}}
+                <li>
+                    {{sorf}}<br/>
+                </li>
+            {{/each}}
+        </ul>
+
+    {{/if}}
+
     {{#if harVedlegg}}
         <h2><span>Dokumenter</span></h2>
         <ul>

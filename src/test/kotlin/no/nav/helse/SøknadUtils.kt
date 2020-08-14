@@ -167,7 +167,8 @@ internal object SøknadUtils {
         ),
         selvstendigOgEllerFrilans = listOf(
             "selvstendig",
-            "frilans"
+            "frilans",
+            "denneSkalIkkeKommeMed"
         ),
         titler = listOf(
             "vedlegg1"

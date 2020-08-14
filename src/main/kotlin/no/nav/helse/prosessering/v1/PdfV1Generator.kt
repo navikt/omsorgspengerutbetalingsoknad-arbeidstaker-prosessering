@@ -41,7 +41,7 @@ internal class PdfV1Generator {
                 if (context == options.param(0)) options.fn() else options.inverse()
             })
             registerHelper("eqJaNei", { context: Boolean, options ->
-                val con = when(context) {
+                val con = when (context) {
                     true -> "Ja"
                     false -> "Nei"
                 }
@@ -120,7 +120,7 @@ internal class PdfV1Generator {
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "erSelvstendigOgEllerFrilans" to melding.selvstendigOgEllerFrilans.erSelvstendigOgEllerFrilans(),
-                        "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
+                        "selvstendigOgEllerFrilans" to melding.selvstendigOgEllerFrilans.formattedSelvstendigOgEllerFrilans(),
                         "ikkeHarSendtInnVedlegg" to melding.vedleggUrls.isEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "titler" to mapOf(
@@ -217,3 +217,26 @@ private fun String.sprakTilTekst() = when (this.toLowerCase()) {
 }
 
 private fun List<String>.erSelvstendigOgEllerFrilans(): Boolean = this.isNotEmpty()
+
+enum class SNF {
+    selvstendig,
+    frilans
+}
+
+private fun SnfToText(string: SNF): String =
+    when (string) {
+        SNF.selvstendig -> "Ja, er selvstendig næringsdrivende"
+        SNF.frilans -> "Ja, er frilanser"
+    }
+
+private fun stringToMaybeSnf(string: String): SNF? =
+    when (string) {
+        SNF.selvstendig.name -> SNF.selvstendig
+        SNF.frilans.name -> SNF.frilans
+        else -> null
+    }
+
+fun List<String>.formattedSelvstendigOgEllerFrilans(): List<String> =
+    this.map(::stringToMaybeSnf)
+        .filterNotNull()
+        .map(::SnfToText)

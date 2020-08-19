@@ -165,11 +165,9 @@ internal object SøknadUtils {
                 fødselsnummer = "02119970078"
             )
         ),
-        selvstendigOgEllerFrilans = listOf(
-            "selvstendig",
-            "frilans",
-            "denneSkalIkkeKommeMed"
-        ),
+        andreUtbetalinger = listOf("dagpenger", "sykepenger"),
+        erSelvstendig = true,
+        erFrilanser = true,
         titler = listOf(
             "vedlegg1"
         ),

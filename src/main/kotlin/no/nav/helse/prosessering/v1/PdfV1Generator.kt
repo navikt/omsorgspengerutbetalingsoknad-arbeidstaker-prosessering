@@ -119,8 +119,14 @@ internal class PdfV1Generator {
                         "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
-                        "erSelvstendigOgEllerFrilans" to melding.selvstendigOgEllerFrilans.erSelvstendigOgEllerFrilans(),
-                        "selvstendigOgEllerFrilans" to melding.selvstendigOgEllerFrilans.formattedSelvstendigOgEllerFrilans(),
+                        "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
+                        "harSøktAndreYtelser" to melding.andreUtbetalinger.isNotEmpty(),
+                        "erSelvstendigOgEllerFrilanser" to erSelvstendigOgEllerFrilanser(
+                            melding.erSelvstendig,
+                            melding.erFrilanser
+                        ),
+                        "erSelvstendig" to melding.erSelvstendig,
+                        "erFrilanser" to melding.erFrilanser,
                         "ikkeHarSendtInnVedlegg" to melding.vedleggUrls.isEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "titler" to mapOf(
@@ -216,27 +222,8 @@ private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     else -> this
 }
 
-private fun List<String>.erSelvstendigOgEllerFrilans(): Boolean = this.isNotEmpty()
+private fun erSelvstendigOgEllerFrilanser(
+    erSelvstendig: Boolean,
+    erFrilanser: Boolean
+): Boolean = (erSelvstendig == true || erFrilanser == true)
 
-enum class SNF {
-    selvstendig,
-    frilans
-}
-
-private fun SnfToText(string: SNF): String =
-    when (string) {
-        SNF.selvstendig -> "Ja, er selvstendig næringsdrivende"
-        SNF.frilans -> "Ja, er frilanser"
-    }
-
-private fun stringToMaybeSnf(string: String): SNF? =
-    when (string) {
-        SNF.selvstendig.name -> SNF.selvstendig
-        SNF.frilans.name -> SNF.frilans
-        else -> null
-    }
-
-fun List<String>.formattedSelvstendigOgEllerFrilans(): List<String> =
-    this.map(::stringToMaybeSnf)
-        .filterNotNull()
-        .map(::SnfToText)

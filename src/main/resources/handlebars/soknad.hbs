@@ -244,8 +244,11 @@
         {{/each}}
     </ul>
 
-    {{#if erSelvstendigOgEllerFrilanser}}
+    {{#if inkluderAnnetOverskrift}}
         <h2><span>Annet</span></h2>
+    {{/if}}
+
+    {{#if erSelvstendigOgEllerFrilanser}}
         <h3>Er selvstendig næringsdrivende og/eller frilanser i tillegg til arbeidstaker?</h3>
         <ul>
             {{#if erSelvstendig}}

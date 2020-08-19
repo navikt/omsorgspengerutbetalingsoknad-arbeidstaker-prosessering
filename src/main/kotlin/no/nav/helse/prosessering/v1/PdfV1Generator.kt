@@ -120,6 +120,10 @@ internal class PdfV1Generator {
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
+                        "inkluderAnnetOverskrift" to inkluderAnnetOverskrift(
+                            melding.andreUtbetalinger.isNotEmpty(), melding.erSelvstendig,
+                            melding.erFrilanser
+                        ),
                         "harSøktAndreYtelser" to melding.andreUtbetalinger.isNotEmpty(),
                         "erSelvstendigOgEllerFrilanser" to erSelvstendigOgEllerFrilanser(
                             melding.erSelvstendig,
@@ -227,3 +231,8 @@ private fun erSelvstendigOgEllerFrilanser(
     erFrilanser: Boolean
 ): Boolean = (erSelvstendig == true || erFrilanser == true)
 
+private fun inkluderAnnetOverskrift(
+    harSøktAndreYtelser: Boolean,
+    erSelvstendig: Boolean,
+    erFrilanser: Boolean
+): Boolean = (erSelvstendigOgEllerFrilanser(erSelvstendig, erFrilanser) || harSøktAndreYtelser)

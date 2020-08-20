@@ -244,6 +244,38 @@
         {{/each}}
     </ul>
 
+    {{#if inkluderAnnetOverskrift}}
+        <h2><span>Annet</span></h2>
+    {{/if}}
+
+    {{#if erSelvstendigOgEllerFrilanser}}
+        <h3>Er selvstendig næringsdrivende og/eller frilanser i tillegg til arbeidstaker?</h3>
+        <ul>
+            {{#if erSelvstendig}}
+                <li>
+                    Ja, er selvstendig næringsdrivende<br/>
+                </li>
+            {{/if}}
+            {{#if erFrilanser}}
+                <li>
+                    Ja, er frilanser<br/>
+                </li>
+            {{/if}}
+        </ul>
+    {{/if}}
+
+    <!-- Bekreftet andre utbetalinger -->
+    {{#if harSøktAndreYtelser}}
+        <h3>Søkt om andre ytelser</h3>
+    {{/if}}
+    <ul>
+        {{# each søknad.andreUtbetalinger as |utbetaling|}}
+            <li>
+                {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
+            </li>
+        {{/each}}
+    </ul>
+
     {{#if harVedlegg}}
         <h2><span>Dokumenter</span></h2>
         <ul>

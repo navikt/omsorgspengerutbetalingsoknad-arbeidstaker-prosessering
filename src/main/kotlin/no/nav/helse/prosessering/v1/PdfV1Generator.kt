@@ -41,7 +41,7 @@ internal class PdfV1Generator {
                 if (context == options.param(0)) options.fn() else options.inverse()
             })
             registerHelper("eqJaNei", { context: Boolean, options ->
-                val con = when(context) {
+                val con = when (context) {
                     true -> "Ja"
                     false -> "Nei"
                 }
@@ -120,6 +120,17 @@ internal class PdfV1Generator {
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
+                        "inkluderAnnetOverskrift" to inkluderAnnetOverskrift(
+                            melding.andreUtbetalinger.isNotEmpty(), melding.erSelvstendig,
+                            melding.erFrilanser
+                        ),
+                        "harSøktAndreYtelser" to melding.andreUtbetalinger.isNotEmpty(),
+                        "erSelvstendigOgEllerFrilanser" to erSelvstendigOgEllerFrilanser(
+                            melding.erSelvstendig,
+                            melding.erFrilanser
+                        ),
+                        "erSelvstendig" to melding.erSelvstendig,
+                        "erFrilanser" to melding.erFrilanser,
                         "ikkeHarSendtInnVedlegg" to melding.vedleggUrls.isEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "titler" to mapOf(
@@ -214,3 +225,14 @@ private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     "nn" -> "Nynorsk"
     else -> this
 }
+
+private fun erSelvstendigOgEllerFrilanser(
+    erSelvstendig: Boolean,
+    erFrilanser: Boolean
+): Boolean = (erSelvstendig == true || erFrilanser == true)
+
+private fun inkluderAnnetOverskrift(
+    harSøktAndreYtelser: Boolean,
+    erSelvstendig: Boolean,
+    erFrilanser: Boolean
+): Boolean = (erSelvstendigOgEllerFrilanser(erSelvstendig, erFrilanser) || harSøktAndreYtelser)

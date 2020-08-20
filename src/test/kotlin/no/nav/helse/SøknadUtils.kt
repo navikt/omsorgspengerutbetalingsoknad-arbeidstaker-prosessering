@@ -165,6 +165,9 @@ internal object SøknadUtils {
                 fødselsnummer = "02119970078"
             )
         ),
+        andreUtbetalinger = listOf("dagpenger", "sykepenger"),
+        erSelvstendig = true,
+        erFrilanser = true,
         titler = listOf(
             "vedlegg1"
         ),

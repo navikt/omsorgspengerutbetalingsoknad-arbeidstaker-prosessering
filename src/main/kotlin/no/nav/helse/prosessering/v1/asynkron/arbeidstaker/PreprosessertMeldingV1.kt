@@ -17,7 +17,8 @@ data class PreprosessertArbeidstakerutbetalingMelding(
     val bekreftelser: Bekreftelser,
     val dokumentUrls: List<List<URI>>,
     val titler: List<String>,
-    val hjemmePgaSmittevernhensyn: Boolean
+    val hjemmePgaSmittevernhensyn: Boolean,
+    val hjemmePgaStengtBhgSkole: Boolean? = null // TODO låses til JaNei etter lansering.
 ) {
     internal constructor(
         melding: ArbeidstakerutbetalingMelding,

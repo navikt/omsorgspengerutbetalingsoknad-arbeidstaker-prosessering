@@ -176,7 +176,8 @@ internal object SøknadUtils {
             URI("http://localhost:8080/vedlegg/2"),
             URI("http://localhost:8080/vedlegg/3")
         ),
-        hjemmePgaSmittevernhensyn = true
+        hjemmePgaSmittevernhensyn = true,
+        hjemmePgaStengtBhgSkole = true
     )
 
     internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(

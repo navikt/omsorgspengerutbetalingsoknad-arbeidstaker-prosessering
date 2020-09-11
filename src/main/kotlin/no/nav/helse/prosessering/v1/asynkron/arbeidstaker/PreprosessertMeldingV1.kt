@@ -36,7 +36,8 @@ data class PreprosessertArbeidstakerutbetalingMelding(
         bekreftelser = melding.bekreftelser,
         dokumentUrls = dokumentUrls,
         titler = melding.titler,
-        hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn
+        hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
+        hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole
     )
 }
 

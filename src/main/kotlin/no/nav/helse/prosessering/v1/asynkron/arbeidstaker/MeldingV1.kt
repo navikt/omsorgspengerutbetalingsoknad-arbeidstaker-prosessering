@@ -24,7 +24,8 @@ data class ArbeidstakerutbetalingMelding(
     val erFrilanser: Boolean = false,
     val titler: List<String>,
     val vedleggUrls: List<URI>,
-    val hjemmePgaSmittevernhensyn: Boolean
+    val hjemmePgaSmittevernhensyn: Boolean,
+    val hjemmePgaStengtBhgSkole: Boolean? = null // TODO låses til JaNei etter lansering.
 )
 
 

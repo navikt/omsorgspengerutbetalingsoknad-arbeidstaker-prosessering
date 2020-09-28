@@ -1,103 +1,74 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8"/>
-    <title>Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler</title>
-    {{#block 'style' }}
-    {{/block}}
+<html lang="NO">
 
-    {{#*inline "jaNeiCheckbox"}}
-        {{#if parameter}}
-            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Ja
-            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Nei
-        {{else}}
-            <img class="checkbox" src="{{ image "Checkbox_off.png" }}"/> Ja
-            <img class="checkbox" src="{{ image "Checkbox_on.png" }}"/> Nei
-        {{/if}}
-    {{/inline}}
+<head>
+    <meta charset="UTF-8" />
+    <title>Søknad om ekstra omsorgsdager</title>
+    <meta name="subject" content="Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler" />
+    <meta name="author" content="nav.no" />
+    <meta name="description"
+          content="Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
+    <bookmarks>
+        <bookmark name="Søker" href="#søker" />
+        <bookmark name="Fosterbarn" href="#fosterbarn" />
+        <bookmark name="Smittevernhensyn" href="#smittevernhensyn" />
+        <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder" />
+        <bookmark name="Utenlandsopphold" href="#utenlandsopphold" />
+        <bookmark name="Arbeidssituasjon" href="#arbeidssituasjon" />
+        <bookmark name="Medlemskap" href="#medlemskap" />
+        <bookmark name="Annet" href="#annet" />
+        <bookmark name="Andre utbetalinger" href="#andreUtbetalinger" />
+        <bookmark name="Vedlegg" href="#vedlegg" />
+        <bookmark name="Samtykke" href="#samtykke" />
+    </bookmarks>
+    {{#block 'style-common' }}
+    {{/block}}
 </head>
 <body>
-<div id="header">
-    <img class="navlogo" src="{{ image "Navlogo.png" }}"/>
-    <h1 class="title">Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler</h1>
-</div>
-<div class="container">
-    <div id="container_top">
-        <div class="nokkeldata">
-            <br/><br/>
-            <p>
-                <span class="nokkeldata__overskrift">Sendt til NAV</span><br/>
-                {{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}
-            </p>
-            <p>
-                <span class="nokkeldata__overskrift">Språk</span><br/>
-                {{språk}}
-            </p>
-        </div>
-        <div class="personinfo">
-            <div class="persontekst">
-                <div class="persontekst__sidetopp">
-                    <p>
-                        Søker
-                    </p>
-                    <img class="ikon" src="{{ image "Personikon.png" }}"/>
-                    <div class="persontekst__personalia">
-                        <p class="navn">
-                            {{ søker.formatertNavn }}
-                        </p>
-                        <p class="id">
-                            {{ søknad.søker.fødselsnummer }}<br/>
-                        </p>
-                    </div>
-                    <br/>
+<h1 id="header">Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler</h1>
+<p class="nokkelinfo"><strong>Sendt til NAV </strong>{{mottaksUkedag}} {{#tidspunkt søknad.mottatt}}{{/tidspunkt}}</p>
+<p class="nokkelinfo">Språk: {{språk}}</p>
 
-                    {{#if harFosterbarn}}
-                        <p>
-                            Fosterbarn
-                        </p>
-                    {{/if}}
-                    {{# each søknad.fosterbarn as |barn|}}
-                        <div class="persontekst__personalia">
-                            <span>
-                                <img class="ikon" style="float: left; margin-top: auto; margin-bottom: auto"
-                                     src="{{ image "Personikon.png" }}"/>
-                                <p class="id" style="float: right; margin-top: 8px; margin-bottom: auto">
-                                    {{ barn.fødselsnummer }}
-                                </p>
-                            </span>
-                        </div>
-                        <br/>
-                    {{/each}}
-
-                </div>
-            </div>
-        </div>
+<div class="innholdscontainer">
+    <div class="person" id="søker">
+        <p>Søker</p>
+        <p class="navn">{{ søker.formatertNavn }}</p>
+        <p>{{ søknad.søker.fødselsnummer  }}</p>
     </div>
+    <div class="person" id="fosterbarn">
+        {{#if harFosterbarn}}
+            <p>Fosterbarn</p>
+        {{/if}}
+        {{# each søknad.fosterbarn as |barn|}}
+            <p>{{ barn.fødselsnummer }}</p>
+        {{/each}}
     <br/>
+    </div>
 
-    {{#if søknad.hjemmePgaSmittevernhensyn}}
-        <h2><span>Særlige Smittevernhensyn</span></h2>
-        <ul>
-            <li>Søker opplyser å være hjemme med barn grunnet smittevernhensyn</li>
-            {{#if ikkeHarSendtInnVedlegg}}
-                <li>Bekreftelse fra lege ikke lastet opp. Må ettersendes.</li>
-            {{/if}}
-        </ul>
-    {{/if}}
+    <section id="smittevernhensyn">
+        {{#if søknad.hjemmePgaSmittevernhensyn}}
+            <h2>Særlige Smittevernhensyn</h2>
+            <ul>
+                <li>Søker opplyser å være hjemme med barn grunnet smittevernhensyn</li>
+                {{#if ikkeHarSendtInnVedlegg}}
+                    <li>Bekreftelse fra lege ikke lastet opp. Må ettersendes.</li>
+                {{/if}}
+            </ul>
+        {{/if}}
 
-    {{#if søknad.hjemmePgaStengtBhgSkole}}
-        <h2><span>Stengt barnehage/skole</span></h2>
-        <ul>
-            <li>Søker opplyser å være hjemme fra jobb fordi barnehage/skole har vært lokalt stengt</li>
-            {{#if ikkeHarSendtInnVedlegg}}
-                <li>Bekreftelse fra barnehage/skole ikke lastet opp. Må ettersendes.</li>
-            {{/if}}
-        </ul>
-    {{/if}}
+        {{#if søknad.hjemmePgaStengtBhgSkole}}
+            <h2>Stengt barnehage/skole</h2>
+            <ul>
+                <li>Søker opplyser å være hjemme fra jobb fordi barnehage/skole har vært lokalt stengt</li>
+                {{#if ikkeHarSendtInnVedlegg}}
+                    <li>Bekreftelse fra barnehage/skole ikke lastet opp. Må ettersendes.</li>
+                {{/if}}
+            </ul>
+        {{/if}}
+    </section>
 
-    <!-- UTBETALINGSPERIODER -->
-    <h2><span>Perioder</span></h2>
-    <ul>
+    <section id="utbetalingsperioder">
+        <h2>Perioder</h2>
         {{# each søknad.arbeidsgivere as |org|}}
             {{#if org.navn}}
                 {{#unless org.organisasjonsnummer}}
@@ -118,197 +89,199 @@
                         <br/>Antall timer planlagt jobbe: {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
                         <br/>Antall timer borte: {{#varighet p.antallTimerBorte}}{{/varighet}}
                     {{/if}}
-                    <br/><br/>
+
                 </li>
-            {{/each}}</ul>
-
-        {{/each}}
-    </ul>
-
-    <!-- UTENLANDSOPPHOLD i Perioden -->
-    {{#if harOpphold}}
-        <h3>Utenlandsopphold i perioden</h3>
-    {{/if}}
-    <ul>
-        {{# each søknad.opphold as |o|}}
-        <li>
-            {{# if o.erEØSLand}}
-                <li>
-                    {{o.landnavn}}: {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/>
-                </li>
-            {{else}}
-                <li>
-                    {{o.landnavn}} (utenfor EØS): {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/>
-                </li>
-            {{/if}}
-            </li>
-        {{/each}}
-    </ul>
-
-    <h2><span>Arbeidssituasjon</span></h2>
-    <ul>
-        {{# each søknad.arbeidsgivere as |org|}}
-            {{#if org.navn}}
-                {{#unless org.organisasjonsnummer}}
-                    <h3 class="sporsmalstekst">{{org.navn}} (registrert av søker)</h3>
-                {{/unless}}
-                {{#if org.organisasjonsnummer}}
-                    <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
-                {{/if}}
-            {{else}}
-                <h3 class="sporsmalstekst">{{org.organisasjonsnummer}}</h3>
-            {{/if}}
-
-            <ul>
-                <li>
-                    <p class="sporsmalstekst">Hvor lenge har du jobbet hos arbeidsgiveren din?</p>
-                    {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Ja"}}
-                        {{#if harVedlegg}}
-                            <p>Søker opplyser å ha jobbet mer enn 4 uker. Søker har lastet opp vedlegg til søknaden.</p>
-                            <br/>
-
-                        {{else}}
-                            <p>Søker opplyser å ha jobbet mer enn 4 uker. Søker har ikke lastet opp vedlegg til søknaden
-                                med forklaring fra arbeidsgiver. Denne må
-                                ettersendes.</p>
-                            <br/>
-                        {{/if}}
-                    {{/eqJaNei}}
-                </li>
-
-                {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Nei"}}
-                    {{#eq org.ansettelseslengde.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det å ha jobbet hos en annen
-                            arbeidsgiver. </p>
-                        <br/>
-                    {{/eq}}
-
-                    {{#eq org.ansettelseslengde.begrunnelse "ANDRE_YTELSER"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, å ha mottatt dagpenger,
-                            sykepenger, pleiepenger, omsorgspenger, opplæringspenger, foreldrepenger eller
-                            svangerskapspenger.</p><br/>
-
-                    {{/eq}}
-
-                    {{#eq org.ansettelseslengde.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, hatt ulønnet permisjon
-                            direkte etter en periode med foreldrepenger, for så å ha gjenopptatt arbeidet etter
-                            permisjonen.</p><br/>
-                    {{/eq}}
-
-                    {{#eq org.ansettelseslengde.begrunnelse "MILITÆRTJENESTE"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, vært i
-                            militærtjeneste.</p><br/>
-                    {{/eq}}
-
-                    {{#eq org.ansettelseslengde.begrunnelse "INGEN_AV_SITUASJONENE"}}
-                        <p>Søker opplyser å ha jobbet mindre enn 4 uker, men at ingen av situasjonene beskrevet i
-                            søknaden gjelder for han/hun.</p>
-                        <div class="fritekst">
-                            <p class="sporsmalstekst"><img class="lite_ikon" src="{{ image "Fritekst.png" }}"/>
-                                Forklaring:
-                            </p>
-                            <p class="fritekst_textarea">{{fritekst
-                                    org.ansettelseslengde.ingenAvSituasjoneneForklaring}}</p>
-                        </div>
-                        <br/>
-                    {{/eq}}
-
-                {{/eqJaNei}}
-
-                <li>
-                    <p class="sporsmalstekst">Har du hatt fravær hos gitt arbeidsgiver fordi du har brukt
-                        omsorgsdager?</p>
-                    {{>jaNeiCheckbox parameter=org.harHattFraværHosArbeidsgiver}} <br/><br/>
-                </li>
-
-                <li>
-                    <p class="sporsmalstekst">Har arbeidsgiver utbetalt deg lønn for de dagene du har brukt
-                        omsorgsdager?</p>
-                    {{>jaNeiCheckbox parameter=org.arbeidsgiverHarUtbetaltLønn}} <br/><br/>
-                </li>
+            {{/each}}
             </ul>
         {{/each}}
-    </ul>
+    </section>
 
-    <!-- MEDLEMSKAP -->
-    <h2><span>Medlemskap</span></h2>
-
-    <p class="sporsmalstekst">Bodd i utlandet siste 12 månedene?</p>
-    {{>jaNeiCheckbox parameter=medlemskap.siste12}}
-
-    <br/><br/>
-
-    <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
-    {{>jaNeiCheckbox parameter=medlemskap.neste12}}
-    <br/><br/>
-
-    {{#if harBosteder}}
-        <h3>Utenlandsopphold i medlemsperioden</h3>
-    {{/if}}
-    <ul>
-        {{# each søknad.bosteder as |b|}}
-            <li>
-                {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
-            </li>
-        {{/each}}
-    </ul>
-
-    {{#if inkluderAnnetOverskrift}}
-        <h2><span>Annet</span></h2>
-    {{/if}}
-
-    {{#if erSelvstendigOgEllerFrilanser}}
-        <h3>Er selvstendig næringsdrivende og/eller frilanser i tillegg til arbeidstaker?</h3>
+    <section id="utenlandsopphold">
+        {{#if harOpphold}}
+            <h2>Utenlandsopphold i perioden</h2>
+        {{/if}}
         <ul>
-            {{#if erSelvstendig}}
-                <li>
-                    Ja, er selvstendig næringsdrivende<br/>
-                </li>
-            {{/if}}
-            {{#if erFrilanser}}
-                <li>
-                    Ja, er frilanser<br/>
-                </li>
-            {{/if}}
-        </ul>
-    {{/if}}
-
-    <!-- Bekreftet andre utbetalinger -->
-    {{#if harSøktAndreYtelser}}
-        <h3>Søkt om andre ytelser</h3>
-    {{/if}}
-    <ul>
-        {{# each søknad.andreUtbetalinger as |utbetaling|}}
+            {{# each søknad.opphold as |o|}}
             <li>
-                {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
-            </li>
-        {{/each}}
-    </ul>
-
-    {{#if harVedlegg}}
-        <h2><span>Dokumenter</span></h2>
-        <ul>
-            {{#each titler.vedlegg as |vedlegg|}}
-                <li><p>{{vedlegg.tittel}}</p></li>
+                {{# if o.erEØSLand}}
+                    <li>{{o.landnavn}}: {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/></li>
+                {{else}}
+                    <li>{{o.landnavn}} (utenfor EØS): {{#dato o.fraOgMed}}{{/dato}} - {{#dato o.tilOgMed}}{{/dato}} <br/></li>
+                {{/if}}
+                </li>
             {{/each}}
         </ul>
-    {{/if}}
+    </section>
 
-    <h2><span>Samtykker</span></h2>
-    <p class="sporsmalstekst">Har forstått rettigheter og plikter?</p>
-    {{>jaNeiCheckbox parameter=bekreftelser.harBekreftetOpplysninger}}
-    <br/><br/>
+    <section id="arbeidssituasjon">
+        <h2>Arbeidssituasjon</h2>
+            {{# each søknad.arbeidsgivere as |org|}}
+                {{#if org.navn}}
+                    {{#unless org.organisasjonsnummer}}
+                        <h3 class="sporsmalstekst">{{org.navn}} (registrert av søker)</h3>
+                    {{/unless}}
+                    {{#if org.organisasjonsnummer}}
+                        <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
+                    {{/if}}
+                {{else}}
+                    <h3 class="sporsmalstekst">{{org.organisasjonsnummer}}</h3>
+                {{/if}}
 
-    <p class="sporsmalstekst">Har bekreftet opplysninger?</p>
-    {{>jaNeiCheckbox parameter=bekreftelser.harForståttRettigheterOgPlikter}}
+                <ul>
+                    <li>
+                        <p class="sporsmalstekst">Hvor lenge har du jobbet hos arbeidsgiveren din?</p>
+                        {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Ja"}}
+                            {{#if harVedlegg}}
+                                <p>Søker opplyser å ha jobbet mer enn 4 uker. Søker har lastet opp vedlegg til søknaden.</p>
+                                <br/>
 
+                            {{else}}
+                                <p>Søker opplyser å ha jobbet mer enn 4 uker. Søker har ikke lastet opp vedlegg til søknaden
+                                    med forklaring fra arbeidsgiver. Denne må
+                                    ettersendes.</p>
+                                <br/>
+                            {{/if}}
+                        {{/eqJaNei}}
+
+
+                    {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Nei"}}
+                        {{#eq org.ansettelseslengde.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
+                            <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det å ha jobbet hos en annen
+                                arbeidsgiver. </p>
+                        {{/eq}}
+
+                        {{#eq org.ansettelseslengde.begrunnelse "ANDRE_YTELSER"}}
+                            <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, å ha mottatt dagpenger,
+                                sykepenger, pleiepenger, omsorgspenger, opplæringspenger, foreldrepenger eller
+                                svangerskapspenger.</p>
+
+                        {{/eq}}
+
+                        {{#eq org.ansettelseslengde.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
+                            <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, hatt ulønnet permisjon
+                                direkte etter en periode med foreldrepenger, for så å ha gjenopptatt arbeidet etter
+                                permisjonen.</p>
+                        {{/eq}}
+
+                        {{#eq org.ansettelseslengde.begrunnelse "MILITÆRTJENESTE"}}
+                            <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, vært i
+                                militærtjeneste.</p>
+                        {{/eq}}
+
+                        {{#eq org.ansettelseslengde.begrunnelse "INGEN_AV_SITUASJONENE"}}
+                            <p>Søker opplyser å ha jobbet mindre enn 4 uker, men at ingen av situasjonene beskrevet i
+                                søknaden gjelder for han/hun.</p>
+                            <div class="fritekst">
+                                <p class="sporsmalstekst">
+                                    Forklaring:
+                                </p>
+                                <p class="fritekst_textarea">{{fritekst org.ansettelseslengde.ingenAvSituasjoneneForklaring}}</p>
+                            </div>
+                        {{/eq}}
+
+                    {{/eqJaNei}}
+
+                    <li>
+                        <p class="sporsmalstekst">Har du hatt fravær hos gitt arbeidsgiver fordi du har brukt
+                            omsorgsdager?</p>
+                        {{ jaNeiSvar org.harHattFraværHosArbeidsgiver}} <br/><br/>
+                    </li>
+
+                    <li>
+                        <p class="sporsmalstekst">Har arbeidsgiver utbetalt deg lønn for de dagene du har brukt
+                            omsorgsdager?</p>
+                        {{ jaNeiSvar org.arbeidsgiverHarUtbetaltLønn}} <br/><br/>
+                    </li>
+                    </li>
+                </ul>
+            {{/each}}
+    </section>
+
+    <section id="medlemskap">
+        <h2>Medlemskap</h2>
+
+        <p class="sporsmalstekst">Bodd i utlandet siste 12 månedene?</p>
+        {{ jaNeiSvar medlemskap.siste12}}
+
+        <br/><br/>
+
+        <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
+        {{ jaNeiSvar medlemskap.neste12}}
+        <br/><br/>
+
+        {{#if harBosteder}}
+            <h3>Utenlandsopphold i medlemsperioden</h3>
+        {{/if}}
+        <ul>
+            {{# each søknad.bosteder as |b|}}
+                <li>
+                    {{b.landnavn}}: {{#dato b.fraOgMed}}{{/dato}} - {{#dato b.tilOgMed}}{{/dato}} <br/>
+                </li>
+            {{/each}}
+        </ul>
+    </section>
+
+    <section id="annet">
+        {{#if inkluderAnnetOverskrift}}
+            <h2>Annet</h2>
+        {{/if}}
+        {{#if erSelvstendigOgEllerFrilanser}}
+            <h3>Er selvstendig næringsdrivende og/eller frilanser i tillegg til arbeidstaker?</h3>
+            <ul>
+                {{#if erSelvstendig}}
+                    <li>
+                        Ja, er selvstendig næringsdrivende<br/>
+                    </li>
+                {{/if}}
+                {{#if erFrilanser}}
+                    <li>
+                        Ja, er frilanser<br/>
+                    </li>
+                {{/if}}
+            </ul>
+        {{/if}}
+    </section>
+
+    <section id="andreUtbetalinger">
+        {{#if harSøktAndreYtelser}}
+            <h2>Søkt om andre ytelser</h2>
+        {{/if}}
+        <p>Har søkt om:</p>
+        <ul>
+            {{# each søknad.andreUtbetalinger as |utbetaling|}}
+                <li>
+                    {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
+                </li>
+            {{/each}}
+        </ul>
+    </section>
+
+    <section id="vedlegg">
+        {{#if harVedlegg}}
+            <h2>Dokumenter</h2>
+            <ul>
+                {{#each titler.vedlegg as |vedlegg|}}
+                    <li><p>{{vedlegg.tittel}}</p></li>
+                {{/each}}
+            </ul>
+        {{/if}}
+    </section>
+
+    <section id="samtykke">
+        <h2>Samtykke</h2>
+        <p class="sporsmalstekst">Har forstått rettigheter og plikter?</p>
+        <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
+        <hr />
+        <p class="sporsmalstekst">Har bekreftet opplysninger?</p>
+        <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
+    </section>
 </div>
-
 <!-- FOOTER -->
-<div id="footer">
-    <span class="soknadsid">{{ søknad.søknadId }}</span>
+<p id="footer">
+    <span class="soknadsid">{{ soknad_id }}</span>
     <span class="sidetall">side <span id="pagenumber"></span> av <span id="pagecount"></span></span>
-</div>
+</p>
 </body>
+
 </html>
+

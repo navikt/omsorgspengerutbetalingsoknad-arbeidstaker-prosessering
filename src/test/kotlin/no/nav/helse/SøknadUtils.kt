@@ -60,7 +60,6 @@ internal object SøknadUtils {
                     Utbetalingsperiode(
                         fraOgMed = start.plusDays(20),
                         tilOgMed = start.plusDays(20),
-                        lengde = Duration.ofHours(5).plusMinutes(30),
                         antallTimerPlanlagt = Duration.ofHours(8),
                         antallTimerBorte = Duration.ofHours(8)
                     )
@@ -95,8 +94,7 @@ internal object SøknadUtils {
                 perioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = start.plusDays(30),
-                        tilOgMed = start.plusDays(35),
-                        lengde = Duration.ofHours(2)
+                        tilOgMed = start.plusDays(35)
                     )
                 )
             ),

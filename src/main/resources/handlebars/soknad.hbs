@@ -82,9 +82,6 @@
             <ul>{{# each org.perioder as |p|}}
                 <li>
                     Periode: {{#dato p.fraOgMed}}{{/dato}} - {{#dato p.tilOgMed}}{{/dato}}
-                    {{#if p.lengde}}
-                        <br/>Lengde: {{#varighet p.lengde}}{{/varighet}}
-                    {{/if}}
                     {{#if p.antallTimerBorte}}
                         <br/>Antall timer planlagt jobbe: {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
                         <br/>Antall timer borte: {{#varighet p.antallTimerBorte}}{{/varighet}}

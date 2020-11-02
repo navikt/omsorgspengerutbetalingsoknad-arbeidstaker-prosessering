@@ -47,9 +47,9 @@
 
     <section id="smittevernhensyn">
         {{#if søknad.hjemmePgaSmittevernhensyn}}
-            <h2>Særlige Smittevernhensyn</h2>
+            <h2>Særlige smittevernhensyn</h2>
             <ul>
-                <li>Søker opplyser å være hjemme med barn grunnet smittevernhensyn</li>
+                <li>Du opplyser at du må være hjemme med barn på grunn av særlige smittevernhensyn.</li>
                 {{#if ikkeHarSendtInnVedlegg}}
                     <li>Bekreftelse fra lege ikke lastet opp. Må ettersendes.</li>
                 {{/if}}
@@ -57,9 +57,9 @@
         {{/if}}
 
         {{#if søknad.hjemmePgaStengtBhgSkole}}
-            <h2>Stengt barnehage/skole</h2>
+            <h2>Lokalt stengt barnehage eller skole</h2>
             <ul>
-                <li>Søker opplyser å være hjemme fra jobb fordi barnehage/skole har vært lokalt stengt</li>
+                <li>Du opplyser at du er hjemme med barn fordi barnehagen eller skolen har vært lokalt stengt.</li>
                 {{#if ikkeHarSendtInnVedlegg}}
                     <li>Bekreftelse fra barnehage/skole ikke lastet opp. Må ettersendes.</li>
                 {{/if}}
@@ -68,7 +68,7 @@
     </section>
 
     <section id="utbetalingsperioder">
-        <h2>Perioder</h2>
+        <h2>Perioder du har brukt omsorgsdager</h2>
         {{# each søknad.arbeidsgivere as |org|}}
             {{#if org.navn}}
                 {{#unless org.organisasjonsnummer}}
@@ -83,10 +83,9 @@
                 <li>
                     Periode: {{#dato p.fraOgMed}}{{/dato}} - {{#dato p.tilOgMed}}{{/dato}}
                     {{#if p.antallTimerBorte}}
-                        <br/>Antall timer planlagt jobbe: {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
-                        <br/>Antall timer borte: {{#varighet p.antallTimerBorte}}{{/varighet}}
+                        <br/>Antall timer du har planlagt å jobbe: {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
+                        <br/>Antall timer du var borte fra jobb: {{#varighet p.antallTimerBorte}}{{/varighet}}
                     {{/if}}
-
                 </li>
             {{/each}}
             </ul>
@@ -111,11 +110,11 @@
     </section>
 
     <section id="arbeidssituasjon">
-        <h2>Arbeidssituasjon</h2>
+        <h2>Din arbeidssituasjon</h2>
             {{# each søknad.arbeidsgivere as |org|}}
                 {{#if org.navn}}
                     {{#unless org.organisasjonsnummer}}
-                        <h3 class="sporsmalstekst">{{org.navn}} (registrert av søker)</h3>
+                        <h3 class="sporsmalstekst">{{org.navn}} (registrert av deg)</h3>
                     {{/unless}}
                     {{#if org.organisasjonsnummer}}
                         <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
@@ -129,13 +128,12 @@
                         <p class="sporsmalstekst">Hvor lenge har du jobbet hos arbeidsgiveren din?</p>
                         {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Ja"}}
                             {{#if harVedlegg}}
-                                <p>Søker opplyser å ha jobbet mer enn 4 uker. Søker har lastet opp vedlegg til søknaden.</p>
+                                <p>Du opplyser at du har jobbet mer enn 4 uker. Du har lastet opp vedlegg til søknaden.</p>
                                 <br/>
 
                             {{else}}
-                                <p>Søker opplyser å ha jobbet mer enn 4 uker. Søker har ikke lastet opp vedlegg til søknaden
-                                    med forklaring fra arbeidsgiver. Denne må
-                                    ettersendes.</p>
+                                <p>Du opplyser at du har jobbet mer enn 4 uker. Du har ikke lastet opp vedlegg til søknaden
+                                    med forklaring fra arbeidsgiver. Denne må ettersendes.</p>
                                 <br/>
                             {{/if}}
                         {{/eqJaNei}}
@@ -143,31 +141,31 @@
 
                     {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Nei"}}
                         {{#eq org.ansettelseslengde.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
-                            <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det å ha jobbet hos en annen
+                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det jobbet du hos en annen
                                 arbeidsgiver. </p>
                         {{/eq}}
 
                         {{#eq org.ansettelseslengde.begrunnelse "ANDRE_YTELSER"}}
-                            <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, å ha mottatt dagpenger,
-                                sykepenger, pleiepenger, omsorgspenger, opplæringspenger, foreldrepenger eller
-                                svangerskapspenger.</p>
+                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det har du mottatt
+                                dagpenger, sykepenger, pleiepenger, omsorgspenger, opplæringspenger,
+                                foreldrepenger eller svangerskapspenger</p>
 
                         {{/eq}}
 
                         {{#eq org.ansettelseslengde.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
-                            <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, hatt ulønnet permisjon
+                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det, hatt ulønnet permisjon
                                 direkte etter en periode med foreldrepenger, for så å ha gjenopptatt arbeidet etter
                                 permisjonen.</p>
                         {{/eq}}
 
                         {{#eq org.ansettelseslengde.begrunnelse "MILITÆRTJENESTE"}}
-                            <p>Søker opplyser å ha jobbet mindre enn 4 uker, men direkte før det, vært i
+                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det var du i
                                 militærtjeneste.</p>
                         {{/eq}}
 
                         {{#eq org.ansettelseslengde.begrunnelse "INGEN_AV_SITUASJONENE"}}
-                            <p>Søker opplyser å ha jobbet mindre enn 4 uker, men at ingen av situasjonene beskrevet i
-                                søknaden gjelder for han/hun.</p>
+                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men at ingen av situasjonene beskrevet i
+                                søknaden gjelder for deg.</p>
                             <div class="fritekst">
                                 <p class="sporsmalstekst">
                                     Forklaring:
@@ -179,8 +177,7 @@
                     {{/eqJaNei}}
 
                     <li>
-                        <p class="sporsmalstekst">Har du hatt fravær hos gitt arbeidsgiver fordi du har brukt
-                            omsorgsdager?</p>
+                        <p class="sporsmalstekst">Har du hatt fravær hos denne arbeidsgiveren fordi du har brukt omsorgsdager?</p>
                         {{ jaNeiSvar org.harHattFraværHosArbeidsgiver}} <br/><br/>
                     </li>
 
@@ -195,14 +192,14 @@
     </section>
 
     <section id="medlemskap">
-        <h2>Medlemskap</h2>
+        <h2>Medlemskap i folketrygden</h2>
 
-        <p class="sporsmalstekst">Bodd i utlandet siste 12 månedene?</p>
+        <p class="sporsmalstekst">Har du bodd i utlandet de siste 12 månedene?</p>
         {{ jaNeiSvar medlemskap.siste12}}
 
         <br/><br/>
 
-        <p class="sporsmalstekst">Skal bo i utlandet neste 12 månedene?</p>
+        <p class="sporsmalstekst">Skal du bo i utlandet de neste 12 månedene?</p>
         {{ jaNeiSvar medlemskap.neste12}}
         <br/><br/>
 
@@ -223,16 +220,16 @@
             <h2>Annet</h2>
         {{/if}}
         {{#if erSelvstendigOgEllerFrilanser}}
-            <h3>Er selvstendig næringsdrivende og/eller frilanser i tillegg til arbeidstaker?</h3>
+            <h3>Er du selvstendig næringsdrivende og/eller frilanser i tillegg til arbeidstaker?</h3>
             <ul>
                 {{#if erSelvstendig}}
                     <li>
-                        Ja, er selvstendig næringsdrivende<br/>
+                        Ja, jeg er selvstendig næringsdrivende<br/>
                     </li>
                 {{/if}}
                 {{#if erFrilanser}}
                     <li>
-                        Ja, er frilanser<br/>
+                        Ja, jeg er frilanser<br/>
                     </li>
                 {{/if}}
             </ul>
@@ -241,7 +238,7 @@
 
     <section id="andreUtbetalinger">
         {{#if harSøktAndreYtelser}}
-            <h2>Søkt om andre ytelser</h2>
+            <h2>Andre utbetalinger du har søkt om fra NAV</h2>
         {{/if}}
         <p>Har søkt om:</p>
         <ul>
@@ -265,11 +262,11 @@
     </section>
 
     <section id="samtykke">
-        <h2>Samtykke</h2>
-        <p class="sporsmalstekst">Har forstått rettigheter og plikter?</p>
+        <h2>Samtykke fra deg</h2>
+        <p class="sporsmalstekst">Har du forstått rettigheter og plikter?</p>
         <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
         <hr />
-        <p class="sporsmalstekst">Har bekreftet opplysninger?</p>
+        <p class="sporsmalstekst">Har du bekreftet at opplysninger som er gitt er riktige??</p>
         <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
     </section>
 </div>

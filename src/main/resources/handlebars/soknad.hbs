@@ -239,7 +239,7 @@
     <section id="andreUtbetalinger">
         {{#if harSøktAndreYtelser}}
             <h2>Andre utbetalinger du har søkt om fra NAV</h2>
-        {{/if}}
+
         <p>Har søkt om:</p>
         <ul>
             {{# each søknad.andreUtbetalinger as |utbetaling|}}
@@ -248,6 +248,7 @@
                 </li>
             {{/each}}
         </ul>
+        {{/if}}
     </section>
 
     <section id="vedlegg">

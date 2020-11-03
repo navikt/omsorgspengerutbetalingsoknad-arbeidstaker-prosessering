@@ -35,15 +35,15 @@
         <p class="navn">{{ søker.formatertNavn }}</p>
         <p>{{ søknad.søker.fødselsnummer  }}</p>
     </div>
-    <div class="person" id="fosterbarn">
-        {{#if harFosterbarn}}
+    {{#if harFosterbarn}}
+        <div class="person" id="fosterbarn">
             <p>Fosterbarn</p>
-        {{/if}}
-        {{# each søknad.fosterbarn as |barn|}}
-            <p>{{ barn.fødselsnummer }}</p>
-        {{/each}}
-    <br/>
-    </div>
+            {{# each søknad.fosterbarn as |barn|}}
+                <p>{{ barn.fødselsnummer }}</p>
+            {{/each}}
+            <br/>
+        </div>
+    {{/if}}
 
     <section id="smittevernhensyn">
         {{#if søknad.hjemmePgaSmittevernhensyn}}

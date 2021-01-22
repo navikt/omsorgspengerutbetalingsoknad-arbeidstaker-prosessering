@@ -15,7 +15,7 @@ val handlebarsVersion = "4.1.2"
 val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
 
 plugins {
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.4.21-2"
     id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 

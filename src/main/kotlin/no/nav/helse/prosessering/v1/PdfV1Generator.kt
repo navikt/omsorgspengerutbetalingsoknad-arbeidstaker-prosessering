@@ -108,7 +108,7 @@ internal class PdfV1Generator {
                         "språk" to melding.språk.sprakTilTekst(),
                         "mottaksUkedag" to melding.mottatt.withZoneSameInstant(ZONE_ID).norskDag(),
                         "søker" to mapOf(
-                            "formatertNavn" to melding.søker.formatertNavn()
+                            "formatertNavn" to melding.søker.formatertNavn().capitalizeName()
                         ),
                         "medlemskap" to mapOf(
                             "siste12" to melding.bosteder.any {
@@ -224,6 +224,9 @@ private fun List<String>.somMapTitler(): List<Map<String, Any?>> {
 }
 
 private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
+
+fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.toLowerCase().capitalize() }
+
 private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     "nb" -> "Bokmål"
     "nn" -> "Nynorsk"

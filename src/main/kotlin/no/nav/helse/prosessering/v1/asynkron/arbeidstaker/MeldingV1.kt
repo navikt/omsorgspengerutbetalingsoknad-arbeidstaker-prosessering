@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
+import no.nav.k9.søknad.Søknad
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
@@ -25,7 +26,8 @@ data class ArbeidstakerutbetalingMelding(
     val titler: List<String>,
     val vedleggUrls: List<URI>,
     val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null // TODO låses til JaNei etter lansering.
+    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til JaNei etter lansering.
+    val k9Format: Søknad? = null
 )
 
 

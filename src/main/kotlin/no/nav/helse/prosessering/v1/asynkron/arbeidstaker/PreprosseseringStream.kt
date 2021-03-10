@@ -8,6 +8,7 @@ import no.nav.helse.kafka.ManagedStreamReady
 import no.nav.helse.prosessering.v1.PreprosseseringV1Service
 import no.nav.helse.prosessering.v1.asynkron.Topics
 import no.nav.helse.prosessering.v1.asynkron.process
+import no.nav.k9.søknad.JsonUtils
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
@@ -50,6 +51,7 @@ internal class PreprosseseringStream(
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
                         logger.info("Preprosesserer søknad om utbetaling av omsorgspenger for arbeidstakere.")
+                        logger.info("SKAL IKKE VISES I PROD! K9-Format: {}", JsonUtils.toString(entry.data.k9Format))
                         val preprossesertMelding = preprosseseringV1Service.preprosseser(
                             melding = entry.data,
                             metadata = entry.metadata

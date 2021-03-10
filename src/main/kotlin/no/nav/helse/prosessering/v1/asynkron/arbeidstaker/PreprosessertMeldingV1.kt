@@ -1,6 +1,7 @@
 package no.nav.helse.prosessering.v1.asynkron.arbeidstaker
 
 import no.nav.helse.aktoer.AktørId
+import no.nav.k9.søknad.Søknad
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.net.URI
 import java.time.ZonedDateTime
@@ -18,7 +19,8 @@ data class PreprosessertArbeidstakerutbetalingMelding(
     val dokumentUrls: List<List<URI>>,
     val titler: List<String>,
     val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null // TODO låses til JaNei etter lansering.
+    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til JaNei etter lansering.
+    val k9Format: Søknad?
 ) {
     internal constructor(
         melding: ArbeidstakerutbetalingMelding,
@@ -37,7 +39,8 @@ data class PreprosessertArbeidstakerutbetalingMelding(
         dokumentUrls = dokumentUrls,
         titler = melding.titler,
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
-        hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole
+        hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
+        k9Format = melding.k9Format
     )
 }
 

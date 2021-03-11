@@ -51,7 +51,7 @@ internal class PreprosseseringStream(
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
                         logger.info("Preprosesserer søknad om utbetaling av omsorgspenger for arbeidstakere.")
-                        logger.info("SKAL IKKE VISES I PROD! K9-Format: {}", JsonUtils.toString(entry.data.k9Format))
+
                         val preprossesertMelding = preprosseseringV1Service.preprosseser(
                             melding = entry.data,
                             metadata = entry.metadata

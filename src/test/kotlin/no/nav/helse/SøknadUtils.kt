@@ -5,12 +5,20 @@ import no.nav.helse.aktoer.AktørId
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde.Begrunnelse.*
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
+import no.nav.k9.søknad.Søknad
+import no.nav.k9.søknad.felles.Versjon
+import no.nav.k9.søknad.felles.personopplysninger.Bosteder
+import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
+import no.nav.k9.søknad.felles.type.SøknadId
+import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
+import no.nav.k9.søknad.felles.personopplysninger.Søker as K9Søker
 
 internal object SøknadUtils {
     internal val objectMapper = jacksonObjectMapper().omsorgspengerKonfiguert()
@@ -175,7 +183,20 @@ internal object SøknadUtils {
             URI("http://localhost:8080/vedlegg/3")
         ),
         hjemmePgaSmittevernhensyn = true,
-        hjemmePgaStengtBhgSkole = true
+        hjemmePgaStengtBhgSkole = true,
+        k9Format = Søknad(
+            SøknadId(UUID.randomUUID().toString()),
+            Versjon("1.0.0"),
+            ZonedDateTime.now(),
+            K9Søker(NorskIdentitetsnummer.of("02119970078")),
+            OmsorgspengerUtbetaling(
+                listOf(),
+                null,
+                listOf(),
+                Bosteder(mutableMapOf()),
+                Utenlandsopphold(mutableMapOf())
+            )
+        )
     )
 
     internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(

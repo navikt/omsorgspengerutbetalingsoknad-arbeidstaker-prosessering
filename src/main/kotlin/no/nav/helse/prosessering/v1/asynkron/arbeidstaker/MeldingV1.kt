@@ -27,7 +27,7 @@ data class ArbeidstakerutbetalingMelding(
     val vedleggUrls: List<URI>,
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til JaNei etter lansering.
-    val k9Format: Søknad? = null
+    val k9Format: Søknad
 )
 
 

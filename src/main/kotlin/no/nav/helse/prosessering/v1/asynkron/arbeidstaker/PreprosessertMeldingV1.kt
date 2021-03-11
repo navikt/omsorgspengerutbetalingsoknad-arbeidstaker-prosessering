@@ -20,7 +20,7 @@ data class PreprosessertArbeidstakerutbetalingMelding(
     val titler: List<String>,
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til JaNei etter lansering.
-    val k9Format: Søknad?
+    val k9Format: Søknad
 ) {
     internal constructor(
         melding: ArbeidstakerutbetalingMelding,

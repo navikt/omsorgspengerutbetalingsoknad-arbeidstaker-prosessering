@@ -52,8 +52,8 @@ internal class ArbeidstakerutbetalingJournalforingsStream(
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
-
                         val dokumenter = entry.data.dokumentUrls
+
                         logger.info("Journalfører dokumenter: {}", dokumenter)
                         val journaPostId = joarkGateway.journalfør(
                             mottatt = entry.data.mottatt,

@@ -13,7 +13,6 @@ import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.serialization.Serializer
 import org.apache.kafka.common.serialization.StringSerializer
-import no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.OmsorgspengerUtbetalingSøknad as ArbeidstakerutbetalingSøknad
 
 data class TopicEntry<V>(val metadata: Metadata, val data: V)
 

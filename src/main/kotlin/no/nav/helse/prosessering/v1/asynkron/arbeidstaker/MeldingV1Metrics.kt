@@ -74,7 +74,7 @@ internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
     ).inc()
 
     særligeSmittevernhensynCounter
-        .labels(hjemmePgaSmittevernhensyn.tilJaEllerNei(), vedleggUrls.isNotEmpty().tilJaEllerNei())
+        .labels(hjemmePgaSmittevernhensyn?.tilJaEllerNei(), vedleggUrls.isNotEmpty().tilJaEllerNei())
         .inc()
 
 }

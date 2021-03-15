@@ -11,10 +11,7 @@ import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.omsorgspengerKonfiguert
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Barn
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Bekreftelser
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Søker
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.net.URI
@@ -75,11 +72,10 @@ internal class PdfV1Generator {
                 if (context == true) "Ja" else "Nei"
             })
             registerHelper("årsak", Helper<String> { context, _ ->
-                when(context.toString()) {
-                    "ANNET" -> "Annet"
-                    "STENGT_SKOLE_BHG" -> "Stengt skole eller barnehage"
-                    "SMITTEVERNHENSYN" -> "Smittevernhensyn"
-                    else -> "Ukjent"
+                when(FraværÅrsak.valueOf(context)) {
+                    FraværÅrsak.ANNET -> "Annet"
+                    FraværÅrsak.STENGT_SKOLE_BHG -> "Stengt skole eller barnehage"
+                    FraværÅrsak.SMITTEVERNHENSYN -> "Smittevernhensyn"
                 }
             })
 

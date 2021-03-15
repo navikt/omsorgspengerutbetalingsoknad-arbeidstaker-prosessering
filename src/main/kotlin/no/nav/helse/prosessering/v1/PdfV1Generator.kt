@@ -18,7 +18,10 @@ import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Søker
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.net.URI
-import java.time.*
+import java.time.Duration
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -70,6 +73,14 @@ internal class PdfV1Generator {
             })
             registerHelper("jaNeiSvar", Helper<Boolean> { context, _ ->
                 if (context == true) "Ja" else "Nei"
+            })
+            registerHelper("årsak", Helper<String> { context, _ ->
+                when(context.toString()) {
+                    "ANNET" -> "Annet"
+                    "STENGT_SKOLE_BHG" -> "Stengt skole eller barnehage"
+                    "SMITTEVERNHENSYN" -> "Smittevernhensyn"
+                    else -> "Ukjent"
+                }
             })
 
             infiniteLoops(true)

@@ -101,6 +101,9 @@
                     {{#if p.antallTimerBorte}}
                         <br/>Antall timer du har planlagt å jobbe: {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
                         <br/>Antall timer du var borte fra jobb: {{#varighet p.antallTimerBorte}}{{/varighet}}
+                        {{#if p.årsak}}
+                            <br/>Årsak: {{p.årsak}}
+                        {{/if}}
                     {{/if}}
                 </li>
             {{/each}}

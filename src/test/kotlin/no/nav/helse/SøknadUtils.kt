@@ -43,7 +43,8 @@ internal object SøknadUtils {
                         fraOgMed = start,
                         tilOgMed = start.plusDays(10),
                         antallTimerPlanlagt = Duration.ofHours(8),
-                        antallTimerBorte = Duration.ofHours(8)
+                        antallTimerBorte = Duration.ofHours(8),
+                        årsak = FraværÅrsak.SMITTEVERNHENSYN
                     )
                 )
             ),

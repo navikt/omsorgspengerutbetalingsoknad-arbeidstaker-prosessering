@@ -71,8 +71,15 @@ data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val antallTimerBorte: Duration? = null,
-    val antallTimerPlanlagt: Duration? = null
+    val antallTimerPlanlagt: Duration? = null,
+    val årsak: FraværÅrsak? = null //Fjerner null og optinal når feltet er prodsatt i frontend og api
 )
+
+enum class FraværÅrsak {
+    STENGT_SKOLE_BHG,
+    SMITTEVERNHENSYN,
+    ANNET
+}
 
 data class Søker(
     val fødselsnummer: String,

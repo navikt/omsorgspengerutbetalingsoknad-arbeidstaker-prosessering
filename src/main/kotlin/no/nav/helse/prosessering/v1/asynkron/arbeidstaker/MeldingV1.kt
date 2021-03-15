@@ -25,9 +25,16 @@ data class ArbeidstakerutbetalingMelding(
     val titler: List<String>,
     val vedleggUrls: List<URI>,
     val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null // TODO låses til JaNei etter lansering.
+    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til JaNei etter lansering.
+    val barn: List<Barn> = listOf()
 )
 
+data class Barn(
+    var identitetsnummer: String,
+    val aktørId: String?,
+    val navn: String,
+    val aleneOmOmsorgen: Boolean
+)
 
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,

@@ -11,6 +11,7 @@
     <bookmarks>
         <bookmark name="Søker" href="#søker" />
         <bookmark name="Fosterbarn" href="#fosterbarn" />
+        <bookmark name="Barn" href="#barn" />
         <bookmark name="Smittevernhensyn" href="#smittevernhensyn" />
         <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder" />
         <bookmark name="Utenlandsopphold" href="#utenlandsopphold" />
@@ -44,6 +45,21 @@
             <br/>
         </div>
     {{/if}}
+
+    <section id="barn">
+        {{#if barn}}
+            <h2>Dine barn</h2>
+            <ul>
+                {{#each barn as |barn|}}
+                    <li>
+                        <p class="sporsmalstekst">{{barn.navn}} ({{barn.identitetsnummer}})</p>
+                        <p class="sporsmalstekst">Er du alene om omsorgen for dette barnet?</p>
+                        {{ jaNeiSvar barn.aleneOmOmsorgen}}
+                    </li>
+                {{/each}}
+            </ul>
+        {{/if}}
+    </section>
 
     <section id="smittevernhensyn">
         {{#if søknad.hjemmePgaSmittevernhensyn}}

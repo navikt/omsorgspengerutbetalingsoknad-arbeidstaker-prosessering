@@ -18,7 +18,8 @@ data class PreprosessertArbeidstakerutbetalingMelding(
     val dokumentUrls: List<List<URI>>,
     val titler: List<String>,
     val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null // TODO låses til JaNei etter lansering.
+    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til JaNei etter lansering.
+    val barn: List<Barn>
 ) {
     internal constructor(
         melding: ArbeidstakerutbetalingMelding,
@@ -37,7 +38,8 @@ data class PreprosessertArbeidstakerutbetalingMelding(
         dokumentUrls = dokumentUrls,
         titler = melding.titler,
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
-        hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole
+        hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
+        barn = melding.barn
     )
 }
 

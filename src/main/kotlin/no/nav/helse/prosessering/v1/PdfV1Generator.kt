@@ -12,6 +12,7 @@ import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.omsorgspengerKonfiguert
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Barn
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Bekreftelser
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Søker
 import java.io.ByteArrayInputStream
@@ -134,6 +135,7 @@ internal class PdfV1Generator {
                         ),
                         "erSelvstendig" to melding.erSelvstendig,
                         "erFrilanser" to melding.erFrilanser,
+                        "barn" to melding.barn.somMapBarn(),
                         "ikkeHarSendtInnVedlegg" to melding.vedleggUrls.isEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "titler" to mapOf(
@@ -243,3 +245,14 @@ private fun inkluderAnnetOverskrift(
     erSelvstendig: Boolean,
     erFrilanser: Boolean
 ): Boolean = (erSelvstendigOgEllerFrilanser(erSelvstendig, erFrilanser) || harSøktAndreYtelser)
+
+
+fun List<Barn>.somMapBarn(): List<Map<String, Any?>> {
+    return map {
+        mapOf<String, Any?>(
+            "navn" to it.navn,
+            "identitetsnummer" to it.identitetsnummer,
+            "aleneOmOmsorgen" to it.aleneOmOmsorgen
+        )
+    }
+}

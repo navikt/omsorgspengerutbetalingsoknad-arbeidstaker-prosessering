@@ -5,9 +5,9 @@ import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dokument.DokumentService
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.SoknadId
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.reportMetrics
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
 import org.slf4j.LoggerFactory
 
 internal class PreprosseseringV1Service(
@@ -29,8 +29,6 @@ internal class PreprosseseringV1Service(
         val correlationId = CorrelationId(metadata.correlationId)
 
         val søkerAktørId = AktørId(melding.søker.aktørId)
-
-        logger.info("Søkerens AktørID = $søkerAktørId")
 
         logger.info("Genererer Oppsummerings-PDF av søknaden.")
         val soknadOppsummeringPdf = pdfV1Generator.generateSoknadOppsummeringPdf(melding)

@@ -28,7 +28,11 @@ data class ArbeidstakerutbetalingMelding(
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til JaNei etter lansering.
     val k9Format: Søknad
-)
+) {
+    override fun toString(): String {
+        return "ArbeidstakerutbetalingMelding(søknadId='$søknadId', mottatt=$mottatt)"
+    }
+}
 
 
 data class Bosted(
@@ -47,7 +51,11 @@ data class ArbeidsgiverDetaljer(
     val arbeidsgiverHarUtbetaltLønn: Boolean,
     val ansettelseslengde: Ansettelseslengde,
     val perioder: List<Utbetalingsperiode>
-)
+) {
+    override fun toString(): String {
+        return "ArbeidsgiverDetaljer()"
+    }
+}
 
 data class OrganisasjonDetaljer(
     val navn: String? = null,
@@ -78,13 +86,17 @@ data class Søker(
     val aktørId: String
 ) {
     override fun toString(): String {
-        return "Soker(fornavn='$fornavn', mellomnavn=$mellomnavn, etternavn='$etternavn', fødselsdato=$fødselsdato, aktørId='$aktørId')"
+        return "Soker(fornavn='$fornavn', mellomnavn=$mellomnavn, etternavn='$etternavn', fødselsdato=$fødselsdato, aktørId='******')"
     }
 }
 
 data class FosterBarn(
     val fødselsnummer: String
-)
+) {
+    override fun toString(): String {
+        return "FosterBarn()"
+    }
+}
 
 data class SpørsmålOgSvar(
     val spørsmål: Spørsmål,

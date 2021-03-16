@@ -41,6 +41,11 @@ data class PreprosessertArbeidstakerutbetalingMelding(
         hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
         barn = melding.barn
     )
+
+    override fun toString(): String {
+        return "PreprosessertArbeidstakerutbetalingMelding(soknadId='$soknadId', mottatt=$mottatt)"
+    }
+
 }
 
 data class PreprossesertSøker(
@@ -57,4 +62,9 @@ data class PreprossesertSøker(
         etternavn = søker.etternavn,
         aktørId = aktørId.id
     )
+
+    override fun toString(): String {
+        return "PreprossesertSøker()"
+    }
+
 }

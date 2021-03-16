@@ -76,7 +76,7 @@ data class Utbetalingsperiode(
 )
 
 enum class FraværÅrsak {
-    STENGT_SKOLE_BHG,
+    STENGT_SKOLE_ELLER_BARNEHAGE,
     SMITTEVERNHENSYN,
     ANNET
 }

@@ -38,7 +38,11 @@ data class Barn(
     val aktørId: String?,
     val navn: String,
     val aleneOmOmsorgen: Boolean
-)
+) {
+    override fun toString(): String {
+        return "Barn()"
+    }
+}
 
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,

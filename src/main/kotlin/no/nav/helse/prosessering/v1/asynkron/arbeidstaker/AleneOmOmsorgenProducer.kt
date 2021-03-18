@@ -36,7 +36,6 @@ class AleneOmOmsorgenProducer(
         melding: ArbeidstakerutbetalingMelding,
         metadata: Metadata
     ) {
-
         val recordMetaData = producer.send(
             ProducerRecord(
                 K9_RAPID_V2_TOPIC.name,

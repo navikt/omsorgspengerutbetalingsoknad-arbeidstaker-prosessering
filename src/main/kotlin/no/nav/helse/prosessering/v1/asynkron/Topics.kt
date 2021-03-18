@@ -6,8 +6,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.helse.dusseldorf.ktor.jackson.dusseldorfConfigured
 import no.nav.helse.prosessering.Metadata
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.serialization.Serializer
@@ -28,6 +28,13 @@ internal data class Topic<V>(
     val valueSerde = Serdes.serdeFrom(serDes, serDes)
 }
 
+internal data class TopicUse<V>(
+    val name: String,
+    val valueSerializer : Serializer<TopicEntry<V>>
+) {
+    internal fun keySerializer() = StringSerializer()
+}
+
 internal object Topics {
     val MOTTATT = Topic(
         name = "privat-omp-utbetalingsoknad-arbeidstaker-mottatt",
@@ -45,6 +52,12 @@ internal object Topics {
         name = "privat-omp-utbetalingsoknad-arbeidstaker-journalfort",
         serDes = JournalfortSerDes()
     )
+
+    val K9_RAPID_V2 = Topic(
+        name = "k9-rapid-v2",
+        serDes = CleanupSerDes()
+    )
+
 }
 
 internal abstract class SerDes<V> : Serializer<V>, Deserializer<V> {

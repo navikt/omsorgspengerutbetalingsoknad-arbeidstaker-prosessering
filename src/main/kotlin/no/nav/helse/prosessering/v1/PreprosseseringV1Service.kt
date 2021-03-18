@@ -5,12 +5,14 @@ import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dokument.DokumentService
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.SoknadId
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.AleneOmOmsorgenProducer
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.reportMetrics
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 import org.slf4j.LoggerFactory
 
 internal class PreprosseseringV1Service(
+    private val aleneOmOmsorgenProducer: AleneOmOmsorgenProducer,
     private val pdfV1Generator: PdfV1Generator,
     private val dokumentService: DokumentService
 ) {
@@ -74,6 +76,12 @@ internal class PreprosseseringV1Service(
             dokumentUrls = komplettDokumentUrls.toList(),
             søkerAktørId = søkerAktørId
         )
+
+        if(melding.barn.isNotEmpty()){
+            logger.info("Registrerer barn")
+            aleneOmOmsorgenProducer.leggPåKø(melding, metadata)
+        }
+
         melding.reportMetrics()
         return preprosessertArbeidstakerutbetalingMelding
     }

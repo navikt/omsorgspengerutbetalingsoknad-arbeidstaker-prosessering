@@ -2,21 +2,18 @@ package no.nav.helse
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.typesafe.config.ConfigFactory
-import io.ktor.config.ApplicationConfig
-import io.ktor.config.HoconApplicationConfig
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.engine.stop
-import io.ktor.server.testing.TestApplicationEngine
-import io.ktor.server.testing.createTestEnvironment
-import io.ktor.server.testing.handleRequest
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.config.*
+import io.ktor.http.*
+import io.ktor.server.engine.*
+import io.ktor.server.testing.*
+import io.ktor.util.*
 import io.prometheus.client.CollectorRegistry
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.delay
 import no.nav.common.KafkaEnvironment
 import no.nav.helse.SøknadUtils.defaultSøknad
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
+import org.json.JSONObject
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.slf4j.Logger
@@ -26,6 +23,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 
 @KtorExperimentalAPI
@@ -47,6 +45,7 @@ class SoknadProsesseringTest {
 
         private val kafkaEnvironment = KafkaWrapper.bootstrap()
         private val kafkaProducer = kafkaEnvironment.arbeidstakerutbetalingMeldingProducer()
+        private val k9RapidKonsumer = kafkaEnvironment.k9RapidKonsumer()
         private val journalføringsKonsumer = kafkaEnvironment.arbeidstakerutbetalingJournalføringsKonsumer()
 
         // Se https://github.com/navikt/dusseldorf-ktor#f%C3%B8dselsnummer
@@ -138,6 +137,8 @@ class SoknadProsesseringTest {
         journalføringsKonsumer
             .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertJournalførtFormat()
+
+        k9RapidKonsumer.hentK9RapidMelding().validerAleneOmOmsorgenBehovssekvens()
     }
 
     private fun readyGir200HealthGir503() {
@@ -162,6 +163,8 @@ class SoknadProsesseringTest {
         journalføringsKonsumer
             .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertJournalførtFormat()
+
+        k9RapidKonsumer.hentK9RapidMelding().validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
@@ -175,6 +178,17 @@ class SoknadProsesseringTest {
         journalføringsKonsumer
             .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertJournalførtFormat()
+
+        k9RapidKonsumer.hentK9RapidMelding().validerAleneOmOmsorgenBehovssekvens()
+    }
+
+    private fun String.validerAleneOmOmsorgenBehovssekvens(){
+        val rawJson = JSONObject(this)
+        assertEquals(rawJson.getJSONArray("@behovsrekkefølge").getString(0), "AleneOmOmsorgen")
+        assertEquals(rawJson.getString("@type"),"Behovssekvens")
+
+        assertNotNull(rawJson.getString("@correlationId"))
+        assertNotNull(rawJson.getJSONObject("@behov"))
     }
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }

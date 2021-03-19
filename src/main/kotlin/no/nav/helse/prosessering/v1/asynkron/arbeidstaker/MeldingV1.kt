@@ -34,7 +34,6 @@ data class ArbeidstakerutbetalingMelding(
     }
 }
 
-
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,

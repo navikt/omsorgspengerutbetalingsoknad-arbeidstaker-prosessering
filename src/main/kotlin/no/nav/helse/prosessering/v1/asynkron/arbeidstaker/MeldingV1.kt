@@ -90,7 +90,7 @@ data class Utbetalingsperiode(
 enum class FraværÅrsak {
     STENGT_SKOLE_ELLER_BARNEHAGE,
     SMITTEVERNHENSYN,
-    ANNET
+    ORDINÆRT_FRAVÆR
 }
 
 data class Søker(

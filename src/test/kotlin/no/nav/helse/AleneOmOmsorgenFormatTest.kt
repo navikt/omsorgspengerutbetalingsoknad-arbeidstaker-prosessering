@@ -31,8 +31,8 @@ class AleneOmOmsorgenFormatTest {
                 ),
                 Barn(
                     navn = "Anton",
-                    identitetsnummer = "07097427806",
-                    aktørId = "67899",
+                    identitetsnummer = "13087223382",
+                    aktørId = "99999",
                     aleneOmOmsorgen = false
                 )
 

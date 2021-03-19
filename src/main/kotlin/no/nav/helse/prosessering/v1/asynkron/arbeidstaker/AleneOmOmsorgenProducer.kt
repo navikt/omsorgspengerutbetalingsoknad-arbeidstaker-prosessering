@@ -54,7 +54,7 @@ class AleneOmOmsorgenProducer(
             )
         ).get()
 
-        logger.info("Registrering av barn sendt til ${K9_RAPID_V2_TOPIC.name} med offset ${recordMetaData.offset()}")
+        logger.info("Registrering av barn med aleneomsorg sendt til ${K9_RAPID_V2_TOPIC.name} med offset ${recordMetaData.offset()}")
     }
 
     internal fun stop() = producer.close()

@@ -50,7 +50,6 @@ dependencies {
     implementation("org.apache.kafka:kafka-streams:$kafkaVersion")
 
     //K9-Rapid
-    implementation("no.nav.k9.rapid:behov:$k9RapidVersion")
     implementation("no.nav.k9.rapid:alene-om-omsorgen:$k9RapidVersion")
 
     // Test
@@ -69,15 +68,6 @@ repositories {
     maven {
         name = "GitHubPackages"
         url = uri("https://maven.pkg.github.com/navikt/k9-format")
-        credentials {
-            username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
-            password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
-        }
-    }
-
-    maven {
-        name = "GitHubPackages"
-        url = uri("https://maven.pkg.github.com/navikt/k9-rapid")
         credentials {
             username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
             password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")

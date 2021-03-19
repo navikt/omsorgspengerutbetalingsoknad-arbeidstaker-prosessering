@@ -7,7 +7,7 @@ val k9FormatVersion = "4.0.0-20200427091830-0607a6e"
 val slf4jVersion = ext.get("slf4jVersion").toString()
 val kotlinxCoroutinesVersion = ext.get("kotlinxCoroutinesVersion").toString()
 
-val k9RapidVersion = "1.db39724"
+val k9RapidVersion = "1.afab3a1"
 
 val openhtmltopdfVersion = "1.0.6"
 val kafkaEmbeddedEnvVersion = "2.4.0"

@@ -14,7 +14,6 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.Serializer
 import org.json.JSONObject
 import org.slf4j.LoggerFactory
-import java.time.LocalDate
 
 class AleneOmOmsorgenProducer(
     val kafkaConfig: KafkaConfig
@@ -64,12 +63,7 @@ fun ArbeidstakerutbetalingMelding.tilK9RapidBehovssekvens(metadata: Metadata, ul
 
     val aleneOmOmsorgenBarn = barn
         .filter { it.aleneOmOmsorgen }
-        .map {
-        AleneOmOmsorgenBehov.Barn(
-            identitetsnummer = it.identitetsnummer,
-            fødselsdato = LocalDate.parse("2021-01-01") //TODO 18.03.2021 - Mangler denne verdien
-        )
-    }
+        .map { AleneOmOmsorgenBehov.Barn(identitetsnummer = it.identitetsnummer) }
 
     return Behovssekvens(
         id = ulid,

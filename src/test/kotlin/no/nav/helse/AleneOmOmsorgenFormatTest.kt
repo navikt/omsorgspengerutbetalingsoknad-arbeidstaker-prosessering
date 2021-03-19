@@ -55,17 +55,15 @@ class AleneOmOmsorgenFormatTest {
               ],
               "@behov": {
                 "AleneOmOmsorgen": {
-                  "versjon": "1.0.0",
+                  "versjon": "1.1.0",
                   "identitetsnummer": "02119970078",
                   "mottaksdato": "2021-01-01",
                   "barn": [
                     {
-                      "identitetsnummer": "14128622870",
-                      "fødselsdato": "2021-01-01"
+                      "identitetsnummer": "14128622870"
                     },
                     {
-                      "identitetsnummer": "07097427806",
-                      "fødselsdato": "2021-01-01"
+                      "identitetsnummer": "07097427806"
                     }
                   ]
                 }

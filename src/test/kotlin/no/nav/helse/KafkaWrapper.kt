@@ -117,14 +117,15 @@ fun KafkaConsumer<String, String>.hentJournalførArbeidstakerutbetalingtMelding(
 }
 
 fun KafkaConsumer<String, String>.hentK9RapidMelding(
-    maxWaitInSeconds: Long = 20
+    maxWaitInSeconds: Long = 20,
+    søkerIdentitetsnummer: String
 ): String {
     val end = System.currentTimeMillis() + Duration.ofSeconds(maxWaitInSeconds).toMillis()
     while (System.currentTimeMillis() < end) {
         seekToBeginning(assignment())
         val entries = poll(Duration.ofSeconds(1))
             .records(K9_RAPID_V2.name)
-            .filter { it.key() != null }
+            .filter { it.value().toString().contains(søkerIdentitetsnummer)}
 
         if (entries.isNotEmpty()) {
             return entries.first().value()

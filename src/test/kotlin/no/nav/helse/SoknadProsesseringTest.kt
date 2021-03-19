@@ -121,9 +121,10 @@ class SoknadProsesseringTest {
 
     @Test
     fun `En feilprosessert melding vil bli prosessert etter at tjenesten restartes`() {
+        val søkerIdentitetsnummer = gyldigFodselsnummerA
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
-            søker = defaultSøknad.søker.copy(fødselsnummer = gyldigFodselsnummerA)
+            søker = defaultSøknad.søker.copy(fødselsnummer = søkerIdentitetsnummer)
         )
 
         wireMockServer.stubJournalfor(500) // Simulerer feil ved journalføring
@@ -138,7 +139,7 @@ class SoknadProsesseringTest {
             .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertJournalførtFormat()
 
-        k9RapidKonsumer.hentK9RapidMelding().validerAleneOmOmsorgenBehovssekvens()
+        k9RapidKonsumer.hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer).validerAleneOmOmsorgenBehovssekvens()
     }
 
     private fun readyGir200HealthGir503() {
@@ -154,9 +155,10 @@ class SoknadProsesseringTest {
 
     @Test
     fun `Melding som gjeder søker med D-nummer`() {
+        val søkerIdentitetsnummer = dNummerA
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
-            søker = defaultSøknad.søker.copy(fødselsnummer = dNummerA)
+            søker = defaultSøknad.søker.copy(fødselsnummer = søkerIdentitetsnummer)
         )
 
         kafkaProducer.leggTilMottak(melding)
@@ -164,11 +166,12 @@ class SoknadProsesseringTest {
             .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertJournalførtFormat()
 
-        k9RapidKonsumer.hentK9RapidMelding().validerAleneOmOmsorgenBehovssekvens()
+        k9RapidKonsumer.hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer).validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
     fun `Forvent riktig format på journalført melding`() {
+        val søkerIdentitetsnummer = gyldigFodselsnummerA
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(fødselsnummer = gyldigFodselsnummerA)
@@ -179,7 +182,7 @@ class SoknadProsesseringTest {
             .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertJournalførtFormat()
 
-        k9RapidKonsumer.hentK9RapidMelding().validerAleneOmOmsorgenBehovssekvens()
+        k9RapidKonsumer.hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer).validerAleneOmOmsorgenBehovssekvens()
     }
 
     private fun String.validerAleneOmOmsorgenBehovssekvens(){

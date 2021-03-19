@@ -6,14 +6,16 @@ import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Barn
 import org.json.JSONObject
 import org.junit.Test
 import org.skyscreamer.jsonassert.JSONAssert
+import java.time.ZonedDateTime
 
 class AleneOmOmsorgenFormatTest {
 
     @Test
-    fun `Gyldig melding blir til forventet AleneOmOmsorgen Behovssekvens`(){
+    fun `Gyldig melding blir til forventet AleneOmOmsorgen Behovssekvens, hvor kun barnmed aleneomsorg blir registrert`(){
         val ulid = "01F12XM8QSH9WZMM9Q7MT071DF"
-
+        val mottatt = ZonedDateTime.parse("2021-01-01T16:24:11.252+05:30[Asia/Calcutta]")
         val gyldigSøknad = SøknadUtils.defaultSøknad.copy(
+            mottatt = mottatt,
             barn = listOf(
                 Barn(
                     navn = "Ole Dole",
@@ -26,7 +28,14 @@ class AleneOmOmsorgenFormatTest {
                     identitetsnummer = "07097427806",
                     aktørId = "67899",
                     aleneOmOmsorgen = true
+                ),
+                Barn(
+                    navn = "Anton",
+                    identitetsnummer = "07097427806",
+                    aktørId = "67899",
+                    aleneOmOmsorgen = false
                 )
+
             )
         )
 
@@ -48,7 +57,7 @@ class AleneOmOmsorgenFormatTest {
                 "AleneOmOmsorgen": {
                   "versjon": "1.0.0",
                   "identitetsnummer": "02119970078",
-                  "mottaksdato": "2021-03-18",
+                  "mottaksdato": "2021-01-01",
                   "barn": [
                     {
                       "identitetsnummer": "14128622870",

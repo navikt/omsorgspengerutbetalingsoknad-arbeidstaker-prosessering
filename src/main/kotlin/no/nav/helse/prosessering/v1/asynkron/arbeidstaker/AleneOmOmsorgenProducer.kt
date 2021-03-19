@@ -62,7 +62,9 @@ class AleneOmOmsorgenProducer(
 
 fun ArbeidstakerutbetalingMelding.tilK9RapidBehovssekvens(metadata: Metadata, ulid: String = ULID().nextULID()) : Behovssekvens {
 
-    val aleneOmOmsorgenBarn = barn.map {
+    val aleneOmOmsorgenBarn = barn
+        .filter { it.aleneOmOmsorgen }
+        .map {
         AleneOmOmsorgenBehov.Barn(
             identitetsnummer = it.identitetsnummer,
             fødselsdato = LocalDate.parse("2021-01-01") //TODO 18.03.2021 - Mangler denne verdien

@@ -4,7 +4,6 @@ import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
 import no.nav.k9.søknad.JsonUtils
 import no.nav.k9.søknad.Søknad
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.URI
@@ -77,4 +76,3 @@ class DokumentService(
         )
     }
 }
-

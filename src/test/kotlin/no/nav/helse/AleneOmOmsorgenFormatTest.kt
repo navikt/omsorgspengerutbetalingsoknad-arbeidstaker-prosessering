@@ -11,9 +11,9 @@ import java.time.ZonedDateTime
 class AleneOmOmsorgenFormatTest {
 
     @Test
-    fun `Gyldig melding blir til forventet AleneOmOmsorgen Behovssekvens, hvor kun barnmed aleneomsorg blir registrert`(){
+    fun `Gyldig melding blir til forventet AleneOmOmsorgen Behovssekvens, hvor kun barn med aleneomsorg blir registrert`(){
         val ulid = "01F12XM8QSH9WZMM9Q7MT071DF"
-        val mottatt = ZonedDateTime.parse("2021-01-01T16:24:11.252+05:30[Asia/Calcutta]")
+        val mottatt = ZonedDateTime.parse("2021-01-01T16:24:11.252+05:30[Europe/Oslo]")
         val gyldigSøknad = SøknadUtils.defaultSøknad.copy(
             mottatt = mottatt,
             barn = listOf(

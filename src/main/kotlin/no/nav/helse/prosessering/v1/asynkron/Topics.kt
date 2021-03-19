@@ -55,7 +55,7 @@ internal object Topics {
 
     val K9_RAPID_V2 = Topic(
         name = "k9-rapid-v2",
-        serDes = CleanupSerDes()
+        serDes = K9RapidSerDes()
     )
 
 }
@@ -97,6 +97,13 @@ private class CleanupSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingCleanup>>()
 }
 private class JournalfortSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingJournalfort>>() {
     override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingJournalfort>? {
+        return data?.let {
+            objectMapper.readValue(it)
+        }
+    }
+}
+private class K9RapidSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingCleanup>>() {
+    override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingCleanup>? {
         return data?.let {
             objectMapper.readValue(it)
         }

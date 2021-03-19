@@ -139,7 +139,9 @@ class SoknadProsesseringTest {
             .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertJournalførtFormat()
 
-        k9RapidKonsumer.hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer).validerAleneOmOmsorgenBehovssekvens()
+        k9RapidKonsumer
+            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
+            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     private fun readyGir200HealthGir503() {
@@ -166,7 +168,9 @@ class SoknadProsesseringTest {
             .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertJournalførtFormat()
 
-        k9RapidKonsumer.hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer).validerAleneOmOmsorgenBehovssekvens()
+        k9RapidKonsumer
+            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
+            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
@@ -182,7 +186,9 @@ class SoknadProsesseringTest {
             .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertJournalførtFormat()
 
-        k9RapidKonsumer.hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer).validerAleneOmOmsorgenBehovssekvens()
+        k9RapidKonsumer
+            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
+            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     private fun String.validerAleneOmOmsorgenBehovssekvens(){

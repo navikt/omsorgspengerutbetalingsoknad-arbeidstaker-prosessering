@@ -17,8 +17,9 @@ data class PreprosessertArbeidstakerutbetalingMelding(
     val bekreftelser: Bekreftelser,
     val dokumentUrls: List<List<URI>>,
     val titler: List<String>,
-    val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null // TODO låses til JaNei etter lansering.
+    val hjemmePgaSmittevernhensyn: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
+    val hjemmePgaStengtBhgSkole: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
+    val barn: List<Barn> = listOf()
 ) {
     internal constructor(
         melding: ArbeidstakerutbetalingMelding,
@@ -37,7 +38,8 @@ data class PreprosessertArbeidstakerutbetalingMelding(
         dokumentUrls = dokumentUrls,
         titler = melding.titler,
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
-        hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole
+        hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
+        barn = melding.barn
     )
 
     override fun toString(): String {

@@ -24,14 +24,25 @@ data class ArbeidstakerutbetalingMelding(
     val erFrilanser: Boolean = false,
     val titler: List<String>,
     val vedleggUrls: List<URI>,
-    val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null // TODO låses til JaNei etter lansering.
+    val hjemmePgaSmittevernhensyn: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
+    val hjemmePgaStengtBhgSkole: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
+    val barn: List<Barn> = listOf()
 ) {
     override fun toString(): String {
         return "ArbeidstakerutbetalingMelding(søknadId='$søknadId', mottatt=$mottatt)"
     }
 }
 
+data class Barn(
+    var identitetsnummer: String,
+    val aktørId: String?,
+    val navn: String,
+    val aleneOmOmsorgen: Boolean
+) {
+    override fun toString(): String {
+        return "Barn()"
+    }
+}
 
 data class Bosted(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
@@ -72,8 +83,15 @@ data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val fraOgMed: LocalDate,
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val antallTimerBorte: Duration? = null,
-    val antallTimerPlanlagt: Duration? = null
+    val antallTimerPlanlagt: Duration? = null,
+    val årsak: FraværÅrsak? = null //Fjerner null og optinal når feltet er prodsatt i frontend og api
 )
+
+enum class FraværÅrsak {
+    STENGT_SKOLE_ELLER_BARNEHAGE,
+    SMITTEVERNHENSYN,
+    ORDINÆRT_FRAVÆR
+}
 
 data class Søker(
     val fødselsnummer: String,

@@ -43,7 +43,8 @@ internal object SøknadUtils {
                         fraOgMed = start,
                         tilOgMed = start.plusDays(10),
                         antallTimerPlanlagt = Duration.ofHours(8),
-                        antallTimerBorte = Duration.ofHours(8)
+                        antallTimerBorte = Duration.ofHours(8),
+                        årsak = FraværÅrsak.SMITTEVERNHENSYN
                     )
                 )
             ),
@@ -175,7 +176,21 @@ internal object SøknadUtils {
             URI("http://localhost:8080/vedlegg/3")
         ),
         hjemmePgaSmittevernhensyn = true,
-        hjemmePgaStengtBhgSkole = true
+        hjemmePgaStengtBhgSkole = true,
+        barn = listOf(
+            Barn(
+                identitetsnummer = "26104500284",
+                navn = "Ole Dole",
+                aleneOmOmsorgen = true,
+                aktørId = null
+            ),
+            Barn(
+                identitetsnummer = "26104500284",
+                navn = "Anton Duck",
+                aleneOmOmsorgen = false,
+                aktørId = null
+            )
+        )
     )
 
     internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(

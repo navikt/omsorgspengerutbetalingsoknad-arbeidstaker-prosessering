@@ -11,6 +11,7 @@
     <bookmarks>
         <bookmark name="Søker" href="#søker" />
         <bookmark name="Fosterbarn" href="#fosterbarn" />
+        <bookmark name="Barn" href="#barn" />
         <bookmark name="Smittevernhensyn" href="#smittevernhensyn" />
         <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder" />
         <bookmark name="Utenlandsopphold" href="#utenlandsopphold" />
@@ -44,6 +45,21 @@
             <br/>
         </div>
     {{/if}}
+
+    <section id="barn">
+        {{#if barn}}
+            <h2>Dine barn</h2>
+            <ul>
+                {{#each barn as |barn|}}
+                    <li>
+                        <p class="sporsmalstekst">{{barn.navn}} ({{barn.identitetsnummer}})</p>
+                        <p class="sporsmalstekst">Er du alene om omsorgen for dette barnet?</p>
+                        {{ jaNeiSvar barn.aleneOmOmsorgen}}
+                    </li>
+                {{/each}}
+            </ul>
+        {{/if}}
+    </section>
 
     <section id="smittevernhensyn">
         {{#if søknad.hjemmePgaSmittevernhensyn}}
@@ -85,6 +101,9 @@
                     {{#if p.antallTimerBorte}}
                         <br/>Antall timer du har planlagt å jobbe: {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
                         <br/>Antall timer du var borte fra jobb: {{#varighet p.antallTimerBorte}}{{/varighet}}
+                    {{/if}}
+                    {{#if p.årsak}}
+                        <br/>Årsak: {{#årsak p.årsak}}{{/årsak}}
                     {{/if}}
                 </li>
             {{/each}}
@@ -253,13 +272,15 @@
     </section>
 
     <section id="vedlegg">
+        <h2>Dokumenter</h2>
         {{#if harVedlegg}}
-            <h2>Dokumenter</h2>
             <ul>
                 {{#each titler.vedlegg as |vedlegg|}}
                     <li><p>{{vedlegg.tittel}}</p></li>
                 {{/each}}
             </ul>
+        {{else}}
+            <p>Har ikke lastet opp vedlegg</p>
         {{/if}}
     </section>
 

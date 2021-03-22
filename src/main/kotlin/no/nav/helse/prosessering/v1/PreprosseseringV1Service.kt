@@ -77,7 +77,7 @@ internal class PreprosseseringV1Service(
             søkerAktørId = søkerAktørId
         )
 
-        if(melding.skalRegistrereAleneOmOmsorgenBarn()){
+        if(melding.harBarntilRegistrering()){
             logger.info("Registrerer barn med alene om omsorgen.")
             aleneOmOmsorgenProducer.leggPåKø(melding, metadata)
         }
@@ -87,9 +87,4 @@ internal class PreprosseseringV1Service(
     }
 }
 
-private fun ArbeidstakerutbetalingMelding.skalRegistrereAleneOmOmsorgenBarn(): Boolean {
-    barn.forEach {
-        if(it.aleneOmOmsorgen) return true
-    }
-    return false
-}
+private fun ArbeidstakerutbetalingMelding.harBarntilRegistrering() = barn.any { it.aleneOmOmsorgen }

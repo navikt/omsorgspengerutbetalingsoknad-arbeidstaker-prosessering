@@ -113,7 +113,7 @@ fun KafkaConsumer<String, String>.hentCleanupArbeidstakerutbetalingtMelding(
         }
     }
 
-    throw IllegalStateException("Fant ikke K9-Rapid-V2 melding etter $maxWaitInSeconds sekunder.")
+    throw IllegalStateException("Fant ikke cleanup melding etter $maxWaitInSeconds sekunder.")
 }
 
 fun KafkaConsumer<String, String>.hentK9RapidMelding(
@@ -131,7 +131,7 @@ fun KafkaConsumer<String, String>.hentK9RapidMelding(
             return entries.first().value()
         }
     }
-    throw IllegalStateException("Fant ikke AleneOmOmsorgen Behovssekvens etter $maxWaitInSeconds sekunder.")
+    throw IllegalStateException("Fant ikke K9-Rapid-V2 melding etter $maxWaitInSeconds sekunder.")
 }
 
 fun KafkaProducer<String, TopicEntry<ArbeidstakerutbetalingMelding>>.leggTilMottak(soknad: ArbeidstakerutbetalingMelding) {

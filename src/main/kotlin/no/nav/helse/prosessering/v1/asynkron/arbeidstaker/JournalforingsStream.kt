@@ -3,7 +3,6 @@ package no.nav.helse.prosessering.v1.asynkron.arbeidstaker
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.erEtter
-import no.nav.helse.joark.Arbeidstype
 import no.nav.helse.joark.JoarkGateway
 import no.nav.helse.joark.JoarkNavn
 import no.nav.helse.kafka.KafkaConfig
@@ -65,8 +64,7 @@ internal class ArbeidstakerutbetalingJournalforingsStream(
                                 etternavn = entry.data.søker.etternavn
                             ),
                             correlationId = CorrelationId(entry.metadata.correlationId),
-                            dokumenter = dokumenter,
-                            arbeidstype = Arbeidstype.ARBEIDSTAKER
+                            dokumenter = dokumenter
                         )
                         logger.info("Dokumenter journalført med ID = ${journaPostId.journalpostId}.")
 

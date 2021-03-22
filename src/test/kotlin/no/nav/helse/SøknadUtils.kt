@@ -55,7 +55,8 @@ internal object SøknadUtils {
                         fraOgMed = start,
                         tilOgMed = start.plusDays(10),
                         antallTimerPlanlagt = Duration.ofHours(8),
-                        antallTimerBorte = Duration.ofHours(8)
+                        antallTimerBorte = Duration.ofHours(8),
+                        årsak = FraværÅrsak.SMITTEVERNHENSYN
                     )
                 )
             ),
@@ -188,6 +189,20 @@ internal object SøknadUtils {
         ),
         hjemmePgaSmittevernhensyn = true,
         hjemmePgaStengtBhgSkole = true,
+        barn = listOf(
+            Barn(
+                identitetsnummer = "26104500284",
+                navn = "Ole Dole",
+                aleneOmOmsorgen = true,
+                aktørId = null
+            ),
+            Barn(
+                identitetsnummer = "26104500284",
+                navn = "Anton Duck",
+                aleneOmOmsorgen = false,
+                aktørId = null
+            )
+        ),
         k9Format = Søknad(
             SøknadId(UUID.randomUUID().toString()),
             Versjon("1.0.0"),

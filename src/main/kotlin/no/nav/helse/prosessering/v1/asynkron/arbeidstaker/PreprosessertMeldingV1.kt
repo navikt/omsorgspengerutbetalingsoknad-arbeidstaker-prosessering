@@ -18,8 +18,9 @@ data class PreprosessertArbeidstakerutbetalingMelding(
     val bekreftelser: Bekreftelser,
     val dokumentUrls: List<List<URI>>,
     val titler: List<String>,
-    val hjemmePgaSmittevernhensyn: Boolean,
-    val hjemmePgaStengtBhgSkole: Boolean? = null, // TODO låses til JaNei etter lansering.
+    val hjemmePgaSmittevernhensyn: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
+    val hjemmePgaStengtBhgSkole: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
+    val barn: List<Barn> = listOf(),
     val k9Format: Søknad
 ) {
     internal constructor(
@@ -40,6 +41,7 @@ data class PreprosessertArbeidstakerutbetalingMelding(
         titler = melding.titler,
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
         hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
+        barn = melding.barn,
         k9Format = melding.k9Format
     )
 

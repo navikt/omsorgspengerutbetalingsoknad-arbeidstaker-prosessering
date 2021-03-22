@@ -8,6 +8,8 @@ val k9FormatVersion = "5.1.17"
 val slf4jVersion = ext.get("slf4jVersion").toString()
 val kotlinxCoroutinesVersion = ext.get("kotlinxCoroutinesVersion").toString()
 
+val k9RapidVersion = "1.afab3a1"
+
 val openhtmltopdfVersion = "1.0.6"
 val kafkaEmbeddedEnvVersion = "2.4.0"
 val kafkaVersion = "2.4.0" // Alligned med version fra kafka-embedded-env
@@ -47,6 +49,9 @@ dependencies {
     // Kafka
     implementation("org.apache.kafka:kafka-streams:$kafkaVersion")
 
+    //K9-Rapid
+    implementation("no.nav.k9.rapid:alene-om-omsorgen:$k9RapidVersion")
+
     //K9-format
     implementation("no.nav.k9:soknad:$k9FormatVersion")
 
@@ -61,9 +66,7 @@ dependencies {
 }
 
 repositories {
-    maven("https://dl.bintray.com/kotlin/ktor")
-    maven("https://kotlin.bintray.com/kotlinx")
-    maven("http://packages.confluent.io/maven/")
+    mavenLocal()
 
     maven {
         name = "GitHubPackages"
@@ -73,16 +76,18 @@ repositories {
             password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
         }
     }
-
-    jcenter()
-    mavenLocal()
     mavenCentral()
+    jcenter()
+
+    maven("https://dl.bintray.com/kotlin/ktor")
+    maven("https://kotlin.bintray.com/kotlinx")
+    maven("http://packages.confluent.io/maven/")
 }
 
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_12
+    targetCompatibility = JavaVersion.VERSION_12
 }
 
 

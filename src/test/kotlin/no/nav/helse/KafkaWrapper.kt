@@ -5,6 +5,8 @@ import no.nav.common.KafkaEnvironment
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
 import no.nav.helse.prosessering.v1.asynkron.Topics.CLEANUP
+import no.nav.helse.prosessering.v1.asynkron.Topics.JOURNALFORT
+import no.nav.helse.prosessering.v1.asynkron.Topics.K9_RAPID_V2
 import no.nav.helse.prosessering.v1.asynkron.Topics.MOTTATT
 import no.nav.helse.prosessering.v1.asynkron.Topics.PREPROSSESERT
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
@@ -33,7 +35,9 @@ object KafkaWrapper {
             topicNames = listOf(
                 MOTTATT.name,
                 PREPROSSESERT.name,
-                CLEANUP.name
+                JOURNALFORT.name,
+                CLEANUP.name,
+                K9_RAPID_V2.name
             )
         )
         return kafkaEnvironment
@@ -76,6 +80,16 @@ fun KafkaEnvironment.arbeidstakerutbetalingCleanupKonsumer(): KafkaConsumer<Stri
     return consumer
 }
 
+fun KafkaEnvironment.k9RapidKonsumer(): KafkaConsumer<String, String> {
+    val consumer = KafkaConsumer(
+        testConsumerProperties("K9-Rapid-V2-Consumer"),
+        StringDeserializer(),
+        StringDeserializer()
+    )
+    consumer.subscribe(listOf(K9_RAPID_V2.name))
+    return consumer
+}
+
 fun KafkaEnvironment.arbeidstakerutbetalingMeldingProducer() = KafkaProducer(
     testProducerProperties("ArbeidstakerutbetalingMeldingProducer"),
     MOTTATT.keySerializer,
@@ -98,7 +112,26 @@ fun KafkaConsumer<String, String>.hentCleanupArbeidstakerutbetalingtMelding(
             return entries.first().value()
         }
     }
-    throw IllegalStateException("Fant ikke opprettet oppgave for søknad $soknadId etter $maxWaitInSeconds sekunder.")
+
+    throw IllegalStateException("Fant ikke K9-Rapid-V2 melding etter $maxWaitInSeconds sekunder.")
+}
+
+fun KafkaConsumer<String, String>.hentK9RapidMelding(
+    maxWaitInSeconds: Long = 20,
+    søkerIdentitetsnummer: String
+): String {
+    val end = System.currentTimeMillis() + Duration.ofSeconds(maxWaitInSeconds).toMillis()
+    while (System.currentTimeMillis() < end) {
+        seekToBeginning(assignment())
+        val entries = poll(Duration.ofSeconds(1))
+            .records(K9_RAPID_V2.name)
+            .filter { it.value().toString().contains(søkerIdentitetsnummer)}
+
+        if (entries.isNotEmpty()) {
+            return entries.first().value()
+        }
+    }
+    throw IllegalStateException("Fant ikke AleneOmOmsorgen Behovssekvens etter $maxWaitInSeconds sekunder.")
 }
 
 fun KafkaProducer<String, TopicEntry<ArbeidstakerutbetalingMelding>>.leggTilMottak(soknad: ArbeidstakerutbetalingMelding) {

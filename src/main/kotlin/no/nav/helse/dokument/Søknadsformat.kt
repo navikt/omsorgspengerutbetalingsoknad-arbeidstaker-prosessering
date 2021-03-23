@@ -1,7 +1,6 @@
 package no.nav.helse.dokument
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper

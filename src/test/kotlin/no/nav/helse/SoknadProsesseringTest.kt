@@ -13,7 +13,6 @@ import kotlinx.coroutines.time.delay
 import no.nav.common.KafkaEnvironment
 import no.nav.helse.SøknadUtils.defaultSøknad
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
-import org.json.JSONObject
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.slf4j.Logger
@@ -23,7 +22,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 
 @KtorExperimentalAPI
@@ -46,7 +44,6 @@ class SoknadProsesseringTest {
         private val kafkaEnvironment = KafkaWrapper.bootstrap()
         private val kafkaProducer = kafkaEnvironment.arbeidstakerutbetalingMeldingProducer()
         private val cleanupKonsumer = kafkaEnvironment.arbeidstakerutbetalingCleanupKonsumer()
-        private val k9RapidKonsumer = kafkaEnvironment.k9RapidKonsumer()
 
         // Se https://github.com/navikt/dusseldorf-ktor#f%C3%B8dselsnummer
         private val gyldigFodselsnummerA = "02119970078"
@@ -121,10 +118,9 @@ class SoknadProsesseringTest {
 
     @Test
     fun `En feilprosessert melding vil bli prosessert etter at tjenesten restartes`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
-            søker = defaultSøknad.søker.copy(fødselsnummer = søkerIdentitetsnummer)
+            søker = defaultSøknad.søker.copy(fødselsnummer = gyldigFodselsnummerA)
         )
 
         wireMockServer.stubJournalfor(500) // Simulerer feil ved journalføring
@@ -138,10 +134,6 @@ class SoknadProsesseringTest {
         cleanupKonsumer
             .hentCleanupArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertCleanupFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     private fun readyGir200HealthGir503() {
@@ -157,25 +149,19 @@ class SoknadProsesseringTest {
 
     @Test
     fun `Melding som gjeder søker med D-nummer`() {
-        val søkerIdentitetsnummer = dNummerA
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
-            søker = defaultSøknad.søker.copy(fødselsnummer = søkerIdentitetsnummer)
+            søker = defaultSøknad.søker.copy(fødselsnummer = dNummerA)
         )
 
         kafkaProducer.leggTilMottak(melding)
         cleanupKonsumer
             .hentCleanupArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertCleanupFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
     }
 
     @Test
     fun `Forvent riktig format på cleanup melding`() {
-        val søkerIdentitetsnummer = gyldigFodselsnummerA
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(fødselsnummer = gyldigFodselsnummerA)
@@ -185,19 +171,6 @@ class SoknadProsesseringTest {
         cleanupKonsumer
             .hentCleanupArbeidstakerutbetalingtMelding(melding.søknadId)
             .assertCleanupFormat()
-
-        k9RapidKonsumer
-            .hentK9RapidMelding(søkerIdentitetsnummer = søkerIdentitetsnummer)
-            .validerAleneOmOmsorgenBehovssekvens()
-    }
-
-    private fun String.validerAleneOmOmsorgenBehovssekvens(){
-        val rawJson = JSONObject(this)
-        assertEquals(rawJson.getJSONArray("@behovsrekkefølge").getString(0), "AleneOmOmsorgen")
-        assertEquals(rawJson.getString("@type"),"Behovssekvens")
-
-        assertNotNull(rawJson.getString("@correlationId"))
-        assertNotNull(rawJson.getJSONObject("@behov"))
     }
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }

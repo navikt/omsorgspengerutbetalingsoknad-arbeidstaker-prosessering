@@ -41,11 +41,6 @@ internal object Topics {
         name = "privat-omp-utbetalingsoknad-arbeidstaker-cleanup",
         serDes = CleanupSerDes()
     )
-    val JOURNALFORT = Topic(
-        name = "privat-omp-utbetalingsoknad-arbeidstaker-journalfort",
-        serDes = JournalfortSerDes()
-    )
-
 }
 
 internal abstract class SerDes<V> : Serializer<V>, Deserializer<V> {
@@ -83,18 +78,3 @@ private class CleanupSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingCleanup>>()
         }
     }
 }
-private class JournalfortSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingJournalfort>>() {
-    override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingJournalfort>? {
-        return data?.let {
-            objectMapper.readValue(it)
-        }
-    }
-}
-private class K9RapidSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingCleanup>>() {
-    override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingCleanup>? {
-        return data?.let {
-            objectMapper.readValue(it)
-        }
-    }
-}
-

@@ -5,7 +5,6 @@ import no.nav.common.KafkaEnvironment
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
 import no.nav.helse.prosessering.v1.asynkron.Topics.CLEANUP
-import no.nav.helse.prosessering.v1.asynkron.Topics.JOURNALFORT
 import no.nav.helse.prosessering.v1.asynkron.Topics.MOTTATT
 import no.nav.helse.prosessering.v1.asynkron.Topics.PREPROSSESERT
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
@@ -34,7 +33,6 @@ object KafkaWrapper {
             topicNames = listOf(
                 MOTTATT.name,
                 PREPROSSESERT.name,
-                JOURNALFORT.name,
                 CLEANUP.name
             )
         )

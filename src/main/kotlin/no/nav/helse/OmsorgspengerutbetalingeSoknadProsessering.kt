@@ -1,7 +1,7 @@
 package no.nav.helse
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.*
 import io.ktor.features.*
@@ -28,7 +28,6 @@ import no.nav.helse.joark.JoarkGateway
 import no.nav.helse.prosessering.v1.PdfV1Generator
 import no.nav.helse.prosessering.v1.PreprosseseringV1Service
 import no.nav.helse.prosessering.v1.asynkron.AsynkronProsesseringV1Service
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.AleneOmOmsorgenProducer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.URI
@@ -54,8 +53,6 @@ fun Application.omsorgspengerutbetalingSoknadProsessering() {
 
     val accessTokenClientResolver = AccessTokenClientResolver(environment.config.clients())
 
-    val aleneOmOmsorgenProducer = AleneOmOmsorgenProducer(configuration.getKafkaConfig())
-
     val dokumentGateway = DokumentGateway(
         baseUrl = configuration.getK9DokumentBaseUrl(),
         accessTokenClient = accessTokenClientResolver.dokumentAccessTokenClient(),
@@ -65,10 +62,10 @@ fun Application.omsorgspengerutbetalingSoknadProsessering() {
     val dokumentService = DokumentService(dokumentGateway)
 
     val preprosseseringV1Service = PreprosseseringV1Service(
-        aleneOmOmsorgenProducer = aleneOmOmsorgenProducer,
         pdfV1Generator = PdfV1Generator(),
         dokumentService = dokumentService
     )
+
     val joarkGateway = JoarkGateway(
         baseUrl = configuration.getk9JoarkBaseUrl(),
         accessTokenClient = accessTokenClientResolver.joarkAccessTokenClient(),
@@ -126,5 +123,5 @@ private fun Url.Companion.healthURL(baseUrl: URI) = Url.buildURL(baseUrl = baseU
 fun ZonedDateTime.erEtter(zonedDateTime: ZonedDateTime): Boolean = this.isAfter(zonedDateTime)
 
 internal fun ObjectMapper.omsorgspengerKonfiguert() = dusseldorfConfigured()
-    .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
+    .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
     .configure(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS, false)

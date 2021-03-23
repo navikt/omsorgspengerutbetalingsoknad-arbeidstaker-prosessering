@@ -1,6 +1,6 @@
 package no.nav.helse.prosessering.v1.asynkron
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -28,13 +28,6 @@ internal data class Topic<V>(
     val valueSerde = Serdes.serdeFrom(serDes, serDes)
 }
 
-internal data class TopicUse<V>(
-    val name: String,
-    val valueSerializer : Serializer<TopicEntry<V>>
-) {
-    internal fun keySerializer() = StringSerializer()
-}
-
 internal object Topics {
     val MOTTATT = Topic(
         name = "privat-omp-utbetalingsoknad-arbeidstaker-mottatt",
@@ -53,17 +46,12 @@ internal object Topics {
         serDes = JournalfortSerDes()
     )
 
-    val K9_RAPID_V2 = Topic(
-        name = "k9-rapid-v2",
-        serDes = K9RapidSerDes()
-    )
-
 }
 
 internal abstract class SerDes<V> : Serializer<V>, Deserializer<V> {
     protected val objectMapper = jacksonObjectMapper()
         .dusseldorfConfigured()
-        .setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
+        .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
         .configure(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS, false)
     override fun serialize(topic: String?, data: V): ByteArray? {
         return data?.let {
@@ -97,13 +85,6 @@ private class CleanupSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingCleanup>>()
 }
 private class JournalfortSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingJournalfort>>() {
     override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingJournalfort>? {
-        return data?.let {
-            objectMapper.readValue(it)
-        }
-    }
-}
-private class K9RapidSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingCleanup>>() {
-    override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingCleanup>? {
         return data?.let {
             objectMapper.readValue(it)
         }

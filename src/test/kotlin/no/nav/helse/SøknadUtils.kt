@@ -176,21 +176,7 @@ internal object SøknadUtils {
             URI("http://localhost:8080/vedlegg/3")
         ),
         hjemmePgaSmittevernhensyn = true,
-        hjemmePgaStengtBhgSkole = true,
-        barn = listOf(
-            Barn(
-                identitetsnummer = "26104500284",
-                navn = "Ole Dole",
-                aleneOmOmsorgen = true,
-                aktørId = null
-            ),
-            Barn(
-                identitetsnummer = "26104500284",
-                navn = "Anton Duck",
-                aleneOmOmsorgen = false,
-                aktørId = null
-            )
-        )
+        hjemmePgaStengtBhgSkole = true
     )
 
     internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(

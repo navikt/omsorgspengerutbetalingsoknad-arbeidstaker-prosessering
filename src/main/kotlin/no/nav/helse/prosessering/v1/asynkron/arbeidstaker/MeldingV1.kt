@@ -25,22 +25,10 @@ data class ArbeidstakerutbetalingMelding(
     val titler: List<String>,
     val vedleggUrls: List<URI>,
     val hjemmePgaSmittevernhensyn: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
-    val hjemmePgaStengtBhgSkole: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
-    val barn: List<Barn> = listOf()
+    val hjemmePgaStengtBhgSkole: Boolean? = null //TODO 15.03.2021 - Fjernes når frontend er prodsatt
 ) {
     override fun toString(): String {
         return "ArbeidstakerutbetalingMelding(søknadId='$søknadId', mottatt=$mottatt)"
-    }
-}
-
-data class Barn(
-    var identitetsnummer: String,
-    val aktørId: String?,
-    val navn: String,
-    val aleneOmOmsorgen: Boolean
-) {
-    override fun toString(): String {
-        return "Barn()"
     }
 }
 

@@ -202,7 +202,8 @@ internal object SøknadUtils {
                 listOf(
                     FraværPeriode(
                         Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")),
-                        Duration.ofHours(7).plusMinutes(30)
+                        Duration.ofHours(7).plusMinutes(30),
+                        no.nav.k9.søknad.felles.fravær.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
                     )
                 ),
                 Bosteder(

@@ -7,6 +7,7 @@ import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde.Begr
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
+import no.nav.k9.søknad.felles.fravær.AktivitetFravær
 import no.nav.k9.søknad.felles.fravær.FraværPeriode
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder
@@ -203,7 +204,8 @@ internal object SøknadUtils {
                     FraværPeriode(
                         Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")),
                         Duration.ofHours(7).plusMinutes(30),
-                        no.nav.k9.søknad.felles.fravær.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE
+                        no.nav.k9.søknad.felles.fravær.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
+                        listOf(AktivitetFravær.ARBEIDSTAKER)
                     )
                 ),
                 Bosteder(

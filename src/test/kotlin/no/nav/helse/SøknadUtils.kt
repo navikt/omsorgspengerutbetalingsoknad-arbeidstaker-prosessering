@@ -174,7 +174,7 @@ internal object SøknadUtils {
         ),
         fosterbarn = listOf(
             FosterBarn(
-                fødselsnummer = "02119970078"
+                identitetsnummer = "02119970078"
             )
         ),
         andreUtbetalinger = listOf("dagpenger", "sykepenger"),

@@ -1,5 +1,6 @@
 package no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
@@ -97,7 +98,8 @@ data class Søker(
 }
 
 data class FosterBarn(
-    val fødselsnummer: String
+    @JsonAlias("fødselsnummer")
+    val identitetsnummer: String
 ) {
     override fun toString(): String {
         return "FosterBarn()"

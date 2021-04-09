@@ -109,7 +109,7 @@ private fun PreprosessertArbeidstakerutbetalingMelding.tilKOmsorgspengerUtbetali
 private fun List<FosterBarn>.tilK9Barn(): List<Barn> {
     return map {
         Barn.builder()
-            .norskIdentitetsnummer(NorskIdentitetsnummer.of(it.fødselsnummer))
+            .norskIdentitetsnummer(NorskIdentitetsnummer.of(it.identitetsnummer))
             .build()
     }
 }

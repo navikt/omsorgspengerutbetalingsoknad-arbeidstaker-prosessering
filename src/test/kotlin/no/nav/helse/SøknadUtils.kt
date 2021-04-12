@@ -5,12 +5,25 @@ import no.nav.helse.aktoer.AktørId
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde.Begrunnelse.*
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
+import no.nav.k9.søknad.Søknad
+import no.nav.k9.søknad.felles.Versjon
+import no.nav.k9.søknad.felles.fravær.AktivitetFravær
+import no.nav.k9.søknad.felles.fravær.FraværPeriode
+import no.nav.k9.søknad.felles.personopplysninger.Barn
+import no.nav.k9.søknad.felles.personopplysninger.Bosteder
+import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
+import no.nav.k9.søknad.felles.type.Landkode
+import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
+import no.nav.k9.søknad.felles.type.Periode
+import no.nav.k9.søknad.felles.type.SøknadId
+import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
+import no.nav.k9.søknad.felles.personopplysninger.Søker as K9Søker
 
 internal object SøknadUtils {
     internal val objectMapper = jacksonObjectMapper().omsorgspengerKonfiguert()
@@ -176,7 +189,42 @@ internal object SøknadUtils {
             URI("http://localhost:8080/vedlegg/3")
         ),
         hjemmePgaSmittevernhensyn = true,
-        hjemmePgaStengtBhgSkole = true
+        hjemmePgaStengtBhgSkole = true,
+        k9Format = Søknad(
+            SøknadId(UUID.randomUUID().toString()),
+            Versjon("1.0.0"),
+            ZonedDateTime.now(),
+            K9Søker(NorskIdentitetsnummer.of("02119970078")),
+            OmsorgspengerUtbetaling(
+                listOf(
+                    Barn(NorskIdentitetsnummer.of("26128027024"), null)
+                ),
+                null,
+                listOf(
+                    FraværPeriode(
+                        Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")),
+                        Duration.ofHours(7).plusMinutes(30),
+                        no.nav.k9.søknad.felles.fravær.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
+                        listOf(AktivitetFravær.ARBEIDSTAKER)
+                    )
+                ),
+                Bosteder(
+                    mapOf(
+                        Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")) to
+                                Bosteder.BostedPeriodeInfo(Landkode.NORGE)
+                    )
+                ),
+                Utenlandsopphold(
+                    mapOf(
+                        Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")) to
+                                Utenlandsopphold.UtenlandsoppholdPeriodeInfo.builder()
+                                    .land(Landkode.SPANIA)
+                                    .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD)
+                                    .build()
+                    )
+                )
+            )
+        )
     )
 
     internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(

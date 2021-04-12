@@ -3,7 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val dusseldorfKtorVersion = "1.5.2.1303b90"
 val ktorVersion = ext.get("ktorVersion").toString()
-val k9FormatVersion = "4.0.0-20200427091830-0607a6e"
+val k9FormatVersion = "5.1.28"
+
 val slf4jVersion = ext.get("slf4jVersion").toString()
 val kotlinxCoroutinesVersion = ext.get("kotlinxCoroutinesVersion").toString()
 
@@ -31,7 +32,6 @@ dependencies {
     implementation ( "no.nav.helse:dusseldorf-ktor-metrics:$dusseldorfKtorVersion")
     implementation ( "no.nav.helse:dusseldorf-ktor-health:$dusseldorfKtorVersion")
     implementation ( "no.nav.helse:dusseldorf-ktor-auth:$dusseldorfKtorVersion")
-    implementation ( "no.nav.k9:soknad-omsorgspenger-utbetaling:$k9FormatVersion")
     implementation ( "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:$kotlinxCoroutinesVersion")
     
     // Client
@@ -46,6 +46,9 @@ dependencies {
 
     // Kafka
     implementation("org.apache.kafka:kafka-streams:$kafkaVersion")
+
+    //K9-format
+    implementation("no.nav.k9:soknad:$k9FormatVersion")
 
     // Test
     testImplementation ( "org.apache.kafka:kafka-clients:$kafkaVersion")

@@ -1,11 +1,12 @@
 package no.nav.helse
 
-import no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.OmsorgspengerUtbetalingSøknad as ArbeidstakerutbetalingSøknad
+import no.nav.k9.søknad.JsonUtils
+import no.nav.k9.søknad.Søknad
 import org.json.JSONObject
 import org.skyscreamer.jsonassert.JSONAssert
 import kotlin.test.assertNotNull
 
-internal fun String.assertJournalførtFormat() {
+internal fun String.assertCleanupFormat() {
     val rawJson = JSONObject(this)
 
     val metadata = assertNotNull(rawJson.getJSONObject("metadata"))
@@ -13,13 +14,9 @@ internal fun String.assertJournalførtFormat() {
 
     val data = assertNotNull(rawJson.getJSONObject("data"))
 
-    assertNotNull(data.getString("journalpostId"))
-    val søknad = assertNotNull(data.getJSONObject("søknad"))
+    assertNotNull(data.getJSONObject("journalførtMelding")).getString("journalpostId")
+    val søknad = assertNotNull(data.getJSONObject("melding")).getJSONObject("k9Format")
 
-    val rekonstruertSøknad = ArbeidstakerutbetalingSøknad
-        .builder()
-        .json(søknad.toString())
-        .build()
-
-    JSONAssert.assertEquals(søknad.toString(), ArbeidstakerutbetalingSøknad.SerDes.serialize(rekonstruertSøknad), true)
+    val rekonstruertSøknad = JsonUtils.getObjectMapper().readValue(søknad.toString(), Søknad::class.java)
+    JSONAssert.assertEquals(søknad.toString(), JsonUtils.toString(rekonstruertSøknad), true)
 }

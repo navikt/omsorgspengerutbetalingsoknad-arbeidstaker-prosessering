@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
+import no.nav.k9.søknad.Søknad
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
@@ -26,7 +27,8 @@ data class ArbeidstakerutbetalingMelding(
     val titler: List<String>,
     val vedleggUrls: List<URI>,
     val hjemmePgaSmittevernhensyn: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
-    val hjemmePgaStengtBhgSkole: Boolean? = null //TODO 15.03.2021 - Fjernes når frontend er prodsatt
+    val hjemmePgaStengtBhgSkole: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
+    val k9Format: Søknad
 ) {
     override fun toString(): String {
         return "ArbeidstakerutbetalingMelding(søknadId='$søknadId', mottatt=$mottatt)"

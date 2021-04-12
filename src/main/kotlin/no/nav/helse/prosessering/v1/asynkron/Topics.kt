@@ -7,17 +7,17 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.helse.dusseldorf.ktor.jackson.dusseldorfConfigured
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
+import no.nav.k9.søknad.Søknad
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.serialization.Serializer
 import org.apache.kafka.common.serialization.StringSerializer
-import no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.OmsorgspengerUtbetalingSøknad as ArbeidstakerutbetalingSøknad
 
 data class TopicEntry<V>(val metadata: Metadata, val data: V)
 
 data class ArbeidstakerutbetalingCleanup(val metadata: Metadata, val melding: PreprosessertArbeidstakerutbetalingMelding, val journalførtMelding: ArbeidstakerutbetalingJournalfort)
-data class ArbeidstakerutbetalingJournalfort(val journalpostId: String, val søknad: ArbeidstakerutbetalingSøknad)
+data class ArbeidstakerutbetalingJournalfort(val journalpostId: String, val søknad: Søknad)
 
 internal data class Topic<V>(
     val name: String,
@@ -41,11 +41,6 @@ internal object Topics {
         name = "privat-omp-utbetalingsoknad-arbeidstaker-cleanup",
         serDes = CleanupSerDes()
     )
-    val JOURNALFORT = Topic(
-        name = "privat-omp-utbetalingsoknad-arbeidstaker-journalfort",
-        serDes = JournalfortSerDes()
-    )
-
 }
 
 internal abstract class SerDes<V> : Serializer<V>, Deserializer<V> {
@@ -78,13 +73,6 @@ private class PreprossesertSerDes: SerDes<TopicEntry<PreprosessertArbeidstakerut
 }
 private class CleanupSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingCleanup>>() {
     override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingCleanup>? {
-        return data?.let {
-            objectMapper.readValue(it)
-        }
-    }
-}
-private class JournalfortSerDes: SerDes<TopicEntry<ArbeidstakerutbetalingJournalfort>>() {
-    override fun deserialize(topic: String?, data: ByteArray?): TopicEntry<ArbeidstakerutbetalingJournalfort>? {
         return data?.let {
             objectMapper.readValue(it)
         }

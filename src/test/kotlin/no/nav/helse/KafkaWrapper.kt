@@ -5,7 +5,6 @@ import no.nav.common.KafkaEnvironment
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
 import no.nav.helse.prosessering.v1.asynkron.Topics.CLEANUP
-import no.nav.helse.prosessering.v1.asynkron.Topics.JOURNALFORT
 import no.nav.helse.prosessering.v1.asynkron.Topics.MOTTATT
 import no.nav.helse.prosessering.v1.asynkron.Topics.PREPROSSESERT
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
@@ -34,7 +33,6 @@ object KafkaWrapper {
             topicNames = listOf(
                 MOTTATT.name,
                 PREPROSSESERT.name,
-                JOURNALFORT.name,
                 CLEANUP.name
             )
         )
@@ -68,13 +66,13 @@ private fun KafkaEnvironment.testProducerProperties(clientId: String): MutableMa
     }
 }
 
-fun KafkaEnvironment.arbeidstakerutbetalingJournalføringsKonsumer(): KafkaConsumer<String, String> {
+fun KafkaEnvironment.arbeidstakerutbetalingCleanupKonsumer(): KafkaConsumer<String, String> {
     val consumer = KafkaConsumer(
         testConsumerProperties("arbeidstakerutbetalingConsumer"),
         StringDeserializer(),
         StringDeserializer()
     )
-    consumer.subscribe(listOf(JOURNALFORT.name))
+    consumer.subscribe(listOf(CLEANUP.name))
     return consumer
 }
 
@@ -84,7 +82,7 @@ fun KafkaEnvironment.arbeidstakerutbetalingMeldingProducer() = KafkaProducer(
     MOTTATT.serDes
 )
 
-fun KafkaConsumer<String, String>.hentJournalførArbeidstakerutbetalingtMelding(
+fun KafkaConsumer<String, String>.hentCleanupArbeidstakerutbetalingtMelding(
     soknadId: String,
     maxWaitInSeconds: Long = 20
 ): String {
@@ -92,7 +90,7 @@ fun KafkaConsumer<String, String>.hentJournalførArbeidstakerutbetalingtMelding(
     while (System.currentTimeMillis() < end) {
         seekToBeginning(assignment())
         val entries = poll(Duration.ofSeconds(1))
-            .records(JOURNALFORT.name)
+            .records(CLEANUP.name)
             .filter { it.key() == soknadId }
 
         if (entries.isNotEmpty()) {
@@ -101,7 +99,7 @@ fun KafkaConsumer<String, String>.hentJournalførArbeidstakerutbetalingtMelding(
         }
     }
 
-    throw IllegalStateException("Fant ikke K9-Rapid-V2 melding etter $maxWaitInSeconds sekunder.")
+    throw IllegalStateException("Fant ikke cleanup melding etter $maxWaitInSeconds sekunder.")
 }
 
 fun KafkaProducer<String, TopicEntry<ArbeidstakerutbetalingMelding>>.leggTilMottak(soknad: ArbeidstakerutbetalingMelding) {

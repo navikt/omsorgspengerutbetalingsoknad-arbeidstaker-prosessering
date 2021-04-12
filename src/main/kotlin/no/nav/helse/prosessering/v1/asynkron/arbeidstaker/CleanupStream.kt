@@ -39,7 +39,6 @@ internal class CleanupStream(
         private fun topology(dokumentService: DokumentService, gittDato: ZonedDateTime): Topology {
             val builder = StreamsBuilder()
             val fraCleanup = Topics.CLEANUP
-            val tilJournalfort = Topics.JOURNALFORT
 
             builder
                 .stream(
@@ -57,11 +56,9 @@ internal class CleanupStream(
                             correlationId = CorrelationId(entry.metadata.correlationId)
                         )
                         logger.info("Dokumenter slettet.")
-                        logger.info("Videresender journalført melding")
                         entry.data.journalførtMelding
                     }
                 }
-                .to(tilJournalfort.name, Produced.with(tilJournalfort.keySerde, tilJournalfort.valueSerde))
             return builder.build()
         }
     }

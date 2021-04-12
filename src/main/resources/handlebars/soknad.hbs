@@ -49,9 +49,9 @@
         {{#if søknad.hjemmePgaSmittevernhensyn}}
             <h2>Særlige smittevernhensyn</h2>
             <ul>
-                <li>Du opplyser at du må være hjemme med barn på grunn av særlige smittevernhensyn.</li>
+                <li>Du opplyser at du har vært hjemme med barn på grunn av særlige smittevernhensyn.</li>
                 {{#if ikkeHarSendtInnVedlegg}}
-                    <li>Bekreftelse fra lege ikke lastet opp. Må ettersendes.</li>
+                    <li>Bekreftelse fra lege er ikke lastet opp. Må ettersendes.</li>
                 {{/if}}
             </ul>
         {{/if}}
@@ -59,16 +59,16 @@
         {{#if søknad.hjemmePgaStengtBhgSkole}}
             <h2>Lokalt stengt barnehage eller skole</h2>
             <ul>
-                <li>Du opplyser at du er hjemme med barn fordi barnehagen eller skolen har vært lokalt stengt.</li>
+                <li>Du opplyser at du har vært hjemme med barn fordi barnehagen eller skolen var stengt.</li>
                 {{#if ikkeHarSendtInnVedlegg}}
-                    <li>Bekreftelse fra barnehage/skole ikke lastet opp. Må ettersendes.</li>
+                    <li>Bekreftelse fra barnehage/skole er ikke lastet opp. Må ettersendes.</li>
                 {{/if}}
             </ul>
         {{/if}}
     </section>
 
     <section id="utbetalingsperioder">
-        <h2>Perioder du har brukt omsorgsdager</h2>
+        <h2>Omsorgsdager du søker utbetaling for</h2>
         {{# each søknad.arbeidsgivere as |org|}}
             {{#if org.navn}}
                 {{#unless org.organisasjonsnummer}}
@@ -83,8 +83,8 @@
                 <li>
                     Periode: {{#dato p.fraOgMed}}{{/dato}} - {{#dato p.tilOgMed}}{{/dato}}
                     {{#if p.antallTimerBorte}}
-                        <br/>Antall timer du har planlagt å jobbe: {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
-                        <br/>Antall timer du var borte fra jobb: {{#varighet p.antallTimerBorte}}{{/varighet}}
+                        <br/>Antall timer du skulle ha jobbet denne dagen:  {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
+                        <br/>Antall timer du var borte fra jobb denne dagen:  {{#varighet p.antallTimerBorte}}{{/varighet}}
                     {{/if}}
                     {{#if p.årsak}}
                         <br/>Årsak: {{#årsak p.årsak}}{{/årsak}}
@@ -97,7 +97,9 @@
 
     <section id="utenlandsopphold">
         {{#if harOpphold}}
-            <h2>Utenlandsopphold i perioden</h2>
+            <h2>Utenlandsopphold i dager med fravær</h2>
+            <p>Har du vært i utlandet i noen av dagene du søker omsorgspenger for?</p>
+            {{jaNeiSvar harOpphold}}<br/>
         {{/if}}
         <ul>
             {{# each søknad.opphold as |o|}}
@@ -135,8 +137,9 @@
                                 <br/>
 
                             {{else}}
-                                <p>Du opplyser at du har jobbet mer enn 4 uker. Du har ikke lastet opp vedlegg til søknaden
-                                    med forklaring fra arbeidsgiver. Denne må ettersendes.</p>
+                                <p>Du opplyser at du har jobbet lenger enn 4 uker. Du har ikke lastet opp vedlegg til
+                                    søknaden med forklaring fra arbeidsgiver om hvorfor de ikke har utbetalt omsorgspenger
+                                    til deg. Denne må ettersendes.</p>
                                 <br/>
                             {{/if}}
                         {{/eqJaNei}}
@@ -157,9 +160,9 @@
                         {{/eq}}
 
                         {{#eq org.ansettelseslengde.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
-                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det, hatt ulønnet permisjon
-                                direkte etter en periode med foreldrepenger, for så å ha gjenopptatt arbeidet etter
-                                permisjonen.</p>
+                            <p>Du opplyser at du har jobbet i mindre enn 4 uker, men direkte
+                                før det hadde du ulønnet permisjon etter en periode med foreldrepenger. Du
+                                har gjenopptatt arbeidet etter permisjonen.</p>
                         {{/eq}}
 
                         {{#eq org.ansettelseslengde.begrunnelse "MILITÆRTJENESTE"}}
@@ -198,12 +201,12 @@
     <section id="medlemskap">
         <h2>Medlemskap i folketrygden</h2>
 
-        <p class="sporsmalstekst">Har du bodd i utlandet de siste 12 månedene?</p>
-        {{ jaNeiSvar medlemskap.siste12}}
+        <p class="sporsmalstekst">Har du bodd i utlandet i de siste 12 månedene?</p>
+        {{jaNeiSvar medlemskap.siste12}}
 
         <br/><br/>
 
-        <p class="sporsmalstekst">Skal du bo i utlandet de neste 12 månedene?</p>
+        <p class="sporsmalstekst">Skal du bo i utlandet i de neste 12 månedene?</p>
         {{ jaNeiSvar medlemskap.neste12}}
         <br/><br/>
 
@@ -241,17 +244,18 @@
     </section>
 
     <section id="andreUtbetalinger">
+        <h2>Andre utbetalinger fra NAV</h2>
+        <p>Har du søkt om andre utbetalinger fra NAV?</p>
+        {{jaNeiSvar harSøktAndreYtelser}}<br/>
         {{#if harSøktAndreYtelser}}
-            <h2>Andre utbetalinger du har søkt om fra NAV</h2>
-
-        <p>Har søkt om:</p>
-        <ul>
-            {{# each søknad.andreUtbetalinger as |utbetaling|}}
-                <li>
-                    {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
-                </li>
-            {{/each}}
-        </ul>
+            <p>Har søkt om:</p>
+            <ul>
+                {{# each søknad.andreUtbetalinger as |utbetaling|}}
+                    <li>
+                        {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
+                    </li>
+                {{/each}}
+            </ul>
         {{/if}}
     </section>
 
@@ -270,12 +274,13 @@
 
     <section id="samtykke">
         <h2>Samtykke fra deg</h2>
-        <p class="sporsmalstekst">Har du forstått rettigheter og plikter?</p>
+        <p class="sporsmalstekst">Har du forstått dine rettigheter og plikter?</p>
         <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
         <hr />
-        <p class="sporsmalstekst">Har du bekreftet at opplysninger som er gitt er riktige?</p>
+        <p class="sporsmalstekst">Har du bekreftet at opplysninger du har gitt er riktige?</p>
         <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
     </section>
+
 </div>
 <!-- FOOTER -->
 <p id="footer">

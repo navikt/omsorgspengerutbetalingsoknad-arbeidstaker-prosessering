@@ -2,7 +2,6 @@ package no.nav.helse.dokument
 
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
-import no.nav.k9.søknad.JsonUtils
 import no.nav.k9.søknad.Søknad
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -48,7 +47,6 @@ class DokumentService(
         correlationId: CorrelationId,
         dokumentbeskrivelse: String
     ) : URI {
-        logger.info("SKAL IKKE VISES I PROD! K9-Format som journalføres: {}", JsonUtils.toString(k9Format)) //TODO 11.03.2021 - Fjerne
         return lagreDokument(
             dokument = DokumentGateway.Dokument(
                 content = Søknadsformat.somJson(k9Format),

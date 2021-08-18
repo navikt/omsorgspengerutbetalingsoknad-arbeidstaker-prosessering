@@ -12,10 +12,7 @@ import no.nav.k9.søknad.felles.fravær.FraværPeriode
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
-import no.nav.k9.søknad.felles.type.Landkode
-import no.nav.k9.søknad.felles.type.NorskIdentitetsnummer
-import no.nav.k9.søknad.felles.type.Periode
-import no.nav.k9.søknad.felles.type.SøknadId
+import no.nav.k9.søknad.felles.type.*
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.net.URI
@@ -205,22 +202,22 @@ internal object SøknadUtils {
                         Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")),
                         Duration.ofHours(7).plusMinutes(30),
                         no.nav.k9.søknad.felles.fravær.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
-                        listOf(AktivitetFravær.ARBEIDSTAKER)
+                        listOf(AktivitetFravær.ARBEIDSTAKER),
+                        Organisasjonsnummer.of(GYLDIG_ORGNR)
                     )
                 ),
-                Bosteder(
+                Bosteder().medPerioder(
                     mapOf(
                         Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")) to
-                                Bosteder.BostedPeriodeInfo(Landkode.NORGE)
+                                Bosteder.BostedPeriodeInfo().medLand((Landkode.NORGE))
                     )
                 ),
-                Utenlandsopphold(
+                Utenlandsopphold().medPerioder(
                     mapOf(
                         Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")) to
-                                Utenlandsopphold.UtenlandsoppholdPeriodeInfo.builder()
-                                    .land(Landkode.SPANIA)
-                                    .årsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD)
-                                    .build()
+                                Utenlandsopphold.UtenlandsoppholdPeriodeInfo()
+                                    .medLand(Landkode.SPANIA)
+                                    .medÅrsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD)
                     )
                 )
             )

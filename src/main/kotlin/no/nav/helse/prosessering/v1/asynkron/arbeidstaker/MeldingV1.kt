@@ -26,8 +26,8 @@ data class ArbeidstakerutbetalingMelding(
     val erFrilanser: Boolean = false,
     val titler: List<String>,
     val vedleggUrls: List<URI>,
-    val hjemmePgaSmittevernhensyn: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
-    val hjemmePgaStengtBhgSkole: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
+    val hjemmePgaSmittevernhensyn: Boolean,
+    val hjemmePgaStengtBhgSkole: Boolean? = null,
     val k9Format: Søknad
 ) {
     override fun toString(): String {

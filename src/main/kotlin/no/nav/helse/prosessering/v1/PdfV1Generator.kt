@@ -135,10 +135,10 @@ internal class PdfV1Generator {
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
                         "inkluderAnnetOverskrift" to inkluderAnnetOverskrift(
-                            melding.andreUtbetalinger.isNotEmpty(), melding.erSelvstendig,
+                            melding.andreUtbetalinger?.isNotEmpty() ?: false, melding.erSelvstendig,
                             melding.erFrilanser
                         ),
-                        "harSøktAndreYtelser" to melding.andreUtbetalinger.isNotEmpty(),
+                        "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),
                         "erSelvstendigOgEllerFrilanser" to erSelvstendigOgEllerFrilanser(
                             melding.erSelvstendig,
                             melding.erFrilanser

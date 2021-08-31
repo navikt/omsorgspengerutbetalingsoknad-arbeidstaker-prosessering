@@ -21,7 +21,7 @@ data class ArbeidstakerutbetalingMelding(
     val arbeidsgivere: List<ArbeidsgiverDetaljer>,
     val bekreftelser: Bekreftelser,
     val fosterbarn: List<FosterBarn>? = listOf(), // TODO: 31/08/2021 Fjerner hele feltet når frontend er prodsatt
-    val andreUtbetalinger: List<String> = listOf(), // TODO: 31/08/2021 Fjerner hele feltet når frontend er prodsatt
+    val andreUtbetalinger: List<String>? = listOf(), // TODO: 31/08/2021 Fjerner hele feltet når frontend er prodsatt
     val erSelvstendig: Boolean = false,
     val erFrilanser: Boolean = false,
     val titler: List<String>,

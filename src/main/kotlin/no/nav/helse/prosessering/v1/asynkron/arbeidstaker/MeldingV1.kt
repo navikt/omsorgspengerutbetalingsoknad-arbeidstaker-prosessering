@@ -20,8 +20,8 @@ data class ArbeidstakerutbetalingMelding(
     val opphold: List<Opphold>,
     val arbeidsgivere: List<ArbeidsgiverDetaljer>,
     val bekreftelser: Bekreftelser,
-    val fosterbarn: List<FosterBarn>? = listOf(),
-    val andreUtbetalinger: List<String> = listOf(),
+    val fosterbarn: List<FosterBarn>? = listOf(), // TODO: 31/08/2021 Fjerner hele feltet når frontend er prodsatt
+    val andreUtbetalinger: List<String> = listOf(), // TODO: 31/08/2021 Fjerner hele feltet når frontend er prodsatt
     val erSelvstendig: Boolean = false,
     val erFrilanser: Boolean = false,
     val titler: List<String>,
@@ -49,12 +49,20 @@ data class ArbeidsgiverDetaljer(
     val organisasjonsnummer: String? = null,
     val harHattFraværHosArbeidsgiver: Boolean,
     val arbeidsgiverHarUtbetaltLønn: Boolean,
-    val ansettelseslengde: Ansettelseslengde,
-    val perioder: List<Utbetalingsperiode>
+    val ansettelseslengde: Ansettelseslengde? = null, // TODO: 31/08/2021 Fjerne hele feltet når frontend er prodsatt
+    val perioder: List<Utbetalingsperiode>,
+    val utbetalingsårsak: Utbetalingsårsak? = null, // TODO: 31/08/2021 Fjerne nullable når frontend er prodsatt
+    val konfliktForklaring: String? = null
 ) {
     override fun toString(): String {
         return "ArbeidsgiverDetaljer()"
     }
+}
+
+enum class Utbetalingsårsak(){
+    ARBEIDSGIVER_KONKURS,
+    NYOPPSTARTET_HOS_ARBEIDSGIVER,
+    KONFLIKT_MED_ARBEIDSGIVER
 }
 
 data class OrganisasjonDetaljer(

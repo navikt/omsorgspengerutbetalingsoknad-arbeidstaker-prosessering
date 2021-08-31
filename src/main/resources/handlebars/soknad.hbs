@@ -128,7 +128,8 @@
                     <h3 class="sporsmalstekst">{{org.organisasjonsnummer}}</h3>
                 {{/if}}
 
-                <ul>
+                {{#if org.ansettelseslengde}}
+                    <ul>
                     <li>
                         <p class="sporsmalstekst">Hvor lenge har du jobbet hos arbeidsgiveren din?</p>
                         {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Ja"}}
@@ -195,6 +196,25 @@
                     </li>
                     </li>
                 </ul>
+                {{/if}}
+
+                {{#if org.utbetalingsårsak}}
+                    {{#eq org.utbetalingsårsak "ARBEIDSGIVER_KONKURS"}}
+                        <p>Utbetalingsårsak: Arbeidsgiver er konkurs.</p>
+                    {{/eq}}
+                    {{#eq org.utbetalingsårsak "NYOPPSTARTET_HOS_ARBEIDSGIVER"}}
+                        <p>Utbetalingsårsak: Nyoppstartet hos arbeidsgiver.</p>
+                    {{/eq}}
+                    {{#eq org.utbetalingsårsak "KONFLIKT_MED_ARBEIDSGIVER"}}
+                        <p>Utbetalingsårsak: Konflikt med arbeidsgiver.</p>
+                    {{/eq}}
+                {{/if}}
+
+                {{#if org.konfliktForklaring}}
+                    <p>Forklaring for konflikt: </p>
+                    <p class="fritekst">{{org.konfliktForklaring}}</p>
+                {{/if}}
+                <br/>
             {{/each}}
     </section>
 
@@ -244,18 +264,20 @@
     </section>
 
     <section id="andreUtbetalinger">
-        <h2>Andre utbetalinger fra NAV</h2>
-        <p>Har du søkt om andre utbetalinger fra NAV?</p>
-        {{jaNeiSvar harSøktAndreYtelser}}<br/>
-        {{#if harSøktAndreYtelser}}
-            <p>Har søkt om:</p>
-            <ul>
-                {{# each søknad.andreUtbetalinger as |utbetaling|}}
-                    <li>
-                        {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
-                    </li>
-                {{/each}}
-            </ul>
+        {{#if søknad.andreUtbetalinger}}
+            <h2>Andre utbetalinger fra NAV</h2>
+            <p>Har du søkt om andre utbetalinger fra NAV?</p>
+            {{jaNeiSvar harSøktAndreYtelser}}<br/>
+            {{#if harSøktAndreYtelser}}
+                <p>Har søkt om:</p>
+                <ul>
+                    {{# each søknad.andreUtbetalinger as |utbetaling|}}
+                        <li>
+                            {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
+                        </li>
+                    {{/each}}
+                </ul>
+            {{/if}}
         {{/if}}
     </section>
 

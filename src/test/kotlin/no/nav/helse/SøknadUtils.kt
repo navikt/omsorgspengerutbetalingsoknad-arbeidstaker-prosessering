@@ -9,6 +9,7 @@ import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær
 import no.nav.k9.søknad.felles.fravær.FraværPeriode
+import no.nav.k9.søknad.felles.fravær.SøknadÅrsak
 import no.nav.k9.søknad.felles.personopplysninger.Barn
 import no.nav.k9.søknad.felles.personopplysninger.Bosteder
 import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
@@ -45,9 +46,6 @@ internal object SøknadUtils {
                 organisasjonsnummer = GYLDIG_ORGNR,
                 harHattFraværHosArbeidsgiver = true,
                 arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = true
-                ),
                 perioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = start,
@@ -56,7 +54,9 @@ internal object SøknadUtils {
                         antallTimerBorte = Duration.ofHours(8),
                         årsak = FraværÅrsak.SMITTEVERNHENSYN
                     )
-                )
+                ),
+                utbetalingsårsak = Utbetalingsårsak.KONFLIKT_MED_ARBEIDSGIVER,
+                konfliktForklaring = "Har en konflikt med arbeidsgiver fordi ...."
             ),
             ArbeidsgiverDetaljer(
                 navn = "Arbeidsgiver 2",
@@ -202,6 +202,7 @@ internal object SøknadUtils {
                         Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")),
                         Duration.ofHours(7).plusMinutes(30),
                         no.nav.k9.søknad.felles.fravær.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
+                        SøknadÅrsak.KONFLIKT_MED_ARBEIDSGIVER,
                         listOf(AktivitetFravær.ARBEIDSTAKER),
                         Organisasjonsnummer.of(GYLDIG_ORGNR)
                     )

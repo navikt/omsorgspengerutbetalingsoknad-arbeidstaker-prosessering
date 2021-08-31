@@ -52,10 +52,12 @@ internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
             it.harHattFraværHosArbeidsgiver.tilJaEllerNei()
         )
 
-        ansettelseslengdeCounter.labels(
-            it.ansettelseslengde.merEnn4Uker.tilJaEllerNei(),
-            it.ansettelseslengde.begrunnelse?.name ?: "n/a"
-        ).inc()
+        if(it.ansettelseslengde != null){
+            ansettelseslengdeCounter.labels(
+                it.ansettelseslengde.merEnn4Uker.tilJaEllerNei(),
+                it.ansettelseslengde.begrunnelse?.name ?: "n/a"
+            ).inc()
+        }
     }
 
     val utbetalingsperioder = this.arbeidsgivere.flatMap { it.perioder }

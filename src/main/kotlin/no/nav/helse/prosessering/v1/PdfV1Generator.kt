@@ -9,6 +9,7 @@ import com.github.jknack.handlebars.context.MapValueResolver
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
+import com.openhtmltopdf.util.XRLog
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.omsorgspengerKonfiguert
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
@@ -24,6 +25,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.logging.Level
 
 internal class PdfV1Generator {
     private companion object {
@@ -110,6 +112,7 @@ internal class PdfV1Generator {
     internal fun generateSoknadOppsummeringPdf(
         melding: ArbeidstakerutbetalingMelding
     ): ByteArray {
+        XRLog.listRegisteredLoggers().forEach { logger -> XRLog.setLevel(logger, Level.WARNING) }
         val mottatt = melding.mottatt.toLocalDate()
         soknadTemplateLoader.apply(
             Context
@@ -130,21 +133,9 @@ internal class PdfV1Generator {
                             }
                         ),
                         "harArbeidsgivere" to melding.arbeidsgivere.isNotEmpty(),
-                        "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
-                        "inkluderAnnetOverskrift" to inkluderAnnetOverskrift(
-                            melding.andreUtbetalinger?.isNotEmpty() ?: false, melding.erSelvstendig,
-                            melding.erFrilanser
-                        ),
-                        "harSøktAndreYtelser" to melding.andreUtbetalinger?.isNotEmpty(),
-                        "erSelvstendigOgEllerFrilanser" to erSelvstendigOgEllerFrilanser(
-                            melding.erSelvstendig,
-                            melding.erFrilanser
-                        ),
-                        "erSelvstendig" to melding.erSelvstendig,
-                        "erFrilanser" to melding.erFrilanser,
                         "ikkeHarSendtInnVedlegg" to melding.vedleggUrls.isEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "titler" to mapOf(
@@ -243,14 +234,3 @@ private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     "nn" -> "Nynorsk"
     else -> this
 }
-
-private fun erSelvstendigOgEllerFrilanser(
-    erSelvstendig: Boolean,
-    erFrilanser: Boolean
-): Boolean = (erSelvstendig == true || erFrilanser == true)
-
-private fun inkluderAnnetOverskrift(
-    harSøktAndreYtelser: Boolean,
-    erSelvstendig: Boolean,
-    erFrilanser: Boolean
-): Boolean = (erSelvstendigOgEllerFrilanser(erSelvstendig, erFrilanser) || harSøktAndreYtelser)

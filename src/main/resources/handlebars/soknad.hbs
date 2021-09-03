@@ -10,14 +10,11 @@
           content="Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
     <bookmarks>
         <bookmark name="Søker" href="#søker" />
-        <bookmark name="Fosterbarn" href="#fosterbarn" />
         <bookmark name="Smittevernhensyn" href="#smittevernhensyn" />
         <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder" />
         <bookmark name="Utenlandsopphold" href="#utenlandsopphold" />
         <bookmark name="Arbeidssituasjon" href="#arbeidssituasjon" />
         <bookmark name="Medlemskap" href="#medlemskap" />
-        <bookmark name="Annet" href="#annet" />
-        <bookmark name="Andre utbetalinger" href="#andreUtbetalinger" />
         <bookmark name="Vedlegg" href="#vedlegg" />
         <bookmark name="Samtykke" href="#samtykke" />
     </bookmarks>
@@ -35,15 +32,6 @@
         <p class="navn">{{ søker.formatertNavn }}</p>
         <p>{{ søknad.søker.fødselsnummer  }}</p>
     </div>
-    {{#if harFosterbarn}}
-        <div class="person" id="fosterbarn">
-            <p>Fosterbarn</p>
-            {{# each søknad.fosterbarn as |barn|}}
-                <p>{{ barn.identitetsnummer }}</p>
-            {{/each}}
-            <br/>
-        </div>
-    {{/if}}
 
     <section id="smittevernhensyn">
         {{#if søknad.hjemmePgaSmittevernhensyn}}
@@ -128,76 +116,6 @@
                     <h3 class="sporsmalstekst">{{org.organisasjonsnummer}}</h3>
                 {{/if}}
 
-                {{#if org.ansettelseslengde}}
-                    <ul>
-                    <li>
-                        <p class="sporsmalstekst">Hvor lenge har du jobbet hos arbeidsgiveren din?</p>
-                        {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Ja"}}
-                            {{#if harVedlegg}}
-                                <p>Du opplyser at du har jobbet mer enn 4 uker. Du har lastet opp vedlegg til søknaden.</p>
-                                <br/>
-
-                            {{else}}
-                                <p>Du opplyser at du har jobbet lenger enn 4 uker. Du har ikke lastet opp vedlegg til
-                                    søknaden med forklaring fra arbeidsgiver om hvorfor de ikke har utbetalt omsorgspenger
-                                    til deg. Denne må ettersendes.</p>
-                                <br/>
-                            {{/if}}
-                        {{/eqJaNei}}
-
-
-                    {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Nei"}}
-                        {{#eq org.ansettelseslengde.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
-                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det jobbet du hos en annen
-                                arbeidsgiver. </p>
-                        {{/eq}}
-
-                        {{#eq org.ansettelseslengde.begrunnelse "ANDRE_YTELSER"}}
-                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det har du mottatt
-                                dagpenger, sykepenger, pleiepenger, omsorgspenger, opplæringspenger,  foreldrepenger,
-                                svangerskapspenger eller kompensasjonsordning for
-                                selvstendig næringsdrivende eller frilansere.</p>
-
-                        {{/eq}}
-
-                        {{#eq org.ansettelseslengde.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
-                            <p>Du opplyser at du har jobbet i mindre enn 4 uker, men direkte
-                                før det hadde du ulønnet permisjon etter en periode med foreldrepenger. Du
-                                har gjenopptatt arbeidet etter permisjonen.</p>
-                        {{/eq}}
-
-                        {{#eq org.ansettelseslengde.begrunnelse "MILITÆRTJENESTE"}}
-                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det var du i
-                                militærtjeneste.</p>
-                        {{/eq}}
-
-                        {{#eq org.ansettelseslengde.begrunnelse "INGEN_AV_SITUASJONENE"}}
-                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men at ingen av situasjonene beskrevet i
-                                søknaden gjelder for deg.</p>
-                            <div class="fritekst">
-                                <p class="sporsmalstekst">
-                                    Forklaring:
-                                </p>
-                                <p class="fritekst_textarea">{{fritekst org.ansettelseslengde.ingenAvSituasjoneneForklaring}}</p>
-                            </div>
-                        {{/eq}}
-
-                    {{/eqJaNei}}
-
-                    <li>
-                        <p class="sporsmalstekst">Har du hatt fravær hos denne arbeidsgiveren fordi du har brukt omsorgsdager?</p>
-                        {{ jaNeiSvar org.harHattFraværHosArbeidsgiver}} <br/><br/>
-                    </li>
-
-                    <li>
-                        <p class="sporsmalstekst">Har arbeidsgiver utbetalt deg lønn for de dagene du har brukt
-                            omsorgsdager?</p>
-                        {{ jaNeiSvar org.arbeidsgiverHarUtbetaltLønn}} <br/><br/>
-                    </li>
-                    </li>
-                </ul>
-                {{/if}}
-
                 {{#if org.utbetalingsårsak}}
                     {{#eq org.utbetalingsårsak "ARBEIDSGIVER_KONKURS"}}
                         <p>Utbetalingsårsak: Arbeidsgiver er konkurs.</p>
@@ -240,45 +158,6 @@
                 </li>
             {{/each}}
         </ul>
-    </section>
-
-    <section id="annet">
-        {{#if inkluderAnnetOverskrift}}
-            <h2>Annet</h2>
-        {{/if}}
-        {{#if erSelvstendigOgEllerFrilanser}}
-            <h3>Er du selvstendig næringsdrivende og/eller frilanser i tillegg til arbeidstaker?</h3>
-            <ul>
-                {{#if erSelvstendig}}
-                    <li>
-                        Ja, jeg er selvstendig næringsdrivende<br/>
-                    </li>
-                {{/if}}
-                {{#if erFrilanser}}
-                    <li>
-                        Ja, jeg er frilanser<br/>
-                    </li>
-                {{/if}}
-            </ul>
-        {{/if}}
-    </section>
-
-    <section id="andreUtbetalinger">
-        {{#if søknad.andreUtbetalinger}}
-            <h2>Andre utbetalinger fra NAV</h2>
-            <p>Har du søkt om andre utbetalinger fra NAV?</p>
-            {{jaNeiSvar harSøktAndreYtelser}}<br/>
-            {{#if harSøktAndreYtelser}}
-                <p>Har søkt om:</p>
-                <ul>
-                    {{# each søknad.andreUtbetalinger as |utbetaling|}}
-                        <li>
-                            {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
-                        </li>
-                    {{/each}}
-                </ul>
-            {{/if}}
-        {{/if}}
     </section>
 
     <section id="vedlegg">

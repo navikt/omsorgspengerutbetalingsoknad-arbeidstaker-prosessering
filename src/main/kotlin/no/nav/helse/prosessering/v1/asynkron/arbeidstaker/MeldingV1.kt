@@ -1,10 +1,8 @@
 package no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
 import no.nav.k9.søknad.Søknad
 import java.net.URI
 import java.time.Duration
@@ -20,10 +18,6 @@ data class ArbeidstakerutbetalingMelding(
     val opphold: List<Opphold>,
     val arbeidsgivere: List<ArbeidsgiverDetaljer>,
     val bekreftelser: Bekreftelser,
-    val fosterbarn: List<FosterBarn>? = listOf(), // TODO: 31/08/2021 Fjerner hele feltet når frontend er prodsatt
-    val andreUtbetalinger: List<String>? = listOf(), // TODO: 31/08/2021 Fjerner hele feltet når frontend er prodsatt
-    val erSelvstendig: Boolean = false,
-    val erFrilanser: Boolean = false,
     val titler: List<String>,
     val vedleggUrls: List<URI>,
     val hjemmePgaSmittevernhensyn: Boolean,
@@ -49,9 +43,8 @@ data class ArbeidsgiverDetaljer(
     val organisasjonsnummer: String? = null,
     val harHattFraværHosArbeidsgiver: Boolean,
     val arbeidsgiverHarUtbetaltLønn: Boolean,
-    val ansettelseslengde: Ansettelseslengde? = null, // TODO: 31/08/2021 Fjerne hele feltet når frontend er prodsatt
     val perioder: List<Utbetalingsperiode>,
-    val utbetalingsårsak: Utbetalingsårsak? = null, // TODO: 31/08/2021 Fjerne nullable når frontend er prodsatt
+    val utbetalingsårsak: Utbetalingsårsak,
     val konfliktForklaring: String? = null
 ) {
     override fun toString(): String {
@@ -104,20 +97,6 @@ data class Søker(
         return "Soker(fornavn='$fornavn', mellomnavn=$mellomnavn, etternavn='$etternavn', fødselsdato=$fødselsdato, aktørId='******')"
     }
 }
-
-data class FosterBarn(
-    @JsonAlias("fødselsnummer")
-    val identitetsnummer: String
-) {
-    override fun toString(): String {
-        return "FosterBarn()"
-    }
-}
-
-data class SpørsmålOgSvar(
-    val spørsmål: Spørsmål,
-    val svar: JaNei
-)
 
 /**
  * Unngå `Boolean` default-verdi null -> false

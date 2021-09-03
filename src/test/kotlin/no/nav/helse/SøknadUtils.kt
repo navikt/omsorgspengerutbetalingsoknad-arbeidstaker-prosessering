@@ -1,9 +1,6 @@
 package no.nav.helse
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import no.nav.helse.aktoer.AktørId
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde.Begrunnelse.*
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
@@ -63,10 +60,7 @@ internal object SøknadUtils {
                 organisasjonsnummer = GYLDIG_ORGNR,
                 harHattFraværHosArbeidsgiver = true,
                 arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = false,
-                    begrunnelse = ANNET_ARBEIDSFORHOLD
-                ),
+                utbetalingsårsak = Utbetalingsårsak.ARBEIDSGIVER_KONKURS,
                 perioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = start.plusDays(20),
@@ -77,61 +71,10 @@ internal object SøknadUtils {
                 )
             ),
             ArbeidsgiverDetaljer(
-                navn = "Arbeidsgiver 3",
-                organisasjonsnummer = GYLDIG_ORGNR,
-                harHattFraværHosArbeidsgiver = true,
-                arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = false,
-                    begrunnelse = MILITÆRTJENESTE
-                ),
-                perioder = listOf(
-                    Utbetalingsperiode(
-                        fraOgMed = start.plusDays(30),
-                        tilOgMed = start.plusDays(35)
-                    )
-                )
-            ),
-            ArbeidsgiverDetaljer(
-                navn = "Arbeidsgiver 4",
-                organisasjonsnummer = GYLDIG_ORGNR,
-                harHattFraværHosArbeidsgiver = true,
-                arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = false,
-                    begrunnelse = INGEN_AV_SITUASJONENE,
-                    ingenAvSituasjoneneForklaring = "Forklarer hvorfor ingen av situasjonene passer."
-                ),
-                perioder = listOf(
-                    Utbetalingsperiode(
-                        fraOgMed = start.plusDays(30),
-                        tilOgMed = start.plusDays(35)
-                    )
-                )
-            ),
-            ArbeidsgiverDetaljer(
-                organisasjonsnummer = GYLDIG_ORGNR,
-                harHattFraværHosArbeidsgiver = true,
-                arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = false,
-                    begrunnelse = ANDRE_YTELSER
-                ),
-                perioder = listOf(
-                    Utbetalingsperiode(
-                        fraOgMed = start.plusMonths(1),
-                        tilOgMed = start.plusMonths(1).plusDays(5)
-                    )
-                )
-            ),
-            ArbeidsgiverDetaljer(
                 navn = "Ikke registrert arbeidsgiver",
                 harHattFraværHosArbeidsgiver = true,
                 arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = false,
-                    begrunnelse = ANDRE_YTELSER
-                ),
+                utbetalingsårsak = Utbetalingsårsak.NYOPPSTARTET_HOS_ARBEIDSGIVER,
                 perioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = start.plusMonths(1),
@@ -169,14 +112,6 @@ internal object SøknadUtils {
             harForståttRettigheterOgPlikter = JaNei.Ja,
             harBekreftetOpplysninger = JaNei.Ja
         ),
-        fosterbarn = listOf(
-            FosterBarn(
-                identitetsnummer = "02119970078"
-            )
-        ),
-        andreUtbetalinger = listOf("dagpenger", "sykepenger"),
-        erSelvstendig = true,
-        erFrilanser = true,
         titler = listOf(
             "vedlegg1"
         ),
@@ -222,15 +157,6 @@ internal object SøknadUtils {
                     )
                 )
             )
-        )
-    )
-
-    internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(
-        søkerAktørId = AktørId("123456"),
-        melding = defaultSøknad,
-        dokumentUrls = listOf(
-            listOf(URI("http://localhost:8080/vedlegg/1"), URI("http://localhost:8080/vedlegg/2")),
-            listOf(URI("http://localhost:8080/vedlegg/3"), URI("http://localhost:8080/vedlegg/4"))
         )
     )
 }

@@ -58,14 +58,6 @@ enum class Utbetalingsårsak(){
     KONFLIKT_MED_ARBEIDSGIVER
 }
 
-data class OrganisasjonDetaljer(
-    val navn: String? = null,
-    val organisasjonsnummer: String,
-    val harHattFraværHosArbeidsgiver: Boolean,
-    val arbeidsgiverHarUtbetaltLønn: Boolean,
-    val perioder: List<Utbetalingsperiode>
-)
-
 data class Bekreftelser(
     val harBekreftetOpplysninger: JaNei,
     val harForståttRettigheterOgPlikter: JaNei

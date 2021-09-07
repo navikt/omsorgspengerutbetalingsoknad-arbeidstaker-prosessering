@@ -39,8 +39,8 @@ data class Bosted(
 typealias Opphold = Bosted
 
 data class ArbeidsgiverDetaljer(
-    val navn: String? = null,
-    val organisasjonsnummer: String? = null,
+    val navn: String,
+    val organisasjonsnummer: String,
     val harHattFraværHosArbeidsgiver: Boolean,
     val arbeidsgiverHarUtbetaltLønn: Boolean,
     val perioder: List<Utbetalingsperiode>,
@@ -68,7 +68,7 @@ data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val antallTimerBorte: Duration? = null,
     val antallTimerPlanlagt: Duration? = null,
-    val årsak: FraværÅrsak? = null //Fjerner null og optinal når feltet er prodsatt i frontend og api
+    val årsak: FraværÅrsak
 )
 
 enum class FraværÅrsak {

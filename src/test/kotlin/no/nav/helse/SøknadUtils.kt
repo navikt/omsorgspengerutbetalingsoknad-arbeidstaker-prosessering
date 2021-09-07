@@ -66,19 +66,22 @@ internal object SøknadUtils {
                         fraOgMed = start.plusDays(20),
                         tilOgMed = start.plusDays(20),
                         antallTimerPlanlagt = Duration.ofHours(8),
-                        antallTimerBorte = Duration.ofHours(8)
+                        antallTimerBorte = Duration.ofHours(8),
+                        årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
                     )
                 )
             ),
             ArbeidsgiverDetaljer(
-                navn = "Ikke registrert arbeidsgiver",
+                navn = "Arbeidsgiver 3",
+                organisasjonsnummer = GYLDIG_ORGNR,
                 harHattFraværHosArbeidsgiver = true,
                 arbeidsgiverHarUtbetaltLønn = false,
                 utbetalingsårsak = Utbetalingsårsak.NYOPPSTARTET_HOS_ARBEIDSGIVER,
                 perioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = start.plusMonths(1),
-                        tilOgMed = start.plusMonths(1).plusDays(5)
+                        tilOgMed = start.plusMonths(1).plusDays(5),
+                        årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
                     )
                 )
             )

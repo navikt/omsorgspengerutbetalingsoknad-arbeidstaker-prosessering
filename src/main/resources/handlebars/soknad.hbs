@@ -13,7 +13,7 @@
         <bookmark name="Smittevernhensyn" href="#smittevernhensyn" />
         <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder" />
         <bookmark name="Utenlandsopphold" href="#utenlandsopphold" />
-        <bookmark name="Arbeidssituasjon" href="#arbeidssituasjon" />
+        <bookmark name="Årsak til søknad om utbetaling" href="#årsakTilUtbetaling" />
         <bookmark name="Medlemskap" href="#medlemskap" />
         <bookmark name="Vedlegg" href="#vedlegg" />
         <bookmark name="Samtykke" href="#samtykke" />
@@ -102,8 +102,8 @@
         </ul>
     </section>
 
-    <section id="arbeidssituasjon">
-        <h2>Din arbeidssituasjon</h2>
+    <section id="årsakTilUtbetaling">
+        <h2>Årsak til søknad om utbetaling</h2>
             {{# each søknad.arbeidsgivere as |org|}}
                 {{#if org.navn}}
                     {{#unless org.organisasjonsnummer}}
@@ -118,18 +118,18 @@
 
                 {{#if org.utbetalingsårsak}}
                     {{#eq org.utbetalingsårsak "ARBEIDSGIVER_KONKURS"}}
-                        <p>Utbetalingsårsak: Arbeidsgiver er konkurs.</p>
+                        <p>Årsak til søknad: Arbeidsgiver er konkurs.</p>
                     {{/eq}}
                     {{#eq org.utbetalingsårsak "NYOPPSTARTET_HOS_ARBEIDSGIVER"}}
-                        <p>Utbetalingsårsak: Nyoppstartet hos arbeidsgiver.</p>
+                        <p>Årsak til søknad: Jeg har jobbet mindre enn 4 uker hos denne arbeidsgiveren.</p>
                     {{/eq}}
                     {{#eq org.utbetalingsårsak "KONFLIKT_MED_ARBEIDSGIVER"}}
-                        <p>Utbetalingsårsak: Konflikt med arbeidsgiver.</p>
+                        <p>Årsak til søknad: Uenighet med arbeidsgiver.</p>
                     {{/eq}}
                 {{/if}}
 
                 {{#if org.konfliktForklaring}}
-                    <p>Forklaring for konflikt: </p>
+                    <p>Din forklaring på situasjonen med arbeidsgiver:</p>
                     <p class="fritekst">{{org.konfliktForklaring}}</p>
                 {{/if}}
                 <br/>

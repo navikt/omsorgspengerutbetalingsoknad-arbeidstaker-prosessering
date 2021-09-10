@@ -114,6 +114,10 @@
                     <p>Din forklaring på situasjonen med arbeidsgiver:</p>
                     <p class="fritekst">{{org.konfliktForklaring}}</p>
                 {{/if}}
+
+                {{#if org.årsakNyoppstartet}}
+                    <p>Grunn til nyoppstartet: {{org.årsakNyoppstartet}}</p>
+                {{/if}}
                 <br/>
             {{/each}}
     </section>

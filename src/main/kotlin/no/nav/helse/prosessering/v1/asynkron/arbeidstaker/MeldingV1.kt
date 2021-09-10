@@ -45,11 +45,22 @@ data class ArbeidsgiverDetaljer(
     val arbeidsgiverHarUtbetaltLønn: Boolean,
     val perioder: List<Utbetalingsperiode>,
     val utbetalingsårsak: Utbetalingsårsak,
-    val konfliktForklaring: String? = null
+    val konfliktForklaring: String? = null,
+    val årsakNyoppstartet: ÅrsakNyoppstartet? = null
 ) {
     override fun toString(): String {
         return "ArbeidsgiverDetaljer()"
     }
+}
+
+enum class ÅrsakNyoppstartet{
+    JOBBET_HOS_ANNEN_ARBEIDSGIVER,
+    VAR_FRILANSER,
+    VAR_SELVSTENDIGE,
+    SØKTE_ANDRE_UTBETALINGER,
+    ARBEID_I_UTLANDET,
+    UTØVDE_MILITÆR,
+    ANNET
 }
 
 enum class Utbetalingsårsak(){

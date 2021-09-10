@@ -53,20 +53,20 @@ data class ArbeidsgiverDetaljer(
     }
 }
 
-enum class ÅrsakNyoppstartet{
-    JOBBET_HOS_ANNEN_ARBEIDSGIVER,
-    VAR_FRILANSER,
-    VAR_SELVSTENDIGE,
-    SØKTE_ANDRE_UTBETALINGER,
-    ARBEID_I_UTLANDET,
-    UTØVDE_MILITÆR,
-    ANNET
+enum class ÅrsakNyoppstartet(val pdfTekst: String){
+    JOBBET_HOS_ANNEN_ARBEIDSGIVER("Jeg jobbet for en annen arbeidsgiveren."),
+    VAR_FRILANSER("Jeg var frilanser."),
+    VAR_SELVSTENDIGE("Jeg var selvstendig næringsdrivende."),
+    SØKTE_ANDRE_UTBETALINGER("Jeg søkte om eller mottok dagpenger, foreldrepenger, svangerskapspenger, sykepenger, omsorgspenger, pleiepenger, opplæringspenger eller kompensasjonsytelse."),
+    ARBEID_I_UTLANDET("Jeg var i arbeid, hadde frilansoppdrag eller næringsvirksomhet i utlandet."),
+    UTØVDE_MILITÆR("Jeg utøvde militærtjeneste."),
+    ANNET("Annet.")
 }
 
-enum class Utbetalingsårsak(){
-    ARBEIDSGIVER_KONKURS,
-    NYOPPSTARTET_HOS_ARBEIDSGIVER,
-    KONFLIKT_MED_ARBEIDSGIVER
+enum class Utbetalingsårsak(val pdfTekst: String){
+    ARBEIDSGIVER_KONKURS("Arbeidsgiver er konkurs."),
+    NYOPPSTARTET_HOS_ARBEIDSGIVER("Jeg har jobbet mindre enn 4 uker hos denne arbeidsgiveren."),
+    KONFLIKT_MED_ARBEIDSGIVER("Uenighet med arbeidsgiver.")
 }
 
 data class Bekreftelser(

@@ -77,7 +77,7 @@ internal object SøknadUtils {
                 harHattFraværHosArbeidsgiver = true,
                 arbeidsgiverHarUtbetaltLønn = false,
                 utbetalingsårsak = Utbetalingsårsak.NYOPPSTARTET_HOS_ARBEIDSGIVER,
-                årsakNyoppstartet = ÅrsakNyoppstartet.JOBBET_HOS_ANNEN_ARBEIDSGIVER,
+                årsakNyoppstartet = ÅrsakNyoppstartet.SØKTE_ANDRE_UTBETALINGER,
                 perioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = start.plusMonths(1),

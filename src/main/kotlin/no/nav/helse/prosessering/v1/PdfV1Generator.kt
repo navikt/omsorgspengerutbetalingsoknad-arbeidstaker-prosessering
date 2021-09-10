@@ -12,10 +12,7 @@ import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
 import com.openhtmltopdf.util.XRLog
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.omsorgspengerKonfiguert
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Bekreftelser
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.FraværÅrsak
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Søker
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.net.URI
@@ -133,6 +130,7 @@ internal class PdfV1Generator {
                             }
                         ),
                         "harArbeidsgivere" to melding.arbeidsgivere.isNotEmpty(),
+                        "arbeidsgivere" to melding.arbeidsgivere.somMap(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
@@ -221,6 +219,20 @@ private fun List<String>.somMapTitler(): List<Map<String, Any?>> {
     return map {
         mapOf(
             "tittel" to it
+        )
+    }
+}
+
+private fun List<ArbeidsgiverDetaljer>.somMap(): List<Map<String, Any?>> {
+    return map{
+        mapOf(
+            "navn" to it.navn,
+            "organisasjonsnummer" to it.organisasjonsnummer,
+            "utbetalingsårsak" to it.utbetalingsårsak.pdfTekst,
+            "harSattKonfliktForklaring" to (it.konfliktForklaring != null),
+            "konfliktForklaring" to it.konfliktForklaring,
+            "harSattÅrsakNyoppstartet" to (it.årsakNyoppstartet != null),
+            "årsakNyoppstartet" to it.årsakNyoppstartet?.pdfTekst
         )
     }
 }

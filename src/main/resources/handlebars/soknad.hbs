@@ -95,28 +95,18 @@
 
     <section id="årsakTilUtbetaling">
         <h2>Årsak til søknad om utbetaling</h2>
-            {{# each søknad.arbeidsgivere as |org|}}
-                <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
+            {{# each arbeidsgivere as |arbeidsgiver|}}
+                <h3 class="sporsmalstekst">{{arbeidsgiver.navn}} ({{arbeidsgiver.organisasjonsnummer}})</h3>
 
-                {{#if org.utbetalingsårsak}}
-                    {{#eq org.utbetalingsårsak "ARBEIDSGIVER_KONKURS"}}
-                        <p>Årsak til søknad: Arbeidsgiver er konkurs.</p>
-                    {{/eq}}
-                    {{#eq org.utbetalingsårsak "NYOPPSTARTET_HOS_ARBEIDSGIVER"}}
-                        <p>Årsak til søknad: Jeg har jobbet mindre enn 4 uker hos denne arbeidsgiveren.</p>
-                    {{/eq}}
-                    {{#eq org.utbetalingsårsak "KONFLIKT_MED_ARBEIDSGIVER"}}
-                        <p>Årsak til søknad: Uenighet med arbeidsgiver.</p>
-                    {{/eq}}
-                {{/if}}
+                <p>Årsak til søknad: {{ arbeidsgiver.utbetalingsårsak}}</p>
 
-                {{#if org.konfliktForklaring}}
+                {{#if arbeidsgiver.harSattKonfliktForklaring}}
                     <p>Din forklaring på situasjonen med arbeidsgiver:</p>
-                    <p class="fritekst">{{org.konfliktForklaring}}</p>
+                    <p class="fritekst">{{arbeidsgiver.konfliktForklaring}}</p>
                 {{/if}}
 
-                {{#if org.årsakNyoppstartet}}
-                    <p>Hva var situasjonen din rett før du startet hos denne arbeidsgiveren? {{org.årsakNyoppstartet}}</p>
+                {{#if arbeidsgiver.harSattÅrsakNyoppstartet}}
+                    <p>Hva var situasjonen din rett før du startet hos denne arbeidsgiveren? {{arbeidsgiver.årsakNyoppstartet}}</p>
                 {{/if}}
                 <br/>
             {{/each}}

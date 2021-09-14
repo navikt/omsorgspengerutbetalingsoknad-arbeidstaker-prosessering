@@ -59,7 +59,7 @@ enum class ÅrsakNyoppstartet(val pdfTekst: String){
     VAR_SELVSTENDIGE("Jeg var selvstendig næringsdrivende."),
     SØKTE_ANDRE_UTBETALINGER("Jeg søkte om eller mottok dagpenger, foreldrepenger, svangerskapspenger, sykepenger, omsorgspenger, pleiepenger, opplæringspenger eller kompensasjonsytelse."),
     ARBEID_I_UTLANDET("Jeg var i arbeid, hadde frilansoppdrag eller næringsvirksomhet i utlandet."),
-    UTØVDE_MILITÆR("Jeg utøvde militærtjeneste."),
+    UTØVDE_VERNEPLIKT("Jeg utøvde verneplikt."),
     ANNET("Annet.")
 }
 

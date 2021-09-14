@@ -60,7 +60,8 @@ internal object SøknadUtils {
                 organisasjonsnummer = GYLDIG_ORGNR,
                 harHattFraværHosArbeidsgiver = true,
                 arbeidsgiverHarUtbetaltLønn = false,
-                utbetalingsårsak = Utbetalingsårsak.ARBEIDSGIVER_KONKURS,
+                utbetalingsårsak = Utbetalingsårsak.NYOPPSTARTET_HOS_ARBEIDSGIVER,
+                årsakNyoppstartet = ÅrsakNyoppstartet.UTØVDE_VERNEPLIKT,
                 perioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = start.plusDays(20),

@@ -6,7 +6,6 @@ import io.ktor.config.*
 import io.ktor.http.*
 import io.ktor.server.engine.*
 import io.ktor.server.testing.*
-import io.ktor.util.*
 import io.prometheus.client.CollectorRegistry
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.time.delay
@@ -24,10 +23,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 
-@KtorExperimentalAPI
 class SoknadProsesseringTest {
 
-    @KtorExperimentalAPI
     private companion object {
 
         private val logger: Logger = LoggerFactory.getLogger(SoknadProsesseringTest::class.java)
@@ -43,7 +40,7 @@ class SoknadProsesseringTest {
 
         private val kafkaEnvironment = KafkaWrapper.bootstrap()
         private val kafkaProducer = kafkaEnvironment.arbeidstakerutbetalingMeldingProducer()
-        private val journalføringsKonsumer = kafkaEnvironment.arbeidstakerutbetalingJournalføringsKonsumer()
+        private val cleanupKonsumer = kafkaEnvironment.arbeidstakerutbetalingCleanupKonsumer()
 
         // Se https://github.com/navikt/dusseldorf-ktor#f%C3%B8dselsnummer
         private val gyldigFodselsnummerA = "02119970078"
@@ -91,7 +88,7 @@ class SoknadProsesseringTest {
             logger.info("Tearing down")
             wireMockServer.stop()
             kafkaProducer.close()
-            journalføringsKonsumer.close()
+            cleanupKonsumer.close()
             stopEngine()
             kafkaEnvironment.tearDown()
             logger.info("Tear down complete")
@@ -131,9 +128,9 @@ class SoknadProsesseringTest {
 
         wireMockServer.stubJournalfor(201) // Simulerer journalføring fungerer igjen
         restartEngine()
-        journalføringsKonsumer
-            .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
-            .assertJournalførtFormat()
+        cleanupKonsumer
+            .hentCleanupArbeidstakerutbetalingtMelding(melding.søknadId)
+            .assertCleanupFormat()
     }
 
     private fun readyGir200HealthGir503() {
@@ -155,22 +152,22 @@ class SoknadProsesseringTest {
         )
 
         kafkaProducer.leggTilMottak(melding)
-        journalføringsKonsumer
-            .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
-            .assertJournalførtFormat()
+        cleanupKonsumer
+            .hentCleanupArbeidstakerutbetalingtMelding(melding.søknadId)
+            .assertCleanupFormat()
     }
 
     @Test
-    fun `Forvent riktig format på journalført melding`() {
+    fun `Forvent riktig format på cleanup melding`() {
         val melding = defaultSøknad.copy(
             søknadId = UUID.randomUUID().toString(),
             søker = defaultSøknad.søker.copy(fødselsnummer = gyldigFodselsnummerA)
         )
 
         kafkaProducer.leggTilMottak(melding)
-        journalføringsKonsumer
-            .hentJournalførArbeidstakerutbetalingtMelding(melding.søknadId)
-            .assertJournalførtFormat()
+        cleanupKonsumer
+            .hentCleanupArbeidstakerutbetalingtMelding(melding.søknadId)
+            .assertCleanupFormat()
     }
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }

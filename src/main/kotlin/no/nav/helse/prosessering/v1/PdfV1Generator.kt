@@ -9,12 +9,10 @@ import com.github.jknack.handlebars.context.MapValueResolver
 import com.github.jknack.handlebars.io.ClassPathTemplateLoader
 import com.openhtmltopdf.outputdevice.helper.BaseRendererBuilder
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder
+import com.openhtmltopdf.util.XRLog
 import no.nav.helse.dusseldorf.ktor.core.fromResources
 import no.nav.helse.omsorgspengerKonfiguert
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Bekreftelser
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.FraværÅrsak
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Søker
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.net.URI
@@ -24,6 +22,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import java.util.logging.Level
 
 internal class PdfV1Generator {
     private companion object {
@@ -110,6 +109,7 @@ internal class PdfV1Generator {
     internal fun generateSoknadOppsummeringPdf(
         melding: ArbeidstakerutbetalingMelding
     ): ByteArray {
+        XRLog.listRegisteredLoggers().forEach { logger -> XRLog.setLevel(logger, Level.WARNING) }
         val mottatt = melding.mottatt.toLocalDate()
         soknadTemplateLoader.apply(
             Context
@@ -130,21 +130,10 @@ internal class PdfV1Generator {
                             }
                         ),
                         "harArbeidsgivere" to melding.arbeidsgivere.isNotEmpty(),
-                        "harFosterbarn" to melding.fosterbarn?.isNotEmpty(),
+                        "arbeidsgivere" to melding.arbeidsgivere.somMap(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
                         "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
-                        "inkluderAnnetOverskrift" to inkluderAnnetOverskrift(
-                            melding.andreUtbetalinger.isNotEmpty(), melding.erSelvstendig,
-                            melding.erFrilanser
-                        ),
-                        "harSøktAndreYtelser" to melding.andreUtbetalinger.isNotEmpty(),
-                        "erSelvstendigOgEllerFrilanser" to erSelvstendigOgEllerFrilanser(
-                            melding.erSelvstendig,
-                            melding.erFrilanser
-                        ),
-                        "erSelvstendig" to melding.erSelvstendig,
-                        "erFrilanser" to melding.erFrilanser,
                         "ikkeHarSendtInnVedlegg" to melding.vedleggUrls.isEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "titler" to mapOf(
@@ -234,6 +223,20 @@ private fun List<String>.somMapTitler(): List<Map<String, Any?>> {
     }
 }
 
+private fun List<ArbeidsgiverDetaljer>.somMap(): List<Map<String, Any?>> {
+    return map{
+        mapOf(
+            "navn" to it.navn,
+            "organisasjonsnummer" to it.organisasjonsnummer,
+            "utbetalingsårsak" to it.utbetalingsårsak.pdfTekst,
+            "harSattKonfliktForklaring" to (it.konfliktForklaring != null),
+            "konfliktForklaring" to it.konfliktForklaring,
+            "harSattÅrsakNyoppstartet" to (it.årsakNyoppstartet != null),
+            "årsakNyoppstartet" to it.årsakNyoppstartet?.pdfTekst
+        )
+    }
+}
+
 private fun Søker.formatertNavn() = if (mellomnavn != null) "$fornavn $mellomnavn $etternavn" else "$fornavn $etternavn"
 
 fun String.capitalizeName(): String = split(" ").joinToString(" ") { it.toLowerCase().capitalize() }
@@ -243,14 +246,3 @@ private fun String.sprakTilTekst() = when (this.toLowerCase()) {
     "nn" -> "Nynorsk"
     else -> this
 }
-
-private fun erSelvstendigOgEllerFrilanser(
-    erSelvstendig: Boolean,
-    erFrilanser: Boolean
-): Boolean = (erSelvstendig == true || erFrilanser == true)
-
-private fun inkluderAnnetOverskrift(
-    harSøktAndreYtelser: Boolean,
-    erSelvstendig: Boolean,
-    erFrilanser: Boolean
-): Boolean = (erSelvstendigOgEllerFrilanser(erSelvstendig, erFrilanser) || harSøktAndreYtelser)

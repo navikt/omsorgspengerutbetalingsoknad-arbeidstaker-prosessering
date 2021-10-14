@@ -10,14 +10,11 @@
           content="Søknad om utbetaling av omsorgspenger når arbeidsgiver ikke utbetaler mottatt {{soknad_mottatt_dag}} {{ soknad_mottatt }}" />
     <bookmarks>
         <bookmark name="Søker" href="#søker" />
-        <bookmark name="Fosterbarn" href="#fosterbarn" />
         <bookmark name="Smittevernhensyn" href="#smittevernhensyn" />
         <bookmark name="Utbetalingsperioder" href="#utbetalingsperioder" />
         <bookmark name="Utenlandsopphold" href="#utenlandsopphold" />
-        <bookmark name="Arbeidssituasjon" href="#arbeidssituasjon" />
+        <bookmark name="Årsak til søknad om utbetaling" href="#årsakTilUtbetaling" />
         <bookmark name="Medlemskap" href="#medlemskap" />
-        <bookmark name="Annet" href="#annet" />
-        <bookmark name="Andre utbetalinger" href="#andreUtbetalinger" />
         <bookmark name="Vedlegg" href="#vedlegg" />
         <bookmark name="Samtykke" href="#samtykke" />
     </bookmarks>
@@ -35,23 +32,14 @@
         <p class="navn">{{ søker.formatertNavn }}</p>
         <p>{{ søknad.søker.fødselsnummer  }}</p>
     </div>
-    {{#if harFosterbarn}}
-        <div class="person" id="fosterbarn">
-            <p>Fosterbarn</p>
-            {{# each søknad.fosterbarn as |barn|}}
-                <p>{{ barn.identitetsnummer }}</p>
-            {{/each}}
-            <br/>
-        </div>
-    {{/if}}
 
     <section id="smittevernhensyn">
         {{#if søknad.hjemmePgaSmittevernhensyn}}
             <h2>Særlige smittevernhensyn</h2>
             <ul>
-                <li>Du opplyser at du må være hjemme med barn på grunn av særlige smittevernhensyn.</li>
+                <li>Du opplyser at du har vært hjemme med barn på grunn av særlige smittevernhensyn.</li>
                 {{#if ikkeHarSendtInnVedlegg}}
-                    <li>Bekreftelse fra lege ikke lastet opp. Må ettersendes.</li>
+                    <li>Bekreftelse fra lege er ikke lastet opp. Må ettersendes.</li>
                 {{/if}}
             </ul>
         {{/if}}
@@ -59,36 +47,27 @@
         {{#if søknad.hjemmePgaStengtBhgSkole}}
             <h2>Lokalt stengt barnehage eller skole</h2>
             <ul>
-                <li>Du opplyser at du er hjemme med barn fordi barnehagen eller skolen har vært lokalt stengt.</li>
+                <li>Du opplyser at du har vært hjemme med barn fordi barnehagen eller skolen var stengt.</li>
                 {{#if ikkeHarSendtInnVedlegg}}
-                    <li>Bekreftelse fra barnehage/skole ikke lastet opp. Må ettersendes.</li>
+                    <li>Bekreftelse fra barnehage/skole er ikke lastet opp. Må ettersendes.</li>
                 {{/if}}
             </ul>
         {{/if}}
     </section>
 
     <section id="utbetalingsperioder">
-        <h2>Perioder du har brukt omsorgsdager</h2>
+        <h2>Omsorgsdager du søker utbetaling for</h2>
         {{# each søknad.arbeidsgivere as |org|}}
-            {{#if org.navn}}
-                {{#unless org.organisasjonsnummer}}
-                    <h3 class="sporsmalstekst">{{org.navn}} (registrert av søker)</h3>
-                {{/unless}}
-                {{#if org.organisasjonsnummer}}
-                    <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
-                {{/if}}
-            {{/if}}
+            <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
 
             <ul>{{# each org.perioder as |p|}}
                 <li>
                     Periode: {{#dato p.fraOgMed}}{{/dato}} - {{#dato p.tilOgMed}}{{/dato}}
                     {{#if p.antallTimerBorte}}
-                        <br/>Antall timer du har planlagt å jobbe: {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
-                        <br/>Antall timer du var borte fra jobb: {{#varighet p.antallTimerBorte}}{{/varighet}}
+                        <br/>Antall timer du skulle ha jobbet denne dagen:  {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
+                        <br/>Antall timer du var borte fra jobb denne dagen:  {{#varighet p.antallTimerBorte}}{{/varighet}}
                     {{/if}}
-                    {{#if p.årsak}}
-                        <br/>Årsak: {{#årsak p.årsak}}{{/årsak}}
-                    {{/if}}
+                    <br/>Årsak: {{#årsak p.årsak}}{{/årsak}}
                 </li>
             {{/each}}
             </ul>
@@ -97,7 +76,9 @@
 
     <section id="utenlandsopphold">
         {{#if harOpphold}}
-            <h2>Utenlandsopphold i perioden</h2>
+            <h2>Utenlandsopphold i dager med fravær</h2>
+            <p>Har du vært i utlandet i noen av dagene du søker omsorgspenger for?</p>
+            {{jaNeiSvar harOpphold}}<br/>
         {{/if}}
         <ul>
             {{# each søknad.opphold as |o|}}
@@ -112,98 +93,34 @@
         </ul>
     </section>
 
-    <section id="arbeidssituasjon">
-        <h2>Din arbeidssituasjon</h2>
-            {{# each søknad.arbeidsgivere as |org|}}
-                {{#if org.navn}}
-                    {{#unless org.organisasjonsnummer}}
-                        <h3 class="sporsmalstekst">{{org.navn}} (registrert av deg)</h3>
-                    {{/unless}}
-                    {{#if org.organisasjonsnummer}}
-                        <h3 class="sporsmalstekst">{{org.navn}} ({{org.organisasjonsnummer}})</h3>
-                    {{/if}}
-                {{else}}
-                    <h3 class="sporsmalstekst">{{org.organisasjonsnummer}}</h3>
+    <section id="årsakTilUtbetaling">
+        <h2>Årsak til søknad om utbetaling</h2>
+            {{# each arbeidsgivere as |arbeidsgiver|}}
+                <h3 class="sporsmalstekst">{{arbeidsgiver.navn}} ({{arbeidsgiver.organisasjonsnummer}})</h3>
+
+                <p>Årsak til søknad: {{ arbeidsgiver.utbetalingsårsak}}</p>
+
+                {{#if arbeidsgiver.harSattKonfliktForklaring}}
+                    <p>Din forklaring på situasjonen med arbeidsgiver:</p>
+                    <p class="fritekst">{{arbeidsgiver.konfliktForklaring}}</p>
                 {{/if}}
 
-                <ul>
-                    <li>
-                        <p class="sporsmalstekst">Hvor lenge har du jobbet hos arbeidsgiveren din?</p>
-                        {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Ja"}}
-                            {{#if harVedlegg}}
-                                <p>Du opplyser at du har jobbet mer enn 4 uker. Du har lastet opp vedlegg til søknaden.</p>
-                                <br/>
-
-                            {{else}}
-                                <p>Du opplyser at du har jobbet mer enn 4 uker. Du har ikke lastet opp vedlegg til søknaden
-                                    med forklaring fra arbeidsgiver. Denne må ettersendes.</p>
-                                <br/>
-                            {{/if}}
-                        {{/eqJaNei}}
-
-
-                    {{#eqJaNei org.ansettelseslengde.merEnn4Uker "Nei"}}
-                        {{#eq org.ansettelseslengde.begrunnelse "ANNET_ARBEIDSFORHOLD"}}
-                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det jobbet du hos en annen
-                                arbeidsgiver. </p>
-                        {{/eq}}
-
-                        {{#eq org.ansettelseslengde.begrunnelse "ANDRE_YTELSER"}}
-                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det har du mottatt
-                                dagpenger, sykepenger, pleiepenger, omsorgspenger, opplæringspenger,  foreldrepenger,
-                                svangerskapspenger eller kompensasjonsordning for
-                                selvstendig næringsdrivende eller frilansere.</p>
-
-                        {{/eq}}
-
-                        {{#eq org.ansettelseslengde.begrunnelse "LOVBESTEMT_FERIE_ELLER_ULØNNET_PERMISJON"}}
-                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det, hatt ulønnet permisjon
-                                direkte etter en periode med foreldrepenger, for så å ha gjenopptatt arbeidet etter
-                                permisjonen.</p>
-                        {{/eq}}
-
-                        {{#eq org.ansettelseslengde.begrunnelse "MILITÆRTJENESTE"}}
-                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men direkte før det var du i
-                                militærtjeneste.</p>
-                        {{/eq}}
-
-                        {{#eq org.ansettelseslengde.begrunnelse "INGEN_AV_SITUASJONENE"}}
-                            <p>Du opplyser at du har jobbet mindre enn 4 uker, men at ingen av situasjonene beskrevet i
-                                søknaden gjelder for deg.</p>
-                            <div class="fritekst">
-                                <p class="sporsmalstekst">
-                                    Forklaring:
-                                </p>
-                                <p class="fritekst_textarea">{{fritekst org.ansettelseslengde.ingenAvSituasjoneneForklaring}}</p>
-                            </div>
-                        {{/eq}}
-
-                    {{/eqJaNei}}
-
-                    <li>
-                        <p class="sporsmalstekst">Har du hatt fravær hos denne arbeidsgiveren fordi du har brukt omsorgsdager?</p>
-                        {{ jaNeiSvar org.harHattFraværHosArbeidsgiver}} <br/><br/>
-                    </li>
-
-                    <li>
-                        <p class="sporsmalstekst">Har arbeidsgiver utbetalt deg lønn for de dagene du har brukt
-                            omsorgsdager?</p>
-                        {{ jaNeiSvar org.arbeidsgiverHarUtbetaltLønn}} <br/><br/>
-                    </li>
-                    </li>
-                </ul>
+                {{#if arbeidsgiver.harSattÅrsakNyoppstartet}}
+                    <p>Hva var situasjonen din rett før du startet hos denne arbeidsgiveren? {{arbeidsgiver.årsakNyoppstartet}}</p>
+                {{/if}}
+                <br/>
             {{/each}}
     </section>
 
     <section id="medlemskap">
         <h2>Medlemskap i folketrygden</h2>
 
-        <p class="sporsmalstekst">Har du bodd i utlandet de siste 12 månedene?</p>
-        {{ jaNeiSvar medlemskap.siste12}}
+        <p class="sporsmalstekst">Har du bodd i utlandet i de siste 12 månedene?</p>
+        {{jaNeiSvar medlemskap.siste12}}
 
         <br/><br/>
 
-        <p class="sporsmalstekst">Skal du bo i utlandet de neste 12 månedene?</p>
+        <p class="sporsmalstekst">Skal du bo i utlandet i de neste 12 månedene?</p>
         {{ jaNeiSvar medlemskap.neste12}}
         <br/><br/>
 
@@ -217,42 +134,6 @@
                 </li>
             {{/each}}
         </ul>
-    </section>
-
-    <section id="annet">
-        {{#if inkluderAnnetOverskrift}}
-            <h2>Annet</h2>
-        {{/if}}
-        {{#if erSelvstendigOgEllerFrilanser}}
-            <h3>Er du selvstendig næringsdrivende og/eller frilanser i tillegg til arbeidstaker?</h3>
-            <ul>
-                {{#if erSelvstendig}}
-                    <li>
-                        Ja, jeg er selvstendig næringsdrivende<br/>
-                    </li>
-                {{/if}}
-                {{#if erFrilanser}}
-                    <li>
-                        Ja, jeg er frilanser<br/>
-                    </li>
-                {{/if}}
-            </ul>
-        {{/if}}
-    </section>
-
-    <section id="andreUtbetalinger">
-        {{#if harSøktAndreYtelser}}
-            <h2>Andre utbetalinger du har søkt om fra NAV</h2>
-
-        <p>Har søkt om:</p>
-        <ul>
-            {{# each søknad.andreUtbetalinger as |utbetaling|}}
-                <li>
-                    {{#storForbokstav utbetaling}}{{/storForbokstav}} <br/>
-                </li>
-            {{/each}}
-        </ul>
-        {{/if}}
     </section>
 
     <section id="vedlegg">
@@ -270,12 +151,13 @@
 
     <section id="samtykke">
         <h2>Samtykke fra deg</h2>
-        <p class="sporsmalstekst">Har du forstått rettigheter og plikter?</p>
-        <p>{{ jaNeiSvar samtykke.harForståttRettigheterOgPlikter }}</p>
+        <p class="sporsmalstekst">Har du forstått dine rettigheter og plikter?</p>
+        <p>{{ jaNeiSvar bekreftelser.harForståttRettigheterOgPlikter }}</p>
         <hr />
-        <p class="sporsmalstekst">Har du bekreftet at opplysninger som er gitt er riktige?</p>
-        <p>{{ jaNeiSvar samtykke.harBekreftetOpplysninger }}</p>
+        <p class="sporsmalstekst">Har du bekreftet at opplysninger du har gitt er riktige?</p>
+        <p>{{ jaNeiSvar bekreftelser.harBekreftetOpplysninger }}</p>
     </section>
+
 </div>
 <!-- FOOTER -->
 <p id="footer">

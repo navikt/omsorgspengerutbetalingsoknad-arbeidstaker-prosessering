@@ -45,9 +45,8 @@ internal class PreprosseseringV1Service(
         logger.info("Mellomlagring av Oppsummerings-PDF OK")
 
         logger.info("Mellomlagrer Oppsummerings-JSON")
-
-        val soknadJsonUrl = dokumentService.lagreSoknadsMelding(
-            melding = melding,
+        val søknadJsonUrl = dokumentService.lagreSoknadsMelding(
+            k9Format = melding.k9Format,
             aktørId = søkerAktørId,
             correlationId = correlationId,
             dokumentbeskrivelse = "Søknad om utbetaling av omsorgspenger - Arbeidstaker som JSON"
@@ -58,7 +57,7 @@ internal class PreprosseseringV1Service(
         val komplettDokumentUrls = mutableListOf(
             listOf(
                 soknadOppsummeringPdfUrl,
-                soknadJsonUrl
+                søknadJsonUrl
             )
         )
 

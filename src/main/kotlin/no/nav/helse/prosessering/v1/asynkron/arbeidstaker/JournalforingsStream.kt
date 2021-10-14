@@ -3,7 +3,6 @@ package no.nav.helse.prosessering.v1.asynkron.arbeidstaker
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.erEtter
-import no.nav.helse.joark.Arbeidstype
 import no.nav.helse.joark.JoarkGateway
 import no.nav.helse.joark.JoarkNavn
 import no.nav.helse.kafka.KafkaConfig
@@ -14,12 +13,6 @@ import no.nav.helse.prosessering.v1.asynkron.ArbeidstakerutbetalingCleanup
 import no.nav.helse.prosessering.v1.asynkron.ArbeidstakerutbetalingJournalfort
 import no.nav.helse.prosessering.v1.asynkron.Topics
 import no.nav.helse.prosessering.v1.asynkron.process
-import no.nav.k9.søknad.felles.Barn
-import no.nav.k9.søknad.felles.NorskIdentitetsnummer
-import no.nav.k9.søknad.felles.Søker
-import no.nav.k9.søknad.felles.SøknadId
-import no.nav.k9.søknad.omsorgspenger.utbetaling.arbeidstaker.OmsorgspengerUtbetalingSøknad
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.FosterBarn
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.Consumed
@@ -58,8 +51,8 @@ internal class ArbeidstakerutbetalingJournalforingsStream(
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
-
                         val dokumenter = entry.data.dokumentUrls
+
                         logger.info("Journalfører dokumenter: {}", dokumenter)
                         val journaPostId = joarkGateway.journalfør(
                             mottatt = entry.data.mottatt,
@@ -71,14 +64,15 @@ internal class ArbeidstakerutbetalingJournalforingsStream(
                                 etternavn = entry.data.søker.etternavn
                             ),
                             correlationId = CorrelationId(entry.metadata.correlationId),
-                            dokumenter = dokumenter,
-                            arbeidstype = Arbeidstype.ARBEIDSTAKER
+                            dokumenter = dokumenter
                         )
                         logger.info("Dokumenter journalført med ID = ${journaPostId.journalpostId}.")
+
                         val journalfort = ArbeidstakerutbetalingJournalfort(
                             journalpostId = journaPostId.journalpostId,
-                            søknad = entry.data.tilKOmsorgspengerUtbetalingSøknad()
+                            søknad = entry.data.k9Format
                         )
+
                         ArbeidstakerutbetalingCleanup(
                             metadata = entry.metadata,
                             melding = entry.data,
@@ -94,26 +88,3 @@ internal class ArbeidstakerutbetalingJournalforingsStream(
 
     internal fun stop() = stream.stop(becauseOfError = false)
 }
-
-private fun PreprosessertArbeidstakerutbetalingMelding.tilKOmsorgspengerUtbetalingSøknad(): OmsorgspengerUtbetalingSøknad {
-    val builder = OmsorgspengerUtbetalingSøknad.builder()
-        .søknadId(SøknadId.of(soknadId))
-        .mottattDato(mottatt)
-        .søker(søker.tilK9Søker())
-
-    fosterbarn?.let { builder.fosterbarn(it.tilK9Barn()) }
-
-    return builder.build()
-}
-
-private fun List<FosterBarn>.tilK9Barn(): List<Barn> {
-    return map {
-        Barn.builder()
-            .norskIdentitetsnummer(NorskIdentitetsnummer.of(it.identitetsnummer))
-            .build()
-    }
-}
-
-private fun PreprossesertSøker.tilK9Søker() = Søker.builder()
-    .norskIdentitetsnummer(NorskIdentitetsnummer.of(fødselsnummer))
-    .build()

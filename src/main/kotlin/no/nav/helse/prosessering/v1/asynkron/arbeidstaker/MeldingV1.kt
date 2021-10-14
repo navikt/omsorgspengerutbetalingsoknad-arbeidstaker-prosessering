@@ -1,10 +1,9 @@
 package no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonValue
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
+import no.nav.k9.søknad.Søknad
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
@@ -19,14 +18,11 @@ data class ArbeidstakerutbetalingMelding(
     val opphold: List<Opphold>,
     val arbeidsgivere: List<ArbeidsgiverDetaljer>,
     val bekreftelser: Bekreftelser,
-    val fosterbarn: List<FosterBarn>? = listOf(),
-    val andreUtbetalinger: List<String> = listOf(),
-    val erSelvstendig: Boolean = false,
-    val erFrilanser: Boolean = false,
     val titler: List<String>,
     val vedleggUrls: List<URI>,
-    val hjemmePgaSmittevernhensyn: Boolean? = null, //TODO 15.03.2021 - Fjernes når frontend er prodsatt
-    val hjemmePgaStengtBhgSkole: Boolean? = null //TODO 15.03.2021 - Fjernes når frontend er prodsatt
+    val hjemmePgaSmittevernhensyn: Boolean,
+    val hjemmePgaStengtBhgSkole: Boolean? = null,
+    val k9Format: Søknad
 ) {
     override fun toString(): String {
         return "ArbeidstakerutbetalingMelding(søknadId='$søknadId', mottatt=$mottatt)"
@@ -43,25 +39,35 @@ data class Bosted(
 typealias Opphold = Bosted
 
 data class ArbeidsgiverDetaljer(
-    val navn: String? = null,
-    val organisasjonsnummer: String? = null,
+    val navn: String,
+    val organisasjonsnummer: String,
     val harHattFraværHosArbeidsgiver: Boolean,
     val arbeidsgiverHarUtbetaltLønn: Boolean,
-    val ansettelseslengde: Ansettelseslengde,
-    val perioder: List<Utbetalingsperiode>
+    val perioder: List<Utbetalingsperiode>,
+    val utbetalingsårsak: Utbetalingsårsak,
+    val konfliktForklaring: String? = null,
+    val årsakNyoppstartet: ÅrsakNyoppstartet? = null
 ) {
     override fun toString(): String {
         return "ArbeidsgiverDetaljer()"
     }
 }
 
-data class OrganisasjonDetaljer(
-    val navn: String? = null,
-    val organisasjonsnummer: String,
-    val harHattFraværHosArbeidsgiver: Boolean,
-    val arbeidsgiverHarUtbetaltLønn: Boolean,
-    val perioder: List<Utbetalingsperiode>
-)
+enum class ÅrsakNyoppstartet(val pdfTekst: String){
+    JOBBET_HOS_ANNEN_ARBEIDSGIVER("Jeg jobbet for en annen arbeidsgiver."),
+    VAR_FRILANSER("Jeg var frilanser."),
+    VAR_SELVSTENDIGE("Jeg var selvstendig næringsdrivende."),
+    SØKTE_ANDRE_UTBETALINGER("Jeg søkte om eller mottok dagpenger, foreldrepenger, svangerskapspenger, sykepenger, omsorgspenger, pleiepenger, opplæringspenger, kompensasjonsytelse for selvstendig næringsdrivende eller frilanser."),
+    ARBEID_I_UTLANDET("Jeg jobbet i utlandet som arbeidstaker, selvstendig næringsdrivende eller frilanser."),
+    UTØVDE_VERNEPLIKT("Jeg utøvde verneplikt."),
+    ANNET("Annet.")
+}
+
+enum class Utbetalingsårsak(val pdfTekst: String){
+    ARBEIDSGIVER_KONKURS("Arbeidsgiver er konkurs."),
+    NYOPPSTARTET_HOS_ARBEIDSGIVER("Jeg har jobbet mindre enn 4 uker hos denne arbeidsgiveren."),
+    KONFLIKT_MED_ARBEIDSGIVER("Uenighet med arbeidsgiver.")
+}
 
 data class Bekreftelser(
     val harBekreftetOpplysninger: JaNei,
@@ -73,7 +79,7 @@ data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val antallTimerBorte: Duration? = null,
     val antallTimerPlanlagt: Duration? = null,
-    val årsak: FraværÅrsak? = null //Fjerner null og optinal når feltet er prodsatt i frontend og api
+    val årsak: FraværÅrsak
 )
 
 enum class FraværÅrsak {
@@ -94,20 +100,6 @@ data class Søker(
         return "Soker(fornavn='$fornavn', mellomnavn=$mellomnavn, etternavn='$etternavn', fødselsdato=$fødselsdato, aktørId='******')"
     }
 }
-
-data class FosterBarn(
-    @JsonAlias("fødselsnummer")
-    val identitetsnummer: String
-) {
-    override fun toString(): String {
-        return "FosterBarn()"
-    }
-}
-
-data class SpørsmålOgSvar(
-    val spørsmål: Spørsmål,
-    val svar: JaNei
-)
 
 /**
  * Unngå `Boolean` default-verdi null -> false

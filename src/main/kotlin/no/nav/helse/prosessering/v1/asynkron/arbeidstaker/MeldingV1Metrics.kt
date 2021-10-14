@@ -37,12 +37,6 @@ private val særligeSmittevernhensynCounter = Counter.build()
     .labelNames("blirHjemme", "harVedleggLastetOpp")
     .register()
 
-private val ansettelseslengdeCounter = Counter.build()
-    .name("ansettelseslengdeCounter")
-    .help("Teller for info om ansettelseslengde")
-    .labelNames("merEnn4Uker", "begrunnelse")
-    .register()
-
 internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
 
     antallarbeidsgivereCounter.labels(arbeidsgivere.size.toString()).inc()
@@ -51,11 +45,6 @@ internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
             it.arbeidsgiverHarUtbetaltLønn.tilJaEllerNei(),
             it.harHattFraværHosArbeidsgiver.tilJaEllerNei()
         )
-
-        ansettelseslengdeCounter.labels(
-            it.ansettelseslengde.merEnn4Uker.tilJaEllerNei(),
-            it.ansettelseslengde.begrunnelse?.name ?: "n/a"
-        ).inc()
     }
 
     val utbetalingsperioder = this.arbeidsgivere.flatMap { it.perioder }

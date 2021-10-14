@@ -1,16 +1,24 @@
 package no.nav.helse
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import no.nav.helse.aktoer.AktørId
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.Ansettelseslengde.Begrunnelse.*
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
+import no.nav.k9.søknad.Søknad
+import no.nav.k9.søknad.felles.Versjon
+import no.nav.k9.søknad.felles.fravær.AktivitetFravær
+import no.nav.k9.søknad.felles.fravær.FraværPeriode
+import no.nav.k9.søknad.felles.fravær.SøknadÅrsak
+import no.nav.k9.søknad.felles.personopplysninger.Barn
+import no.nav.k9.søknad.felles.personopplysninger.Bosteder
+import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
+import no.nav.k9.søknad.felles.type.*
+import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
+import no.nav.k9.søknad.felles.personopplysninger.Søker as K9Søker
 
 internal object SøknadUtils {
     internal val objectMapper = jacksonObjectMapper().omsorgspengerKonfiguert()
@@ -35,9 +43,6 @@ internal object SøknadUtils {
                 organisasjonsnummer = GYLDIG_ORGNR,
                 harHattFraværHosArbeidsgiver = true,
                 arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = true
-                ),
                 perioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = start,
@@ -46,23 +51,24 @@ internal object SøknadUtils {
                         antallTimerBorte = Duration.ofHours(8),
                         årsak = FraværÅrsak.SMITTEVERNHENSYN
                     )
-                )
+                ),
+                utbetalingsårsak = Utbetalingsårsak.KONFLIKT_MED_ARBEIDSGIVER,
+                konfliktForklaring = "Har en konflikt med arbeidsgiver fordi ...."
             ),
             ArbeidsgiverDetaljer(
                 navn = "Arbeidsgiver 2",
                 organisasjonsnummer = GYLDIG_ORGNR,
                 harHattFraværHosArbeidsgiver = true,
                 arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = false,
-                    begrunnelse = ANNET_ARBEIDSFORHOLD
-                ),
+                utbetalingsårsak = Utbetalingsårsak.NYOPPSTARTET_HOS_ARBEIDSGIVER,
+                årsakNyoppstartet = ÅrsakNyoppstartet.UTØVDE_VERNEPLIKT,
                 perioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = start.plusDays(20),
                         tilOgMed = start.plusDays(20),
                         antallTimerPlanlagt = Duration.ofHours(8),
-                        antallTimerBorte = Duration.ofHours(8)
+                        antallTimerBorte = Duration.ofHours(8),
+                        årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
                     )
                 )
             ),
@@ -71,61 +77,13 @@ internal object SøknadUtils {
                 organisasjonsnummer = GYLDIG_ORGNR,
                 harHattFraværHosArbeidsgiver = true,
                 arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = false,
-                    begrunnelse = MILITÆRTJENESTE
-                ),
-                perioder = listOf(
-                    Utbetalingsperiode(
-                        fraOgMed = start.plusDays(30),
-                        tilOgMed = start.plusDays(35)
-                    )
-                )
-            ),
-            ArbeidsgiverDetaljer(
-                navn = "Arbeidsgiver 4",
-                organisasjonsnummer = GYLDIG_ORGNR,
-                harHattFraværHosArbeidsgiver = true,
-                arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = false,
-                    begrunnelse = INGEN_AV_SITUASJONENE,
-                    ingenAvSituasjoneneForklaring = "Forklarer hvorfor ingen av situasjonene passer."
-                ),
-                perioder = listOf(
-                    Utbetalingsperiode(
-                        fraOgMed = start.plusDays(30),
-                        tilOgMed = start.plusDays(35)
-                    )
-                )
-            ),
-            ArbeidsgiverDetaljer(
-                organisasjonsnummer = GYLDIG_ORGNR,
-                harHattFraværHosArbeidsgiver = true,
-                arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = false,
-                    begrunnelse = ANDRE_YTELSER
-                ),
+                utbetalingsårsak = Utbetalingsårsak.NYOPPSTARTET_HOS_ARBEIDSGIVER,
+                årsakNyoppstartet = ÅrsakNyoppstartet.SØKTE_ANDRE_UTBETALINGER,
                 perioder = listOf(
                     Utbetalingsperiode(
                         fraOgMed = start.plusMonths(1),
-                        tilOgMed = start.plusMonths(1).plusDays(5)
-                    )
-                )
-            ),
-            ArbeidsgiverDetaljer(
-                navn = "Ikke registrert arbeidsgiver",
-                harHattFraværHosArbeidsgiver = true,
-                arbeidsgiverHarUtbetaltLønn = false,
-                ansettelseslengde = Ansettelseslengde(
-                    merEnn4Uker = false,
-                    begrunnelse = ANDRE_YTELSER
-                ),
-                perioder = listOf(
-                    Utbetalingsperiode(
-                        fraOgMed = start.plusMonths(1),
-                        tilOgMed = start.plusMonths(1).plusDays(5)
+                        tilOgMed = start.plusMonths(1).plusDays(5),
+                        årsak = FraværÅrsak.ORDINÆRT_FRAVÆR
                     )
                 )
             )
@@ -159,14 +117,6 @@ internal object SøknadUtils {
             harForståttRettigheterOgPlikter = JaNei.Ja,
             harBekreftetOpplysninger = JaNei.Ja
         ),
-        fosterbarn = listOf(
-            FosterBarn(
-                identitetsnummer = "02119970078"
-            )
-        ),
-        andreUtbetalinger = listOf("dagpenger", "sykepenger"),
-        erSelvstendig = true,
-        erFrilanser = true,
         titler = listOf(
             "vedlegg1"
         ),
@@ -176,15 +126,42 @@ internal object SøknadUtils {
             URI("http://localhost:8080/vedlegg/3")
         ),
         hjemmePgaSmittevernhensyn = true,
-        hjemmePgaStengtBhgSkole = true
-    )
-
-    internal val defaultKomplettSøknad = PreprosessertArbeidstakerutbetalingMelding(
-        søkerAktørId = AktørId("123456"),
-        melding = defaultSøknad,
-        dokumentUrls = listOf(
-            listOf(URI("http://localhost:8080/vedlegg/1"), URI("http://localhost:8080/vedlegg/2")),
-            listOf(URI("http://localhost:8080/vedlegg/3"), URI("http://localhost:8080/vedlegg/4"))
+        hjemmePgaStengtBhgSkole = true,
+        k9Format = Søknad(
+            SøknadId(UUID.randomUUID().toString()),
+            Versjon("1.0.0"),
+            ZonedDateTime.now(),
+            K9Søker(NorskIdentitetsnummer.of("02119970078")),
+            OmsorgspengerUtbetaling(
+                listOf(
+                    Barn(NorskIdentitetsnummer.of("26128027024"), null)
+                ),
+                null,
+                listOf(
+                    FraværPeriode(
+                        Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")),
+                        Duration.ofHours(7).plusMinutes(30),
+                        no.nav.k9.søknad.felles.fravær.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
+                        SøknadÅrsak.KONFLIKT_MED_ARBEIDSGIVER,
+                        listOf(AktivitetFravær.ARBEIDSTAKER),
+                        Organisasjonsnummer.of(GYLDIG_ORGNR)
+                    )
+                ),
+                Bosteder().medPerioder(
+                    mapOf(
+                        Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")) to
+                                Bosteder.BostedPeriodeInfo().medLand((Landkode.NORGE))
+                    )
+                ),
+                Utenlandsopphold().medPerioder(
+                    mapOf(
+                        Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")) to
+                                Utenlandsopphold.UtenlandsoppholdPeriodeInfo()
+                                    .medLand(Landkode.SPANIA)
+                                    .medÅrsak(Utenlandsopphold.UtenlandsoppholdÅrsak.BARNET_INNLAGT_I_HELSEINSTITUSJON_DEKKET_ETTER_AVTALE_MED_ET_ANNET_LAND_OM_TRYGD)
+                    )
+                )
+            )
         )
     )
 }

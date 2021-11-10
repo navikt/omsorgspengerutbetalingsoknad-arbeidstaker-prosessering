@@ -43,7 +43,6 @@ fun Application.omsorgspengerutbetalingSoknadProsessering() {
     install(ContentNegotiation) {
         jackson {
             omsorgspengerKonfiguert()
-
         }
     }
 

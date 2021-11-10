@@ -110,8 +110,7 @@ fun KafkaProducer<String, TopicEntry<ArbeidstakerutbetalingMelding>>.leggTilMott
             TopicEntry(
                 metadata = Metadata(
                     version = 1,
-                    correlationId = UUID.randomUUID().toString(),
-                    requestId = UUID.randomUUID().toString()
+                    correlationId = UUID.randomUUID().toString()
                 ),
                 data = soknad
             )

@@ -1,8 +1,9 @@
 {
   "app": "omsorgspengerutbetalingsoknad-arbeidstaker-prosessering",
   "cluster": "dev-fss",
-  "namespace": "default",
+  "namespace": "dusseldorf",
   "team": "dusseldorf",
+  "tenant": "trygdeetaten.no",
   "minReplicas": "1",
   "maxReplicas": "2",
   "ingresses": [
@@ -10,7 +11,6 @@
   ],
   "vaultKvPath": "/kv/preprod/fss/omsorgspengerutbetalingsoknad-arbeidstaker-prosessering/default",
   "azureadKvPath": "/azuread/data/dev/creds/omsorgspengerutbetalingsoknad-arbeidstaker-prosessering",
-  "serviceuserKvPath": "/serviceuser/data/dev/srvomsutarb-prs",
   "env": {
     "K9_JOARK_BASE_URL": "https://k9-joark.nais.preprod.local",
     "K9_DOKUMENT_BASE_URL": "https://k9-dokument.nais.preprod.local",

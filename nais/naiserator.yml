@@ -47,9 +47,9 @@ spec:
         kvPath: {{vaultKvPath}}
       - mountPath: /var/run/secrets/nais.io/azuread
         kvPath: {{azureadKvPath}}
-      - mountPath: /var/run/secrets/nais.io/serviceuser
-        kvPath: {{serviceuserKvPath}}
   webproxy: true
+  envFrom:
+    - secret: {{app}}
   env:
   {{#each env}}
     - name: {{@key}}

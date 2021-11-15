@@ -10,8 +10,7 @@
     "https://omsorgspengerutbetalingsoknad-arbeidstaker-prosessering.nais.preprod.local"
   ],
   "vaultKvPath": "/kv/preprod/fss/omsorgspengerutbetalingsoknad-arbeidstaker-prosessering/default",
-  "azureadKvPath": "/azuread/data/dev/creds/omsorgspengerutbetalingsoknad-arbeidstaker-prosessering",
-  "serviceuserKvPath": "/serviceuser/data/dev/srvomsutarb-prs",
+  "azureadKvPath": "/azuread/data/dev/creds/omsorgspengerutbetalingsoknad-arbeidstaker-prosessering"
   "env": {
     "K9_JOARK_BASE_URL": "https://k9-joark.nais.preprod.local",
     "K9_DOKUMENT_BASE_URL": "https://k9-dokument.nais.preprod.local",

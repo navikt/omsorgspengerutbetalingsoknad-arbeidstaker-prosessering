@@ -12,6 +12,10 @@ spec:
     application:
       enabled: true
       tenant: {{tenant}}
+  accessPolicy:
+    outbound:
+      rules:
+        - application: k9-joark
   liveness:
     path: isalive
     initialDelay: 20
@@ -40,13 +44,6 @@ spec:
   prometheus:
     enabled: true
     path: /metrics
-  vault:
-    enabled: true
-    paths:
-      - mountPath: /var/run/secrets/nais.io/vault
-        kvPath: {{vaultKvPath}}
-      - mountPath: /var/run/secrets/nais.io/azuread
-        kvPath: {{azureadKvPath}}
   webproxy: true
   envFrom:
     - secret: {{app}}

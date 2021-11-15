@@ -3,6 +3,7 @@
   "cluster": "dev-fss",
   "namespace": "dusseldorf",
   "team": "dusseldorf",
+  "tenant": "trygdeetaten.no",
   "minReplicas": "1",
   "maxReplicas": "2",
   "ingresses": [

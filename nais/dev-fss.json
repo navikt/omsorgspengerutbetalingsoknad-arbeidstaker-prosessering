@@ -1,7 +1,7 @@
 {
   "app": "omsorgspengerutbetalingsoknad-arbeidstaker-prosessering",
   "cluster": "dev-fss",
-  "namespace": "default",
+  "namespace": "dusseldorf",
   "team": "dusseldorf",
   "minReplicas": "1",
   "maxReplicas": "2",

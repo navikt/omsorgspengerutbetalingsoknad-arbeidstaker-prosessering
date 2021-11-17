@@ -1,7 +1,7 @@
 package no.nav.helse.prosessering.v1.asynkron.arbeidstaker
 
 import io.prometheus.client.Counter
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.MeldingV1
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.Utbetalingsperiode
 import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
@@ -37,7 +37,7 @@ private val særligeSmittevernhensynCounter = Counter.build()
     .labelNames("blirHjemme", "harVedleggLastetOpp")
     .register()
 
-internal fun ArbeidstakerutbetalingMelding.reportMetrics() {
+internal fun MeldingV1.reportMetrics() {
 
     antallarbeidsgivereCounter.labels(arbeidsgivere.size.toString()).inc()
     arbeidsgivere.forEach {

@@ -12,8 +12,8 @@ import kotlinx.coroutines.time.delay
 import no.nav.common.KafkaEnvironment
 import no.nav.helse.SøknadUtils.defaultSøknad
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
-import org.junit.AfterClass
-import org.junit.BeforeClass
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.BeforeAll
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.time.Duration
@@ -40,12 +40,11 @@ class SoknadProsesseringTest {
 
         private val kafkaEnvironment = KafkaWrapper.bootstrap()
         private val kafkaProducer = kafkaEnvironment.arbeidstakerutbetalingMeldingProducer()
-        private val cleanupKonsumer = kafkaEnvironment.arbeidstakerutbetalingCleanupKonsumer()
+        private val cleanupKonsumer = kafkaEnvironment.cleanupKonsumer()
+        private val k9DittnavVarselKonsumer = kafkaEnvironment.k9DittnavVarselKonsumer()
 
         // Se https://github.com/navikt/dusseldorf-ktor#f%C3%B8dselsnummer
         private val gyldigFodselsnummerA = "02119970078"
-        private val gyldigFodselsnummerB = "19066672169"
-        private val gyldigFodselsnummerC = "20037473937"
         private val dNummerA = "55125314561"
 
         private var engine = newEngine(kafkaEnvironment).apply {
@@ -77,12 +76,12 @@ class SoknadProsesseringTest {
             engine.start(wait = true)
         }
 
-        @BeforeClass
+        @BeforeAll
         @JvmStatic
         fun buildUp() {
         }
 
-        @AfterClass
+        @AfterAll
         @JvmStatic
         fun tearDown() {
             logger.info("Tearing down")
@@ -128,9 +127,14 @@ class SoknadProsesseringTest {
 
         wireMockServer.stubJournalfor(201) // Simulerer journalføring fungerer igjen
         restartEngine()
+
         cleanupKonsumer
-            .hentCleanupArbeidstakerutbetalingtMelding(melding.søknadId)
+            .hentCleanupMelding(melding.søknadId)
             .assertCleanupFormat()
+
+        k9DittnavVarselKonsumer
+            .hentK9Beskjed(melding.søknadId)
+            .assertK9Beskjed(melding)
     }
 
     private fun readyGir200HealthGir503() {
@@ -153,8 +157,12 @@ class SoknadProsesseringTest {
 
         kafkaProducer.leggTilMottak(melding)
         cleanupKonsumer
-            .hentCleanupArbeidstakerutbetalingtMelding(melding.søknadId)
+            .hentCleanupMelding(melding.søknadId)
             .assertCleanupFormat()
+
+        k9DittnavVarselKonsumer
+            .hentK9Beskjed(melding.søknadId)
+            .assertK9Beskjed(melding)
     }
 
     @Test
@@ -166,8 +174,12 @@ class SoknadProsesseringTest {
 
         kafkaProducer.leggTilMottak(melding)
         cleanupKonsumer
-            .hentCleanupArbeidstakerutbetalingtMelding(melding.søknadId)
+            .hentCleanupMelding(melding.søknadId)
             .assertCleanupFormat()
+
+        k9DittnavVarselKonsumer
+            .hentK9Beskjed(melding.søknadId)
+            .assertK9Beskjed(melding)
     }
 
     private fun ventPaaAtRetryMekanismeIStreamProsessering() = runBlocking { delay(Duration.ofSeconds(30)) }

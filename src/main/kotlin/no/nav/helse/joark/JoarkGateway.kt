@@ -11,7 +11,6 @@ import com.github.kittinunf.fuel.httpPost
 import io.ktor.http.*
 import no.nav.helse.CorrelationId
 import no.nav.helse.HttpError
-import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dusseldorf.ktor.client.buildURL
 import no.nav.helse.dusseldorf.ktor.health.HealthCheck
 import no.nav.helse.dusseldorf.ktor.health.Healthy
@@ -20,6 +19,7 @@ import no.nav.helse.dusseldorf.ktor.health.UnHealthy
 import no.nav.helse.dusseldorf.ktor.metrics.Operation
 import no.nav.helse.dusseldorf.oauth2.client.AccessTokenClient
 import no.nav.helse.dusseldorf.oauth2.client.CachedAccessTokenClient
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertMelding
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.ByteArrayInputStream
@@ -57,22 +57,22 @@ class JoarkGateway(
     }
 
     suspend fun journalfør(
-        aktørId: AktørId,
-        norskIdent: String,
-        navn: JoarkNavn,
-        mottatt: ZonedDateTime,
-        dokumenter: List<List<URI>>,
+        preprosessertMelding: PreprosessertMelding,
         correlationId: CorrelationId,
     ): JournalPostId {
 
         val authorizationHeader = cachedAccessTokenClient.getAccessToken(journalforeScopes).asAuthoriationHeader()
 
         val joarkRequest = JoarkRequest(
-            aktoerId = aktørId.id,
-            norskIdent = norskIdent,
-            mottatt = mottatt,
-            dokumenter = dokumenter,
-            sokerNavn = navn
+            aktoerId = preprosessertMelding.søker.aktørId,
+            norskIdent = preprosessertMelding.søker.fødselsnummer,
+            mottatt = preprosessertMelding.mottatt,
+            dokumenter = preprosessertMelding.dokumentUrls,
+            sokerNavn = JoarkNavn(
+                fornavn = preprosessertMelding.søker.fornavn,
+                mellomnanvn= preprosessertMelding.søker.mellomnavn,
+                etternavn = preprosessertMelding.søker.etternavn
+            )
         )
 
         val body = objectMapper.writeValueAsBytes(joarkRequest)

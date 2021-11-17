@@ -9,7 +9,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
-data class ArbeidstakerutbetalingMelding(
+data class MeldingV1(
     val søknadId: String,
     val mottatt: ZonedDateTime,
     val språk: String,

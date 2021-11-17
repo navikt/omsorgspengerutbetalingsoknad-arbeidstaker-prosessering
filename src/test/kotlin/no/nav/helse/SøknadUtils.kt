@@ -1,7 +1,9 @@
 package no.nav.helse
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
+import no.nav.helse.prosessering.DAGER_SYNLIG_K9BESKJED
+import no.nav.helse.prosessering.TEKST_K9BESKJED
+import no.nav.helse.prosessering.YTELSE_K9BESKJED
+import no.nav.k9.søknad.JsonUtils
 import no.nav.k9.søknad.Søknad
 import no.nav.k9.søknad.felles.Versjon
 import no.nav.k9.søknad.felles.fravær.AktivitetFravær
@@ -13,19 +15,22 @@ import no.nav.k9.søknad.felles.personopplysninger.Utenlandsopphold
 import no.nav.k9.søknad.felles.type.*
 import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
+import org.json.JSONObject
+import org.skyscreamer.jsonassert.JSONAssert
 import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.util.*
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import no.nav.k9.søknad.felles.personopplysninger.Søker as K9Søker
 
 internal object SøknadUtils {
-    internal val objectMapper = jacksonObjectMapper().omsorgspengerKonfiguert()
     private val start = LocalDate.parse("2020-01-01")
     private const val GYLDIG_ORGNR = "917755736"
 
-    internal val defaultSøknad = ArbeidstakerutbetalingMelding(
+    internal val defaultSøknad = MeldingV1(
         søknadId = UUID.randomUUID().toString(),
         språk = "nb",
         mottatt = ZonedDateTime.now(),
@@ -166,5 +171,26 @@ internal object SøknadUtils {
     )
 }
 
-internal fun ArbeidstakerutbetalingMelding.somJson() = SøknadUtils.objectMapper.writeValueAsString(this)
-internal fun PreprosessertArbeidstakerutbetalingMelding.somJson() = SøknadUtils.objectMapper.writeValueAsString(this)
+internal fun String.assertK9Beskjed(søknad: MeldingV1){
+    val k9Beskjed = JSONObject(this)
+
+    assertEquals(søknad.søknadId, k9Beskjed.getString("grupperingsId"))
+    assertEquals(DAGER_SYNLIG_K9BESKJED, k9Beskjed.getLong("dagerSynlig"))
+    assertEquals(TEKST_K9BESKJED, k9Beskjed.getString("tekst"))
+    assertEquals(YTELSE_K9BESKJED, k9Beskjed.getString("ytelse"))
+}
+
+internal fun String.assertCleanupFormat() {
+    val rawJson = JSONObject(this)
+
+    val metadata = assertNotNull(rawJson.getJSONObject("metadata"))
+    assertNotNull(metadata.getString("correlationId"))
+
+    val data = assertNotNull(rawJson.getJSONObject("data"))
+
+    assertNotNull(data.getJSONObject("journalfort")).getString("journalpostId")
+    val søknad = assertNotNull(data.getJSONObject("melding")).getJSONObject("k9Format")
+
+    val rekonstruertSøknad = JsonUtils.getObjectMapper().readValue(søknad.toString(), Søknad::class.java)
+    JSONAssert.assertEquals(søknad.toString(), JsonUtils.toString(rekonstruertSøknad), true)
+}

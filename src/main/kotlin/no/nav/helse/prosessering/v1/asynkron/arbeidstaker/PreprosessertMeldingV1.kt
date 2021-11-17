@@ -6,7 +6,7 @@ import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.net.URI
 import java.time.ZonedDateTime
 
-data class PreprosessertArbeidstakerutbetalingMelding(
+data class PreprosessertMelding(
     val soknadId: String,
     val mottatt: ZonedDateTime,
     val språk: String?,
@@ -22,7 +22,7 @@ data class PreprosessertArbeidstakerutbetalingMelding(
     val k9Format: Søknad
 ) {
     internal constructor(
-        melding: ArbeidstakerutbetalingMelding,
+        melding: MeldingV1,
         dokumentUrls: List<List<URI>>,
         søkerAktørId: AktørId
     ) : this(

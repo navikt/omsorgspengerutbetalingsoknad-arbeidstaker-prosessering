@@ -89,7 +89,7 @@ internal class PdfV1Generator {
     }
 
     internal fun generateSoknadOppsummeringPdf(
-        melding: ArbeidstakerutbetalingMelding
+        melding: MeldingV1
     ): ByteArray {
         XRLog.listRegisteredLoggers().forEach { logger -> XRLog.setLevel(logger, Level.WARNING) }
         val mottatt = melding.mottatt.toLocalDate()
@@ -171,7 +171,7 @@ internal class PdfV1Generator {
                 false
             )
 
-    private fun ArbeidstakerutbetalingMelding.somMap() = mapper.convertValue(
+    private fun MeldingV1.somMap() = mapper.convertValue(
         this,
         object :
             TypeReference<MutableMap<String, Any?>>() {}

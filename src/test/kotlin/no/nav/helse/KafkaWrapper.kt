@@ -3,11 +3,14 @@ package no.nav.helse
 import no.nav.common.JAASCredential
 import no.nav.common.KafkaEnvironment
 import no.nav.helse.prosessering.Metadata
+import no.nav.helse.prosessering.v1.asynkron.Data
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
 import no.nav.helse.prosessering.v1.asynkron.Topics.CLEANUP
+import no.nav.helse.prosessering.v1.asynkron.Topics.K9_DITTNAV_VARSEL
 import no.nav.helse.prosessering.v1.asynkron.Topics.MOTTATT
-import no.nav.helse.prosessering.v1.asynkron.Topics.PREPROSSESERT
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
+import no.nav.helse.prosessering.v1.asynkron.Topics.PREPROSESSERT
+import no.nav.helse.prosessering.v1.asynkron.mapper
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.MeldingV1
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.KafkaConsumer
@@ -32,8 +35,9 @@ object KafkaWrapper {
             withSecurity = true,
             topicNames = listOf(
                 MOTTATT.name,
-                PREPROSSESERT.name,
-                CLEANUP.name
+                PREPROSESSERT.name,
+                CLEANUP.name,
+                K9_DITTNAV_VARSEL.name
             )
         )
         return kafkaEnvironment
@@ -66,7 +70,7 @@ private fun KafkaEnvironment.testProducerProperties(clientId: String): MutableMa
     }
 }
 
-fun KafkaEnvironment.arbeidstakerutbetalingCleanupKonsumer(): KafkaConsumer<String, String> {
+fun KafkaEnvironment.cleanupKonsumer(): KafkaConsumer<String, String> {
     val consumer = KafkaConsumer(
         testConsumerProperties("arbeidstakerutbetalingConsumer"),
         StringDeserializer(),
@@ -76,13 +80,23 @@ fun KafkaEnvironment.arbeidstakerutbetalingCleanupKonsumer(): KafkaConsumer<Stri
     return consumer
 }
 
+fun KafkaEnvironment.k9DittnavVarselKonsumer(): KafkaConsumer<String, String> {
+    val consumer = KafkaConsumer(
+        testConsumerProperties("K9DittnavVarselKonsumer"),
+        StringDeserializer(),
+        StringDeserializer()
+    )
+    consumer.subscribe(listOf(K9_DITTNAV_VARSEL.name))
+    return consumer
+}
+
 fun KafkaEnvironment.arbeidstakerutbetalingMeldingProducer() = KafkaProducer(
     testProducerProperties("ArbeidstakerutbetalingMeldingProducer"),
     MOTTATT.keySerializer,
     MOTTATT.serDes
 )
 
-fun KafkaConsumer<String, String>.hentCleanupArbeidstakerutbetalingtMelding(
+fun KafkaConsumer<String, String>.hentCleanupMelding(
     soknadId: String,
     maxWaitInSeconds: Long = 20
 ): String {
@@ -102,7 +116,26 @@ fun KafkaConsumer<String, String>.hentCleanupArbeidstakerutbetalingtMelding(
     throw IllegalStateException("Fant ikke cleanup melding etter $maxWaitInSeconds sekunder.")
 }
 
-fun KafkaProducer<String, TopicEntry<ArbeidstakerutbetalingMelding>>.leggTilMottak(soknad: ArbeidstakerutbetalingMelding) {
+fun KafkaConsumer<String, String>.hentK9Beskjed(
+    soknadId: String,
+    maxWaitInSeconds: Long = 20
+): String {
+    val end = System.currentTimeMillis() + Duration.ofSeconds(maxWaitInSeconds).toMillis()
+    while (System.currentTimeMillis() < end) {
+        seekToBeginning(assignment())
+        val entries = poll(Duration.ofSeconds(5))
+            .records(K9_DITTNAV_VARSEL.name)
+            .filter { it.key() == soknadId }
+
+        if (entries.isNotEmpty()) {
+            assertEquals(1, entries.size)
+            return entries.first().value()
+        }
+    }
+    throw IllegalStateException("Fant ikke opprettet K9Beskjed for søknad $soknadId etter $maxWaitInSeconds sekunder.")
+}
+
+fun KafkaProducer<String, TopicEntry>.leggTilMottak(soknad: MeldingV1) {
     send(
         ProducerRecord(
             MOTTATT.name,
@@ -112,11 +145,8 @@ fun KafkaProducer<String, TopicEntry<ArbeidstakerutbetalingMelding>>.leggTilMott
                     version = 1,
                     correlationId = UUID.randomUUID().toString()
                 ),
-                data = soknad
+                data = Data(mapper.writeValueAsString(soknad))
             )
         )
     ).get()
 }
-
-fun KafkaEnvironment.username() = username
-fun KafkaEnvironment.password() = password

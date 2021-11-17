@@ -5,9 +5,9 @@ import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dokument.DokumentService
 import no.nav.helse.prosessering.Metadata
 import no.nav.helse.prosessering.SoknadId
-import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertArbeidstakerutbetalingMelding
+import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertMelding
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.reportMetrics
-import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.ArbeidstakerutbetalingMelding
+import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.MeldingV1
 import org.slf4j.LoggerFactory
 
 internal class PreprosseseringV1Service(
@@ -20,9 +20,9 @@ internal class PreprosseseringV1Service(
     }
 
     internal suspend fun preprosseser(
-        melding: ArbeidstakerutbetalingMelding,
+        melding: MeldingV1,
         metadata: Metadata
-    ): PreprosessertArbeidstakerutbetalingMelding {
+    ): PreprosessertMelding {
         val søknadId = SoknadId(melding.søknadId)
         logger.info("Preprosseserer $søknadId")
 
@@ -68,7 +68,7 @@ internal class PreprosseseringV1Service(
 
         logger.info("Totalt ${komplettDokumentUrls.size} dokumentbolker.")
 
-        val preprosessertArbeidstakerutbetalingMelding = PreprosessertArbeidstakerutbetalingMelding(
+        val preprosessertArbeidstakerutbetalingMelding = PreprosessertMelding(
             melding = melding,
             dokumentUrls = komplettDokumentUrls.toList(),
             søkerAktørId = søkerAktørId

@@ -16,6 +16,8 @@ spec:
     outbound:
       rules:
         - application: k9-joark
+  kafka:
+    pool: {{kafka-pool}}
   liveness:
     path: isalive
     initialDelay: 20

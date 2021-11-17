@@ -3,16 +3,17 @@ package no.nav.helse.prosessering.v1.asynkron.arbeidstaker
 import no.nav.helse.CorrelationId
 import no.nav.helse.aktoer.AktørId
 import no.nav.helse.dokument.DokumentService
-import no.nav.helse.erEtter
 import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
+import no.nav.helse.prosessering.tilK9Beskjed
 import no.nav.helse.prosessering.v1.asynkron.Topics
+import no.nav.helse.prosessering.v1.asynkron.deserialiserTilCleanup
 import no.nav.helse.prosessering.v1.asynkron.process
+import no.nav.helse.prosessering.v1.asynkron.serialiserTilData
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
-import org.apache.kafka.streams.kstream.Consumed
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
@@ -38,26 +39,29 @@ internal class CleanupStream(
         private fun topology(dokumentService: DokumentService, gittDato: ZonedDateTime): Topology {
             val builder = StreamsBuilder()
             val fraCleanup = Topics.CLEANUP
+            val tilK9DittnavVarsel = Topics.K9_DITTNAV_VARSEL
 
             builder
-                .stream(
-                    fraCleanup.name, Consumed.with(fraCleanup.keySerde, fraCleanup.valueSerde)
-                )
-                .filter { _, entry -> entry.data.melding.mottatt.erEtter(gittDato) }
+                .stream(fraCleanup.name, fraCleanup.consumed)
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
                         logger.info("Sletter dokumenter.")
+                        val cleanup = entry.deserialiserTilCleanup()
 
                         dokumentService.slettDokumeter(
-                            urlBolks = entry.data.melding.dokumentUrls,
-                            aktørId = AktørId(entry.data.melding.søker.aktørId),
+                            urlBolks = cleanup.melding.dokumentUrls,
+                            aktørId = AktørId(cleanup.melding.søker.aktørId),
                             correlationId = CorrelationId(entry.metadata.correlationId)
                         )
                         logger.info("Dokumenter slettet.")
-                        entry.data.journalførtMelding
+
+                        val k9beskjed = cleanup.tilK9Beskjed()
+                        logger.info("Sender K9Beskjed viderer til ${tilK9DittnavVarsel.name}")
+                        k9beskjed.serialiserTilData()
                     }
                 }
+                .to(tilK9DittnavVarsel.name, tilK9DittnavVarsel.produced)
             return builder.build()
         }
     }

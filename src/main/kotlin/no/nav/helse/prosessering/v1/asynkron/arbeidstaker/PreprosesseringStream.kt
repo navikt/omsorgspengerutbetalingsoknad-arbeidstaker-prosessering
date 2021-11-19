@@ -4,7 +4,7 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
-import no.nav.helse.prosessering.v1.PreprosseseringV1Service
+import no.nav.helse.prosessering.v1.PreprosesseringV1Service
 import no.nav.helse.prosessering.v1.asynkron.Topics
 import no.nav.helse.prosessering.v1.asynkron.deserialiserTilMeldingV1
 import no.nav.helse.prosessering.v1.asynkron.process
@@ -14,8 +14,8 @@ import org.apache.kafka.streams.Topology
 import org.slf4j.LoggerFactory
 import java.time.ZonedDateTime
 
-internal class PreprosseseringStream(
-    preprosseseringV1Service: PreprosseseringV1Service,
+internal class PreprosesseringStream(
+    preprosseseringV1Service: PreprosesseringV1Service,
     kafkaConfig: KafkaConfig,
     datoMottattEtter: ZonedDateTime
 ) {
@@ -34,9 +34,9 @@ internal class PreprosseseringStream(
         private const val NAME = "PreprosesseringV1"
         private val logger = LoggerFactory.getLogger("no.nav.$NAME.topology")
 
-        private fun topology(preprosseseringV1Service: PreprosseseringV1Service, gittDato: ZonedDateTime): Topology {
+        private fun topology(preprosesseringV1Service: PreprosesseringV1Service, gittDato: ZonedDateTime): Topology {
             val builder = StreamsBuilder()
-            val fromMottatt = Topics.MOTTATT
+            val fromMottatt = Topics.MOTTATT_V2
             val tilPreprosessert = Topics.PREPROSESSERT
 
             builder
@@ -46,7 +46,7 @@ internal class PreprosseseringStream(
                     process(NAME, soknadId, entry) {
                         logger.info("Preprosesserer søknad om utbetaling av omsorgspenger for arbeidstakere.")
 
-                        val preprossesertMelding = preprosseseringV1Service.preprosseser(
+                        val preprossesertMelding = preprosesseringV1Service.preprosesser(
                             melding = entry.deserialiserTilMeldingV1(),
                             metadata = entry.metadata
                         )

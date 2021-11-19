@@ -1,7 +1,7 @@
 package no.nav.helse
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import io.ktor.server.testing.withApplication
+import io.ktor.server.testing.*
 import no.nav.helse.dusseldorf.testsupport.asArguments
 import no.nav.helse.dusseldorf.testsupport.wiremock.WireMockBuilder
 import org.slf4j.Logger
@@ -18,7 +18,7 @@ class OmsorgspengerutbetalingsoknadProsesseringWithMocks {
                 .withPort(8091)
                 .withAzureSupport()
                 .build()
-                .stubK9DokumentHealth()
+                .stubK9MellomlagringHealth()
                 .stubK9JoarkHealth()
                 .stubJournalfor()
                 .stubLagreDokument()

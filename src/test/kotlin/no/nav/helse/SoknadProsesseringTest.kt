@@ -32,7 +32,7 @@ class SoknadProsesseringTest {
         private val wireMockServer: WireMockServer = WireMockBuilder()
             .withAzureSupport()
             .build()
-            .stubK9DokumentHealth()
+            .stubK9MellomlagringHealth()
             .stubK9JoarkHealth()
             .stubJournalfor()
             .stubLagreDokument()

@@ -24,6 +24,10 @@ internal object Topics {
         name = "dusseldorf.privat-omsorgspengerutbetalingsoknad-arbeidstaker-mottatt",
         serDes = SerDes()
     )
+    val MOTTATT_V2 = Topic(
+        name = "dusseldorf.privat-omsorgspengerutbetalingsoknad-arbeidstaker-mottatt-v2",
+        serDes = SerDes()
+    )
     val PREPROSESSERT = Topic(
         name = "dusseldorf.privat-omsorgspengerutbetalingsoknad-arbeidstaker-preprosessert",
         serDes = SerDes()

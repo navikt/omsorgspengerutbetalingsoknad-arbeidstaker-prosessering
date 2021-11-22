@@ -7,7 +7,7 @@ import no.nav.helse.prosessering.v1.asynkron.Data
 import no.nav.helse.prosessering.v1.asynkron.TopicEntry
 import no.nav.helse.prosessering.v1.asynkron.Topics.CLEANUP
 import no.nav.helse.prosessering.v1.asynkron.Topics.K9_DITTNAV_VARSEL
-import no.nav.helse.prosessering.v1.asynkron.Topics.MOTTATT
+import no.nav.helse.prosessering.v1.asynkron.Topics.MOTTATT_V2
 import no.nav.helse.prosessering.v1.asynkron.Topics.PREPROSESSERT
 import no.nav.helse.prosessering.v1.asynkron.mapper
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.MeldingV1
@@ -34,7 +34,7 @@ object KafkaWrapper {
             withSchemaRegistry = false,
             withSecurity = true,
             topicNames = listOf(
-                MOTTATT.name,
+                MOTTATT_V2.name,
                 PREPROSESSERT.name,
                 CLEANUP.name,
                 K9_DITTNAV_VARSEL.name
@@ -92,8 +92,8 @@ fun KafkaEnvironment.k9DittnavVarselKonsumer(): KafkaConsumer<String, String> {
 
 fun KafkaEnvironment.arbeidstakerutbetalingMeldingProducer() = KafkaProducer(
     testProducerProperties("ArbeidstakerutbetalingMeldingProducer"),
-    MOTTATT.keySerializer,
-    MOTTATT.serDes
+    MOTTATT_V2.keySerializer,
+    MOTTATT_V2.serDes
 )
 
 fun KafkaConsumer<String, String>.hentCleanupMelding(
@@ -138,7 +138,7 @@ fun KafkaConsumer<String, String>.hentK9Beskjed(
 fun KafkaProducer<String, TopicEntry>.leggTilMottak(soknad: MeldingV1) {
     send(
         ProducerRecord(
-            MOTTATT.name,
+            MOTTATT_V2.name,
             soknad.søknadId,
             TopicEntry(
                 metadata = Metadata(

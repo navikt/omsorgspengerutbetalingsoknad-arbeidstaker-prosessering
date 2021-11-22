@@ -24,8 +24,6 @@ internal class PreprosesseringV1Service(
         melding: MeldingV1,
         metadata: Metadata
     ): PreprosessertMelding {
-        logger.info("Preprosseserer ${melding.søknadId}")
-
         val correlationId = CorrelationId(metadata.correlationId)
         val dokumentEier = DokumentEier(melding.søker.fødselsnummer)
 

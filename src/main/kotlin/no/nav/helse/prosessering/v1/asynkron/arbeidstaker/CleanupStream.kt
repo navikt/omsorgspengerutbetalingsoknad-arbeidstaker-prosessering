@@ -7,6 +7,7 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
+import no.nav.helse.prosessering.formaterStatuslogging
 import no.nav.helse.prosessering.tilK9Beskjed
 import no.nav.helse.prosessering.v1.asynkron.Topics
 import no.nav.helse.prosessering.v1.asynkron.deserialiserTilCleanup
@@ -46,7 +47,7 @@ internal class CleanupStream(
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
-                        logger.info("Sletter dokumenter.")
+                        logger.info(formaterStatuslogging(soknadId, "kjører cleanup"))
                         val cleanup = entry.deserialiserTilCleanup()
 
                         k9MellomlagringService.slettDokumeter(
@@ -56,7 +57,7 @@ internal class CleanupStream(
                         )
 
                         val k9beskjed = cleanup.tilK9Beskjed()
-                        logger.info("Sender K9Beskjed viderer til ${tilK9DittnavVarsel.name}")
+                        logger.info(formaterStatuslogging(soknadId, "sender K9Beskjed videre til ${tilK9DittnavVarsel.name} med eventId ${k9beskjed.eventId}"))
                         k9beskjed.serialiserTilData()
                     }
                 }

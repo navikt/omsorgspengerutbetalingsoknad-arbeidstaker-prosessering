@@ -4,6 +4,7 @@ import no.nav.helse.kafka.KafkaConfig
 import no.nav.helse.kafka.ManagedKafkaStreams
 import no.nav.helse.kafka.ManagedStreamHealthy
 import no.nav.helse.kafka.ManagedStreamReady
+import no.nav.helse.prosessering.formaterStatuslogging
 import no.nav.helse.prosessering.v1.PreprosesseringV1Service
 import no.nav.helse.prosessering.v1.asynkron.Topics
 import no.nav.helse.prosessering.v1.asynkron.deserialiserTilMeldingV1
@@ -44,7 +45,7 @@ internal class PreprosesseringStream(
                 .filter { _, entry -> 1 == entry.metadata.version }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
-                        logger.info("Preprosesserer søknad om utbetaling av omsorgspenger for arbeidstakere.")
+                        logger.info(formaterStatuslogging(soknadId, "preprosesseres"))
 
                         val preprossesertMelding = preprosesseringV1Service.preprosesser(
                             melding = entry.deserialiserTilMeldingV1(),

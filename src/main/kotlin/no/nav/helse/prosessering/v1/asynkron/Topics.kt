@@ -20,10 +20,7 @@ data class Cleanup(val metadata: Metadata, val melding: PreprosessertMelding, va
 data class Journalfort(val journalpostId: String, val søknad: Søknad)
 
 internal object Topics {
-    val MOTTATT = Topic(
-        name = "dusseldorf.privat-omsorgspengerutbetalingsoknad-arbeidstaker-mottatt",
-        serDes = SerDes()
-    )
+
     val MOTTATT_V2 = Topic(
         name = "dusseldorf.privat-omsorgspengerutbetalingsoknad-arbeidstaker-mottatt-v2",
         serDes = SerDes()

@@ -149,9 +149,11 @@ internal object SøknadUtils {
                         no.nav.k9.søknad.felles.fravær.FraværÅrsak.STENGT_SKOLE_ELLER_BARNEHAGE,
                         SøknadÅrsak.KONFLIKT_MED_ARBEIDSGIVER,
                         listOf(AktivitetFravær.ARBEIDSTAKER),
-                        Organisasjonsnummer.of(GYLDIG_ORGNR)
+                        Organisasjonsnummer.of(GYLDIG_ORGNR),
+                        null
                     )
                 ),
+                null,
                 Bosteder().medPerioder(
                     mapOf(
                         Periode(LocalDate.parse("2020-01-01"), LocalDate.parse("2020-01-10")) to

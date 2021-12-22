@@ -62,7 +62,7 @@ internal fun MeldingV1.reportMetrics() {
         utbetalingsperioder.tilAntallDelDager().toString()
     ).inc()
 
-    hjemmePgaSmittevernhensyn?.let {
+    hjemmePgaSmittevernhensyn.let {
         særligeSmittevernhensynCounter
             .labels(hjemmePgaSmittevernhensyn.tilJaEllerNei(), vedleggUrls.isNotEmpty().tilJaEllerNei())
             .inc()

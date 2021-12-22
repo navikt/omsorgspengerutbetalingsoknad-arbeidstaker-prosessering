@@ -139,7 +139,7 @@ internal object SøknadUtils {
             K9Søker(NorskIdentitetsnummer.of("02119970078")),
             OmsorgspengerUtbetaling(
                 listOf(
-                    Barn(NorskIdentitetsnummer.of("26128027024"), null)
+                    Barn().medNorskIdentitetsnummer(NorskIdentitetsnummer.of("26128027024"))
                 ),
                 null,
                 listOf(

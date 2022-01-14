@@ -66,7 +66,7 @@ class JoarkGateway(
         val joarkRequest = JoarkRequest(
             norskIdent = preprosessertMelding.søker.fødselsnummer,
             mottatt = preprosessertMelding.mottatt,
-            dokumenter = preprosessertMelding.dokumentUrls,
+            dokumenteId = preprosessertMelding.dokumentId,
             sokerNavn = JoarkNavn(
                 fornavn = preprosessertMelding.søker.fornavn,
                 mellomnanvn= preprosessertMelding.søker.mellomnavn,
@@ -114,7 +114,8 @@ class JoarkGateway(
 private data class JoarkRequest(
     @JsonProperty("norsk_ident") val norskIdent: String,
     val mottatt: ZonedDateTime,
-    val dokumenter: List<List<URI>>,
+    @JsonProperty("dokument_id")
+    val dokumenteId: List<List<String>>,
     @JsonProperty("soker_navn")
     val sokerNavn: JoarkNavn
 )

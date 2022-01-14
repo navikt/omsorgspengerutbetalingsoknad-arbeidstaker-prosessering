@@ -20,6 +20,7 @@ data class MeldingV1(
     val bekreftelser: Bekreftelser,
     val titler: List<String>,
     val vedleggUrls: List<URI>,
+    val vedleggId: List<String> = listOf(),
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null,
     val k9Format: Søknad

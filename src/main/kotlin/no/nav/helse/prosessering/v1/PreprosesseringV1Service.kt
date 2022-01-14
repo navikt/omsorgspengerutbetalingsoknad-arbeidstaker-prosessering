@@ -10,6 +10,7 @@ import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.PreprosessertMelding
 import no.nav.helse.prosessering.v1.asynkron.arbeidstaker.reportMetrics
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.MeldingV1
 import org.slf4j.LoggerFactory
+import java.net.URI
 
 internal class PreprosesseringV1Service(
     private val pdfV1Generator: PdfV1Generator,
@@ -31,7 +32,7 @@ internal class PreprosesseringV1Service(
         val oppsummeringPdf = pdfV1Generator.generateSoknadOppsummeringPdf(melding)
 
         logger.info("Mellomlagrer Oppsummerings-PDF.")
-        val soknadOppsummeringPdfUrl = k9MellomlagringService.lagreDokument(
+        val oppsummeringPdfDokumentId = k9MellomlagringService.lagreDokument(
             dokument = Dokument(
               eier = dokumentEier,
               content = oppsummeringPdf,
@@ -39,10 +40,10 @@ internal class PreprosesseringV1Service(
               title = "Søknad om utbetaling av omsorgspenger - Arbeidstaker"
             ),
             correlationId = correlationId
-        )
+        ).dokumentId()
 
         logger.info("Mellomlagrer Oppsummerings-JSON")
-        val søknadJsonUrl = k9MellomlagringService.lagreDokument(
+        val søknadJsonDokumentId = k9MellomlagringService.lagreDokument(
             dokument = Dokument(
                 eier = dokumentEier,
                 content = Søknadsformat.somJson(melding.k9Format),
@@ -50,28 +51,35 @@ internal class PreprosesseringV1Service(
                 title = "Søknad om utbetaling av omsorgspenger - Arbeidstaker som JSON"
             ),
             correlationId = correlationId
-        )
+        ).dokumentId()
 
-        val komplettDokumentUrls = mutableListOf(
+        val komplettDokumentId = mutableListOf(
             listOf(
-                soknadOppsummeringPdfUrl,
-                søknadJsonUrl
+                oppsummeringPdfDokumentId,
+                søknadJsonDokumentId
             )
         )
 
         if (melding.vedleggUrls.isNotEmpty()) {
             logger.trace("Legger til ${melding.vedleggUrls.size} vedlegg URL's fra meldingen som dokument.")
-            melding.vedleggUrls.forEach { komplettDokumentUrls.add(listOf(it)) }
+            melding.vedleggUrls.forEach { komplettDokumentId.add(listOf(it.dokumentId())) }
         }
 
-        logger.info("Totalt ${komplettDokumentUrls.size} dokumentbolker.")
+        if (melding.vedleggId.isNotEmpty()) {
+            logger.trace("Legger til ${melding.vedleggId.size} vedlegg Id's fra meldingen som dokument.")
+            melding.vedleggId.forEach { komplettDokumentId.add(listOf(it)) }
+        }
+
+        logger.info("Totalt ${komplettDokumentId.size} dokumentbolker.")
 
         val preprosessertArbeidstakerutbetalingMelding = PreprosessertMelding(
             melding = melding,
-            dokumentUrls = komplettDokumentUrls.toList()
+            dokumentId = komplettDokumentId.toList()
         )
 
         melding.reportMetrics()
         return preprosessertArbeidstakerutbetalingMelding
     }
 }
+
+fun URI.dokumentId() = this.toString().substringAfterLast("/")

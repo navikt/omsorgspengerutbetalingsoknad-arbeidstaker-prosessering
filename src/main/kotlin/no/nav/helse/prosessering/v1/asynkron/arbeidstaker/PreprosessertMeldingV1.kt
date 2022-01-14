@@ -2,7 +2,6 @@ package no.nav.helse.prosessering.v1.asynkron.arbeidstaker
 
 import no.nav.k9.søknad.Søknad
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
-import java.net.URI
 import java.time.ZonedDateTime
 
 data class PreprosessertMelding(
@@ -14,7 +13,7 @@ data class PreprosessertMelding(
     val bosteder: List<Bosted>,
     val opphold: List<Opphold>,
     val bekreftelser: Bekreftelser,
-    val dokumentUrls: List<List<URI>>,
+    val dokumentId: List<List<String>>,
     val titler: List<String>,
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null,
@@ -22,7 +21,7 @@ data class PreprosessertMelding(
 ) {
     internal constructor(
         melding: MeldingV1,
-        dokumentUrls: List<List<URI>>,
+        dokumentId: List<List<String>>,
     ) : this(
         soknadId = melding.søknadId,
         mottatt = melding.mottatt,
@@ -32,7 +31,7 @@ data class PreprosessertMelding(
         bosteder = melding.bosteder,
         opphold = melding.opphold,
         bekreftelser = melding.bekreftelser,
-        dokumentUrls = dokumentUrls,
+        dokumentId = dokumentId,
         titler = melding.titler,
         hjemmePgaSmittevernhensyn = melding.hjemmePgaSmittevernhensyn,
         hjemmePgaStengtBhgSkole = melding.hjemmePgaStengtBhgSkole,
@@ -42,5 +41,4 @@ data class PreprosessertMelding(
     override fun toString(): String {
         return "PreprosessertMelding(soknadId='$soknadId', mottatt=$mottatt)"
     }
-
 }

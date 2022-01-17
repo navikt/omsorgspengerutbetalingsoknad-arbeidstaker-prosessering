@@ -17,7 +17,6 @@ import no.nav.k9.søknad.ytelse.omsorgspenger.v1.OmsorgspengerUtbetaling
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import org.json.JSONObject
 import org.skyscreamer.jsonassert.JSONAssert
-import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -125,11 +124,7 @@ internal object SøknadUtils {
         titler = listOf(
             "vedlegg1"
         ),
-        vedleggUrls = listOf(
-            URI("http://localhost:8080/vedlegg/1"),
-            URI("http://localhost:8080/vedlegg/2"),
-            URI("http://localhost:8080/vedlegg/3")
-        ),
+        vedleggId = listOf("1234", "5678"),
         hjemmePgaSmittevernhensyn = true,
         hjemmePgaStengtBhgSkole = true,
         k9Format = Søknad(

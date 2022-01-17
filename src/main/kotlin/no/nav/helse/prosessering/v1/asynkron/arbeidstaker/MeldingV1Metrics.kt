@@ -64,7 +64,7 @@ internal fun MeldingV1.reportMetrics() {
 
     hjemmePgaSmittevernhensyn.let {
         særligeSmittevernhensynCounter
-            .labels(hjemmePgaSmittevernhensyn.tilJaEllerNei(), vedleggUrls.isNotEmpty().tilJaEllerNei())
+            .labels(hjemmePgaSmittevernhensyn.tilJaEllerNei(), vedleggId.isNotEmpty().tilJaEllerNei())
             .inc()
     }
 

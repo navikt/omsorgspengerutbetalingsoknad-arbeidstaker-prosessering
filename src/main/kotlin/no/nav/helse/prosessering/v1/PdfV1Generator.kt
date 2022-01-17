@@ -114,8 +114,8 @@ internal class PdfV1Generator {
                         "arbeidsgivere" to melding.arbeidsgivere.somMap(),
                         "harOpphold" to melding.opphold.isNotEmpty(),
                         "harBosteder" to melding.bosteder.isNotEmpty(),
-                        "harVedlegg" to melding.vedleggUrls.isNotEmpty(),
-                        "ikkeHarSendtInnVedlegg" to (melding.vedleggUrls.isEmpty() && melding.vedleggId.isEmpty()),
+                        "harVedlegg" to melding.vedleggId.isNotEmpty(),
+                        "ikkeHarSendtInnVedlegg" to melding.vedleggId.isEmpty(),
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "titler" to mapOf(
                             "vedlegg" to melding.titler.somMapTitler()

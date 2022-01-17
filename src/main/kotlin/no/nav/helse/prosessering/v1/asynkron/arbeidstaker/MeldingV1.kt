@@ -19,7 +19,7 @@ data class MeldingV1(
     val arbeidsgivere: List<ArbeidsgiverDetaljer>,
     val bekreftelser: Bekreftelser,
     val titler: List<String>,
-    val vedleggUrls: List<URI>,
+    val vedleggUrls: List<URI> = listOf(),
     val vedleggId: List<String> = listOf(),
     val hjemmePgaSmittevernhensyn: Boolean,
     val hjemmePgaStengtBhgSkole: Boolean? = null,

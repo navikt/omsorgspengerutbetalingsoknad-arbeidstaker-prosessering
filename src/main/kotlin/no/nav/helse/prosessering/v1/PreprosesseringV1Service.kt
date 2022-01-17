@@ -61,16 +61,16 @@ internal class PreprosesseringV1Service(
         )
 
         if (melding.vedleggUrls.isNotEmpty()) {
-            logger.trace("Legger til ${melding.vedleggUrls.size} vedlegg URL's fra meldingen som dokument.")
+            logger.info("Legger til ${melding.vedleggUrls.size} vedlegg URL's fra meldingen som dokument.")
             melding.vedleggUrls.forEach { komplettDokumentId.add(listOf(it.dokumentId())) }
         }
 
         if (melding.vedleggId.isNotEmpty()) {
-            logger.trace("Legger til ${melding.vedleggId.size} vedlegg Id's fra meldingen som dokument.")
+            logger.info("Legger til ${melding.vedleggId.size} vedlegg Id's fra meldingen som dokument.")
             melding.vedleggId.forEach { komplettDokumentId.add(listOf(it)) }
         }
 
-        logger.info("Totalt ${komplettDokumentId.size} dokumentbolker.")
+        logger.info("Totalt ${komplettDokumentId.size} dokumentbolker med ${komplettDokumentId.flatten().size} dokumenter.")
 
         val preprosessertArbeidstakerutbetalingMelding = PreprosessertMelding(
             melding = melding,

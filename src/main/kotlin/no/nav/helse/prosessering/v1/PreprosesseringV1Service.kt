@@ -70,7 +70,7 @@ internal class PreprosesseringV1Service(
             melding.vedleggId.forEach { komplettDokumentId.add(listOf(it)) }
         }
 
-        logger.info("Totalt ${komplettDokumentId.size} dokumentbolker med ${komplettDokumentId.flatten().size} dokumenter.")
+        logger.info("Totalt ${komplettDokumentId.size} dokumentbolker med totalt ${komplettDokumentId.flatten().size} dokumenter.")
 
         val preprosessertArbeidstakerutbetalingMelding = PreprosessertMelding(
             melding = melding,

@@ -60,11 +60,6 @@ internal class PreprosesseringV1Service(
             )
         )
 
-        if (melding.vedleggUrls.isNotEmpty()) {
-            logger.info("Legger til ${melding.vedleggUrls.size} vedlegg URL's fra meldingen som dokument.")
-            melding.vedleggUrls.forEach { komplettDokumentId.add(listOf(it.dokumentId())) }
-        }
-
         if (melding.vedleggId.isNotEmpty()) {
             logger.info("Legger til ${melding.vedleggId.size} vedlegg Id's fra meldingen som dokument.")
             melding.vedleggId.forEach { komplettDokumentId.add(listOf(it)) }

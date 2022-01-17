@@ -95,17 +95,21 @@ class K9MellomlagringGateway(
     }
 
     internal suspend fun slettDokmenter(
-        urls: List<URI>,
+        dokumentId: List<String>,
         dokumentEier: DokumentEier,
         correlationId: CorrelationId
     ) {
         val authorizationHeader = cachedAccessTokenClient.getAccessToken(sletteDokumentScopes).asAuthoriationHeader()
         coroutineScope {
             val deferred = mutableListOf<Deferred<Unit>>()
-            urls.forEach {
+            dokumentId.forEach { dokumentId ->
                 deferred.add(async {
+                    val url = Url.buildURL(
+                        baseUrl = completeUrl,
+                        pathParts = listOf(dokumentId)
+                    )
                     requestSlettDokument(
-                        url = it,
+                        url = url,
                         correlationId = correlationId,
                         dokumentEier = dokumentEier,
                         authorizationHeader = authorizationHeader

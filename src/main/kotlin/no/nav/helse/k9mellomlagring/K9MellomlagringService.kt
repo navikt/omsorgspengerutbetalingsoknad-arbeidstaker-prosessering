@@ -21,15 +21,12 @@ class K9MellomlagringService(
     }
 
     internal suspend fun slettDokumeter(
-        urlBolks: List<List<URI>>,
+        dokumentIdBolks: List<List<String>>,
         dokumentEier: DokumentEier,
         correlationId : CorrelationId
     ) {
-        val urls = mutableListOf<URI>()
-        urlBolks.forEach { urls.addAll(it) }
-        logger.trace("Sletter ${urls.size} dokumenter")
         k9MellomlagringGateway.slettDokmenter(
-            urls = urls,
+            dokumentId = dokumentIdBolks.flatten(),
             dokumentEier = dokumentEier,
             correlationId = correlationId
         )

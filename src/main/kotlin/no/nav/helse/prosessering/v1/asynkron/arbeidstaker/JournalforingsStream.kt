@@ -46,7 +46,7 @@ internal class ArbeidstakerutbetalingJournalforingsStream(
                         logger.info(formaterStatuslogging(soknadId, "journalføres"))
                         val preprosessertMelding = entry.deserialiserTilPreprosessert()
 
-                        logger.info("Journalfører dokumenter: {}", preprosessertMelding.dokumentUrls)
+                        logger.info("Journalfører dokumenter: {}", preprosessertMelding.dokumentId)
                         val journaPostId = joarkGateway.journalfør(
                             preprosessertMelding = preprosessertMelding,
                             correlationId = CorrelationId(entry.metadata.correlationId)

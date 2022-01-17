@@ -15,7 +15,6 @@ import no.nav.helse.omsorgspengerKonfiguert
 import no.nav.omsorgspengerutbetaling.arbeidstakerutbetaling.*
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.net.URI
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZoneId
@@ -120,9 +119,6 @@ internal class PdfV1Generator {
                         "bekreftelser" to melding.bekreftelser.bekreftelserSomMap(),
                         "titler" to mapOf(
                             "vedlegg" to melding.titler.somMapTitler()
-                        ),
-                        "vedleggUrls" to mapOf(
-                            "vedlegg" to melding.vedleggUrls.somMapVedleggUrls()
                         )
                     )
                 )
@@ -189,14 +185,6 @@ private fun Bekreftelser.bekreftelserSomMap(): Map<String, Boolean> {
 private fun Duration.tilString(): String = when (this.toMinutesPart()) {
     0 -> "${this.toHours()} timer"
     else -> "${this.toHoursPart()} timer og ${this.toMinutesPart()} minutter"
-}
-
-private fun List<URI>.somMapVedleggUrls(): List<Map<String, Any?>> {
-    return map {
-        mapOf(
-            "navn" to it
-        )
-    }
 }
 
 private fun List<String>.somMapTitler(): List<Map<String, Any?>> {

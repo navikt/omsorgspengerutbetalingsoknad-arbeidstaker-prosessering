@@ -41,6 +41,8 @@ internal class ArbeidstakerutbetalingJournalforingsStream(
             val mapValues = builder
                 .stream(fraPreprosessert.name, fraPreprosessert.consumed)
                 .filter { _, entry -> 1 == entry.metadata.version }
+                // TODO: 29/04/2022 Fjerne linjen under før prodsetting
+                .filterNot { _, entry -> entry.deserialiserTilPreprosessert().soknadId == "eef6b8f2-3518-4cde-b75b-b0c5d7b3ae60" }
                 .mapValues { soknadId, entry ->
                     process(NAME, soknadId, entry) {
                         logger.info(formaterStatuslogging(soknadId, "journalføres"))

@@ -19,6 +19,9 @@ spec:
       application: omsorgspengerutbetalingsoknad-arbeidstaker-api
       access: write
     - team: dusseldorf
+      application: k9-brukerdialog-api
+      access: write
+    - team: dusseldorf
       application: omsorgspengerutbetalingsoknad-arbeidstaker-prosessering
       access: read
 

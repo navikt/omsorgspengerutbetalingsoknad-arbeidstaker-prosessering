@@ -5,7 +5,7 @@ val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
 val dusseldorfKtorVersion = "3.1.6.7-05da1a0"
 val ktorVersion = ext.get("ktorVersion").toString()
 
-val k9FormatVersion = "5.8.7"
+val k9FormatVersion = "5.8.8"
 val slf4jVersion = ext.get("slf4jVersion").toString()
 val kotlinxCoroutinesVersion = ext.get("kotlinxCoroutinesVersion").toString()
 val openhtmltopdfVersion = "1.0.10"

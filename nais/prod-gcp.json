@@ -8,7 +8,7 @@
   "minReplicas": "1",
   "maxReplicas": "2",
   "ingresses": [
-    "https://omsorgspengerutbetalingsoknad-arbeidstaker-prosessering.nais.adeo.no"
+    "https://omsorgspengerutbetalingsoknad-arbeidstaker-prosessering.intern.nav.no"
   ],
   "env": {
     "K9_JOARK_BASE_URL": "http://k9-joark",

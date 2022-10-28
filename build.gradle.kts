@@ -1,27 +1,24 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
-val dusseldorfKtorVersion = "3.2.1.1-15e2e63"
-val ktorVersion = ext.get("ktorVersion").toString()
+val dusseldorfKtorVersion = "3.2.1.2-93aa998"
+val ktorVersion = "2.1.2"
 
-val k9FormatVersion = "6.1.5"
-val slf4jVersion = ext.get("slf4jVersion").toString()
-val kotlinxCoroutinesVersion = ext.get("kotlinxCoroutinesVersion").toString()
+val k9FormatVersion = "7.0.4"
+val slf4jVersion = "2.0.3"
+val kotlinxCoroutinesVersion = "1.6.5"
 val openhtmltopdfVersion = "1.0.10"
-val kafkaEmbeddedEnvVersion = ext.get("kafkaEmbeddedEnvVersion").toString()
-val kafkaVersion = ext.get("kafkaVersion").toString() // Alligned med version fra kafka-embedded-env
-val handlebarsVersion = "4.3.0"
+val kafkaEmbeddedEnvVersion = "3.2.1"
+val kafkaVersion = "3.2.3"
+val handlebarsVersion = "4.3.1"
 val fuelVersion = "2.3.1"
+val jsonassertVersion = "1.5.1"
+
+val mainClass = "no.nav.helse.OmsorgspengerutbetalingeSoknadProsesseringKt"
 
 plugins {
-    kotlin("jvm") version "1.7.10"
+    kotlin("jvm") version "1.7.20"
     id("com.github.johnrengelman.shadow") version "7.1.2"
-}
-
-buildscript {
-    // Henter ut diverse dependency versjoner, i.e. ktorVersion.
-    apply("https://raw.githubusercontent.com/navikt/dusseldorf-ktor/b18c5feeca2840e6812eb805d50937d7aa0aca6a/gradle/dusseldorf-ktor.gradle.kts")
 }
 
 dependencies {
@@ -60,7 +57,7 @@ dependencies {
     testImplementation ( "io.ktor:ktor-server-test-host:$ktorVersion") {
         exclude(group = "org.eclipse.jetty")
     }
-    testImplementation("org.skyscreamer:jsonassert:1.5.1")
+    testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 }
 

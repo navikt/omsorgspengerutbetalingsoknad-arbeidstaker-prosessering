@@ -2,7 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val dusseldorfKtorVersion = "3.2.1.2-93aa998"
-val ktorVersion = "2.1.2"
+val ktorVersion = "2.1.3"
 
 val k9FormatVersion = "7.0.4"
 val slf4jVersion = "2.0.3"

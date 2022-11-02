@@ -133,7 +133,7 @@ class SoknadProsesseringTest {
             .assertCleanupFormat()
 
         k9DittnavVarselKonsumer
-            .hentK9Beskjed(melding.søknadId, maxWaitInSeconds = 40)
+            .hentK9Beskjed(melding.søknadId, maxWaitInSeconds = 60)
             .assertK9Beskjed(melding)
     }
 

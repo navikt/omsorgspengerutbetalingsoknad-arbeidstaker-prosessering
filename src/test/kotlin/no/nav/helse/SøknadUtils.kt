@@ -54,6 +54,13 @@ internal object SøknadUtils {
                         antallTimerPlanlagt = Duration.ofHours(8),
                         antallTimerBorte = Duration.ofHours(8),
                         årsak = FraværÅrsak.SMITTEVERNHENSYN
+                    ),
+                    Utbetalingsperiode(
+                        fraOgMed = start.plusDays(10),
+                        tilOgMed = start.plusDays(20),
+                        antallTimerPlanlagt = Duration.ofHours(8),
+                        antallTimerBorte = Duration.ofHours(8),
+                        årsak = null
                     )
                 ),
                 utbetalingsårsak = Utbetalingsårsak.KONFLIKT_MED_ARBEIDSGIVER,

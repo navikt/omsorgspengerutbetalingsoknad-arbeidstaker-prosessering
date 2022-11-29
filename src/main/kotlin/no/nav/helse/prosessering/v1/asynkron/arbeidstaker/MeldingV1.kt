@@ -78,7 +78,7 @@ data class Utbetalingsperiode(
     @JsonFormat(pattern = "yyyy-MM-dd") val tilOgMed: LocalDate,
     val antallTimerBorte: Duration? = null,
     val antallTimerPlanlagt: Duration? = null,
-    val årsak: FraværÅrsak
+    val årsak: FraværÅrsak? = null
 )
 
 enum class FraværÅrsak {

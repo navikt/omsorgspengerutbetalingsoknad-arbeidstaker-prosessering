@@ -67,7 +67,9 @@
                         <br/>Antall timer du skulle ha jobbet denne dagen:  {{#varighet p.antallTimerPlanlagt}}{{/varighet}}
                         <br/>Antall timer du var borte fra jobb denne dagen:  {{#varighet p.antallTimerBorte}}{{/varighet}}
                     {{/if}}
-                    <br/>Årsak: {{#årsak p.årsak}}{{/årsak}}
+                    {{#if p.årsak}}
+                        <br/>Årsak: {{#årsak p.årsak}}{{/årsak}}
+                    {{/if}}
                 </li>
             {{/each}}
             </ul>
